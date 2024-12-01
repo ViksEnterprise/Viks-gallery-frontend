@@ -3,14 +3,16 @@ import landingImg from '../assets/home.jpg'
 import aboutImg from '../assets/about.jpg'
 import { Seller } from "../component/seller";
 import { Subscribe } from "../component/subscribe";
+import { HiChevronRight } from "react-icons/hi";
+import { Testimonial } from "../component/testimonial";
 
 export const Home = () => {
 
     const welcomeMSG = [
-        {msg: 'Welcome to vikis gallery'},
-        {msg: 'Welcome to vikis gallery'},
-        {msg: 'Welcome to vikis gallery'},
-        {msg: 'Welcome to vikis gallery'}
+        {msg: 'Welcome to viks gallery'},
+        {msg: 'Welcome to viks gallery'},
+        {msg: 'Welcome to viks gallery'},
+        {msg: 'Welcome to viks gallery'}
     ];
 
     return (
@@ -18,9 +20,9 @@ export const Home = () => {
             <section className="h-screen w-full bg-white text-white lg:flex relative">
                 <div className="w-full lg:w-2/5 bg-black opacity-60 lg:opacity-100 px-4 lg:px-10 flex-initial absolute lg:relative top-0 bottom-0">
                     <div className="py-16 flex flex-col gap-7">
-                        <h3 className="text-5xl font-bold w-full">Find Art that Speaks to Your Heart</h3>
+                        <h3 className="text-4xl lg:text-5xl font-bold w-full">Find Art that Speaks to Your Heart</h3>
                         <div className="w-full">
-                            <p className="text-lg font-medium">Explore our curated collection of masterpieces and find the perfect piece to elevate your space. Our arts are designed to help you find your personal craft and luxuriously design your home suitable for your needs and preferences.</p>
+                            <p className="text-base lg:text-lg font-medium">Explore our curated collection of masterpieces and find the perfect piece to elevate your space. Our arts are designed to help you find your personal craft and luxuriously design your home suitable for your needs and preferences.</p>
                         </div>
                     </div>
                 </div>
@@ -46,16 +48,16 @@ export const Home = () => {
                         <img className="h-full w-full rounded-lg" src={aboutImg} alt="" />
                     </div>
                     <div className="flex-1 w-full lg:w-2/5">
-                        <div className="lg:p-4 p-2 flex flex-col gap-5">
+                        <div className="lg:p-4 md:p-2 flex flex-col gap-5">
                             <div>
-                                <h4 className="text-3xl text-abt-blue font-semibold uppercase">About Us</h4>
+                                <h4 className="text-3xl text-center md:text-start text-abt-blue font-semibold uppercase">About Us</h4>
                             </div>
                             <div className="text-xl-15 flex flex-col gap-4 text-black font-normal">
                                 <p>At Viks Gallery, we pride ourselves on offering a carefully curated selection of artworks that span a wide range of styles, mediums, and movements. Our mission is to showcase both emerging and established artists, providing them with a platform to share their stories, challenge conventional narratives, and push the boundaries of contemporary art. We are deeply committed to promoting art that sparks meaningful conversations and resonates with diverse audiences, from first-time visitors to seasoned collectors.</p>
                                 <p>Our gallery was founded on the belief that art is a universal language, one that transcends borders and speaks to the shared experiences of humanity. In this spirit, Viks Gallery is dedicated to fostering inclusivity and accessibility within the art world. We aim to break down the barriers that often separate artists from their audiences, ensuring that art is accessible to everyone, regardless of background, ...</p>
                             </div>
                             <div>
-                                <span className="text-xl text-deep-blue capitalize font-semibold">Read more</span>
+                                <span className="flex items-center text-xl text-deep-blue capitalize font-semibold">Read more <HiChevronRight /></span>
                             </div>
                         </div>
                     </div>
@@ -63,6 +65,8 @@ export const Home = () => {
             </section>
             <hr />
             <Seller />
+            <hr />
+            <Testimonial />
             <hr />
             <Subscribe />
         </div>
