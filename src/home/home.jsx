@@ -17,7 +17,7 @@ export const Home = () => {
 
     return (
         <div>
-            <section className="h-screen w-full bg-white text-white flex relative">
+            <section className="h-screen w-full bg-white text-white lg:flex relative">
                 <div className="w-full lg:w-2/5 bg-black opacity-60 lg:opacity-100 px-4 lg:px-10 flex-initial absolute lg:relative top-0 bottom-0">
                     <div className="py-16 flex flex-col gap-7">
                         <h3 className="text-4xl lg:text-5xl font-bold w-full">Find Art that Speaks to Your Heart</h3>
