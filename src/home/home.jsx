@@ -1,12 +1,14 @@
-import React from "react";
+import React, { useState } from "react";
 import landingImg from '../assets/home.jpg'
 import aboutImg from '../assets/about.jpg'
 import { Seller } from "../component/seller";
 import { Subscribe } from "../component/subscribe";
 import { HiChevronRight } from "react-icons/hi";
 import { Testimonial } from "../component/testimonial";
+import { useEffect } from "react";
 
 export const Home = () => {
+    const [heroImgLength, setHeroImgLength] = useState(0)
 
     const welcomeMSG = [
         {msg: 'Welcome to viks gallery'},
@@ -14,6 +16,21 @@ export const Home = () => {
         {msg: 'Welcome to viks gallery'},
         {msg: 'Welcome to viks gallery'}
     ];
+
+    const heroImg = [
+        {img: landingImg},
+        {img: aboutImg},
+        {img: landingImg},
+        {img: aboutImg}
+    ]
+
+    useEffect(() => {
+        const automateHeroImg = setInterval(() => {
+            setHeroImgLength((pre) => (pre + 1) % heroImg.length)
+        }, 3500);
+
+        return () => clearInterval(automateHeroImg);
+    }, [])
 
     return (
         <div>
@@ -26,9 +43,11 @@ export const Home = () => {
                         </div>
                     </div>
                 </div>
-                <div className="flex-1 w-full lg:w-3/5 h-screen">
-                    <div className="w-full h-screen">
-                        <img className="h-full" src={landingImg} alt="" />
+                <div className="flex-1 w-full lg:w-3/5 h-screen overflow-hidden">
+                    <div className="w-full h-screen flex hero-hol" style={{ transform: `translate(-${heroImgLength * 100}%)`}}>
+                        {heroImg.map((images) => (
+                            <img className="h-full w-full" src={images.img} alt="" />
+                        ))}
                     </div>
                 </div>
             </section>
