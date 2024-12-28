@@ -13,6 +13,13 @@
   }
 }
 
+.hero-hol{
+  transition: 0.5s ease-in;
+}
+.slick-slide{
+  margin: 0 1em !important;
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
