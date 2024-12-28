@@ -1,6 +1,6 @@
 import React, { useState } from "react";
-import landingImg from '../assets/home.jpg'
-import aboutImg from '../assets/about.jpg'
+import landingImg from '../assets/home.jpg';
+import aboutImg from '../assets/about.jpg';
 import { Seller } from "../component/seller";
 import { Subscribe } from "../component/subscribe";
 import { HiChevronRight } from "react-icons/hi";

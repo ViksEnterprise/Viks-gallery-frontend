@@ -21,7 +21,7 @@ export const Testimonial = () => {
             disableOnInteraction: false,
         },
         allowTouchMove: false
-    }
+    };
     
     return (
         <section className="p-4 lg:p-9">
