@@ -14,10 +14,7 @@
 }
 
 .hero-hol{
-  transition: 0.5s ease-in;
-}
-.slick-slide{
-  margin: 0 1em !important;
+  transition: 0.5s ease-in-out;
 }
 
 @media (prefers-reduced-motion: no-preference) {
