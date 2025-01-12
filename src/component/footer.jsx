@@ -23,7 +23,7 @@ export const Footer = () => {
     return (
         <div>
             <section className="w-full">
-                <footer className="lg:px-8 lg:pt-9 lg:pb-6 md:px-6 md:pt-7 md:pb-4 p-5 bg-black text-white flex flex-col gap-4">
+                <footer className="lg:px-8 lg:pt-9 lg:pb-6 md:px-6 md:pt-7 md:pb-4 py-7 px-5 bg-black text-white flex flex-col gap-4">
                     <div className="flex md:justify-between gap-6 flex-col md:flex-row items-start">
                         <div className="flex flex-col gap-6 items-start">
                             <div className="flex flex-col gap-3">
