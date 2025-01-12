@@ -1,11 +1,13 @@
 import React, { useState } from "react";
 import landingImg from '../assets/home.jpg';
 import aboutImg from '../assets/about.jpg';
-import { Seller } from "../component/seller";
+import { Seller } from "./seller";
 import { Subscribe } from "../component/subscribe";
 import { HiChevronRight } from "react-icons/hi";
 import { Testimonial } from "../component/testimonial";
 import { useEffect } from "react";
+import { Link } from 'react-router-dom'
+import { Footer } from "../component/footer";
 
 export const Home = () => {
     const [heroImgLength, setHeroImgLength] = useState(0);
@@ -88,7 +90,7 @@ export const Home = () => {
                                 <p>Our gallery was founded on the belief that art is a universal language, one that transcends borders and speaks to the shared experiences of humanity. In this spirit, Viks Gallery is dedicated to fostering inclusivity and accessibility within the art world. We aim to break down the barriers that often separate artists from their audiences, ensuring that art is accessible to everyone, regardless of background, ...</p>
                             </div>
                             <div>
-                                <span className="flex items-center text-xl text-deep-blue capitalize font-semibold">Read more <HiChevronRight /></span>
+                                <Link to='/about'><span className="flex items-center text-xl text-deep-blue capitalize font-semibold">Read more <HiChevronRight /></span></Link>
                             </div>
                         </div>
                     </div>
@@ -100,6 +102,7 @@ export const Home = () => {
             <Testimonial />
             <hr />
             <Subscribe />
+            <Footer />
         </div>
     )
 }

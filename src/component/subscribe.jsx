@@ -18,7 +18,7 @@ export const Subscribe = () => {
     }
 
     return (
-        <section className="w-full p-3 lg:p-9">
+        <section className="w-full py-5 px-3 lg:p-9">
             <div className="flex gap-5 lg:gap-10 items-center flex-col lg:flex-row">
                 <div className="flex-initial w-full lg:w-1/3 flex flex-col gap-3">
                     <h2 className="text-lg lg:text-xl font-semibold uppercase text-black">Viks gallery news</h2>
