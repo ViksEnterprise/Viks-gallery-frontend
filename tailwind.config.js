@@ -8,7 +8,8 @@ module.exports = {
     extend: {
       width: {
         '120': '67rem',
-        '121': '270rem'
+        '121': '270rem',
+        '3p': '30%'
       },
       colors: {
         'deep-blue': '#090351',
