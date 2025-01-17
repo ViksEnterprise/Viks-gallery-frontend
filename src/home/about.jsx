@@ -137,9 +137,9 @@ export const About = () => {
         <div>
             <section className="md:py-6 md:px-5 py-3 px-3">
                 <div className="container flex items-center">
-                    <div className="flex md:justify-between items-center justify-center gap-5 lg:w-4/5 w-full lg:mx-auto md:mx-2 m-0">
+                    <div className="flex justify-between items-center lg:w-4/5 w-full lg:mx-auto md:mx-2 m-0">
                         {metricsBar.map((item, i) => (
-                            <div className="text-center lg:text-3xl md:text-xl text-xs capitalize font-bold text-abt-blue flex-col flex gap-1" key={i}>
+                            <div className="text-center lg:text-3xl md:text-xl text-sm capitalize font-bold text-abt-blue flex-col flex gap-1" key={i}>
                                 <div>
                                     <h5>{item.num}</h5>
                                 </div>
