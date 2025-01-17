@@ -12,6 +12,31 @@ import { Link } from "react-router-dom";
 
 export const About = () => {
     const [wCVG, setWCVG] = useState('');
+    const [soldNum, setSoldNum] = useState(0);
+    const [clientNum, setClientNum] = useState(0);
+    const [countryNum, setCountryNum] = useState(0);
+
+    const autoMetricCount = (num) => {
+        if(num == 1) {
+            return `${num}M+`
+        }
+
+        if(num == 400) {
+            return `${num}K`
+        }
+
+        if(num ==100){
+            return `${num}K`
+        }
+
+        return num
+    }
+
+    const metricsBar = [
+        {num: autoMetricCount(soldNum), items: 'Arts sold'},
+        {num: autoMetricCount(clientNum), items: 'Happy clients'},
+        {num: autoMetricCount(countryNum), items: 'Countries reached'},
+    ]
 
     const WCVGText = [
         {reHeading: 'A Unique and Diverse Collection', inContent: 'Viks Gallery, offers an extensive selection of artwork across various styles, mediums and genres. Our diverse gallery ensures that you’ll find something that truly resonates with your personal taste and vision.'},
@@ -66,10 +91,66 @@ export const About = () => {
         checkScreenSizeForWhyCVG()
 
         window.addEventListener('resize', checkScreenSizeForWhyCVG)
+
+        const soldCount = setInterval(() => {
+            setSoldNum((pre) => {
+                if(pre == 1){
+                    clearInterval(soldCount)
+                    return pre
+                }
+
+                return pre + 1
+            })
+        }, 500);
+
+        const clientCount = setInterval(() => {
+            setClientNum((pre) => {
+                if(pre == 400){
+                    clearInterval(clientCount)
+                    return pre
+                }
+
+                return pre + 1
+            })
+        }, 10);
+
+        const countryCount = setInterval(() => {
+            setCountryNum((pre) => {
+                if(pre == 100){
+                    clearInterval(countryCount)
+                    return pre
+                }
+
+                return pre + 1
+            })
+        }, 15);
+
+        return () => {
+            clearInterval(soldCount)
+            clearInterval(clientCount)
+            clearInterval(countryCount)
+        }
+
     }, [])
 
     return (
         <div>
+            <section className="md:py-6 md:px-5 py-3 px-3">
+                <div className="container flex items-center">
+                    <div className="flex md:justify-between items-center justify-center gap-5 lg:w-4/5 w-full lg:mx-auto md:mx-2 m-0">
+                        {metricsBar.map((item, i) => (
+                            <div className="text-center lg:text-3xl md:text-xl text-xs capitalize font-bold text-abt-blue flex-col flex gap-1" key={i}>
+                                <div>
+                                    <h5>{item.num}</h5>
+                                </div>
+                                <div>
+                                    <h6>{item.items}</h6>
+                                </div>
+                            </div>
+                        ))}
+                    </div>
+                </div>
+            </section>
             <Card
                 normalDiv={true}
                 renderItem={
@@ -81,7 +162,7 @@ export const About = () => {
                             {wCVG}
                         </div>
                         <div className="lg:w-2/5 md:w-3/5 w-full flex flex-col lg:gap-5 gap-3">
-                            <h1 className="font-bold lg:text-3xl text-xl text-blue-900">Why Choose Viks Gallery?</h1>
+                            <h1 className="font-bold lg:text-3xl text-xl text-abt-blue">Why Choose Viks Gallery?</h1>
                             <div className="flex flex-col lg:gap-3 gap-2 items-start">
                                 {WCVGText.map((con, i) => (
                                     <div className="flex flex-col lg:gap-3 gap-2" key={i}>
