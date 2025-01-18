@@ -16,6 +16,15 @@ export const About = () => {
     const [clientNum, setClientNum] = useState(0);
     const [countryNum, setCountryNum] = useState(0);
 
+    const aboutMsg = [
+        {msg: 'At Viks Gallery, we pride ourselves on offering a carefully curated selection of artworks that span a wide range of styles, mediums, and movements. Our mission is to showcase both emerging and established artists, providing them with a platform to share their stories, challenge conventional narratives, and push the boundaries of contemporary art. We are deeply committed to promoting art that sparks meaningful conversations and resonates with diverse audiences, from first-time visitors to seasoned collectors.'},
+        {msg: 'Our gallery was founded on the belief that art is a universal language, one that transcends borders and speaks to the shared experiences of humanity. In this spirit, Viks Gallery is dedicated to fostering inclusivity and accessibility within the art world. We aim to break down the barriers that often separate artists from their audiences, ensuring that art is accessible to everyone, regardless of background, education, or financial means. Whether you are looking to add to your personal collection, discover new talent, or simply experience the beauty of artistic expression, we welcome you to explore our gallery.'},
+        {msg: 'One of the defining features of Viks Gallery is our commitment to showcasing a diverse range of artistic perspectives. Our rotating exhibitions feature works from both local and international artists, each bringing their unique cultural experiences, techniques, and visions to the fore. From contemporary abstract paintings and thought-provoking installations to traditional landscapes and figurative sculptures, our collection reflects the ever-evolving nature of the global art scene. Our goal is to offer visitors an immersive and enriching experience, where they can encounter a multitude of artistic voices and discover new ways of seeing the world.'},
+        {msg: 'At Viks Gallery, we believe that every artwork tells a story, one that not only reflects the artist’s creative process but also invites viewers to embark on their own interpretive journey. Our exhibitions are designed to create a dialogue between the artist and the audience, encouraging visitors to engage with the art on a personal level. We strive to create a space where people can connect with art in a way that resonates with them emotionally, intellectually, and even spiritually. Whether you’re drawn to the bold, experimental pieces or the subtle, intimate works, you’ll find that every artwork at Viks Gallery has the power to move and inspire.'},
+        {msg: 'As we continue to grow and evolve, Viks Gallery remains committed to excellence, creativity, and inclusivity. Our vision is to be a leading art destination where people from all walks of life can experience the joy and wonder of art in its many forms. We are constantly seeking new ways to innovate and expand, whether it’s by introducing cutting-edge technology to our gallery experience or by collaborating with artists and galleries from around the world.'},
+        {msg: 'Ultimately, Viks Gallery is more than just a place to view art. it is a space where art lives, breathes, and connects us all. We invite you to join us on this journey, to explore the diverse and inspiring world of art, and to become a part of the Viks Gallery community. Whether you’re a collector, an artist, or simply someone who appreciates the beauty of creative expression, we look forward to welcoming you to our gallery and sharing our passion for art with you.'}
+    ]
+
     const autoMetricCount = (num) => {
         if(num == 1) {
             return `${num}M+`
@@ -135,6 +144,27 @@ export const About = () => {
 
     return (
         <div>
+            <section className="md:py-6 md:px-5 lg:p-9 py-3 px-4">
+                <div className="w-full flex flex-col md:flex-row gap-9 justify-center">
+                    <div className="md:w-3/6 w-full flex flex-col gap-3">
+                        <div className="text-center container text-3xl font-semibold capitalize">
+                            <h6>About us</h6>
+                        </div>
+                        <div className="xl:text-sm text-xs font-normal flex flex-col gap-4 w-full">
+                            {aboutMsg.map((msg, i) => (
+                                <div key={i}>
+                                    <p>{msg.msg}</p>
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div className="flex justify-end xl:w-2/5 md:w-3/6 w-full relative overflow-hidden">
+                        <div className="relative w-full flex lg:justify-end justify-start">
+                            <div className="img-hold"></div>
+                        </div>
+                    </div>
+                </div>
+            </section>
             <section className="md:py-6 md:px-5 py-3 px-4">
                 <div className="container flex items-center">
                     <div className="flex justify-between items-center lg:w-4/5 w-full lg:mx-auto md:mx-2 m-0">

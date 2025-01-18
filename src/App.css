@@ -17,6 +17,87 @@
   transition: 0.5s ease-in-out;
 }
 
+.img-hold{
+  background-image: url(../src/assets/room.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  height: 220px;
+  width: 100%;
+  border-radius: 13px;
+  transition: transform 0.5s ease;
+  animation: slideLeft 2s alternate;
+}
+@keyframes slideLeft {
+  0%{
+    transform: translateX(50em);
+  } 100% {
+    transform: translateX(0);
+  }
+}
+.img-hold::before{
+  display: none;
+  content: '';
+  position: absolute;
+  background-image: url(../src/assets/room.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 13px;
+  height: 410px;
+  width: 280px;
+  top: 200px;
+  right: 140px;
+  transition: transform 0.5s ease;
+  animation: slideRight 2s alternate;
+}
+@keyframes slideRight {
+  0%{
+    transform: translateX(-90em);
+  } 100% {
+    transform: translateX(0);
+  }
+}
+.img-hold::after{
+  display: none;
+  content: '';
+  position: absolute;
+  background-image: url(../src/assets/flower.jpg);
+  background-repeat: no-repeat;
+  background-position: center center;
+  background-size: cover;
+  border-radius: 13px;
+  height: 402px;
+  width: 280px;
+  top: 415px;
+  right: 0;
+  transition: transform 0.5s ease;
+  animation: slideUp 2s alternate;
+}
+@keyframes slideUp {
+  0%{
+    transform: translateY(50em);
+  } 100% {
+    transform: translateX(0);
+  }
+}
+@media only screen and (min-width: 1024px) {
+  .img-hold::before,
+  .img-hold::after{
+    display: block;
+  }
+  .img-hold{
+    width: 280px !important;
+    height: 400px !important;
+    background-image: url(../src/assets/brush.jpg) !important;
+  }
+}
+@media only screen and (min-width: 765px) {
+  .img-hold{
+    height: 100%;
+  }
+}
+
 @media (prefers-reduced-motion: no-preference) {
   a:nth-of-type(2) .logo {
     animation: logo-spin infinite 20s linear;
