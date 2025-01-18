@@ -145,7 +145,7 @@ export const About = () => {
     return (
         <div>
             <section className="md:py-6 md:px-5 lg:p-9 py-3 px-4">
-                <div className="w-full flex flex-col md:flex-row gap-9 justify-center">
+                <div className="w-full flex flex-col md:flex-row gap-7 justify-center">
                     <div className="md:w-3/6 w-full flex flex-col gap-3">
                         <div className="text-center container text-3xl font-semibold capitalize">
                             <h6>About us</h6>
