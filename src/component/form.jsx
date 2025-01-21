@@ -6,10 +6,10 @@ export const FormCard = ({ authImg, formHoldStyle, headingStyle, heading, innerF
     return (
         <div className="w-full flex items-start">
             <div className="w-full">
-                <div className="flex h-screen w-full relative">
+                <div className="flex lg:h-screen h-svh w-full relative">
                     {authImg &&
-                        <div className="h-screen lg:w-2/5 w-full">
-                            <div className="h-screen w-full">
+                        <div className=" lg:h-screen h-svh lg:w-2/5 w-full">
+                            <div className=" lg:h-screen h-svh w-full">
                                 <img className="h-full w-full" src={authImg} alt="" />
                             </div>
                         </div>
