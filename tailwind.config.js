@@ -14,7 +14,12 @@ module.exports = {
       colors: {
         'deep-blue': '#090351',
         'abt-blue': '#09067C',
-        'tes-col': '#EBEBF1'
+        'tes-col': '#EBEBF1',
+        'auth': '#0A078E',
+        'bdr': '#969696',
+        'label': '#8986AB',
+        'danger': 'red',
+        'ab-bg-color': 'hsla(0, 0.00%, 0.00%, 0.73)'
       },
       fontSize: {
         'xl-15': ['15px', {
