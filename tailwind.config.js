@@ -18,6 +18,7 @@ module.exports = {
         'auth': '#0A078E',
         'bdr': '#969696',
         'label': '#8986AB',
+        'ec': '#EEECEC',
         'danger': 'red',
         'ab-bg-color': 'hsla(0, 0.00%, 0.00%, 0.73)'
       },

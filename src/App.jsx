@@ -4,6 +4,7 @@ import './App.css'
 import { About } from './home/about'
 import { Login } from './accounts/login'
 import { SignUp } from './accounts/register'
+import { ForgotAccountDetails } from './accounts/forget'
 
 function App() {
 
@@ -14,6 +15,7 @@ function App() {
         <Route path='/about' element={ <About /> }></Route>
         <Route path='/login' element={ <Login /> }></Route>
         <Route path='/signUp' element={ <SignUp /> }></Route>
+        <Route path='/reset-pass' element={ <ForgotAccountDetails /> }></Route>
       </Routes>
     </>
   )

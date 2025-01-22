@@ -2,10 +2,10 @@ import React from "react";
 import { Link } from "react-router-dom";
 
 
-export const FormCard = ({ authImg, formStyle, imageHldStyle, subImgHoldStyle, formHoldStyle, headingStyle, heading, innerFormStyle, authMessage, subAuthMessage, authStyle, authMsgStyle, formInHolder, error, fgTxt, btnText, link, subLink, singleSubLink, SubLInk}) => {
+export const FormCard = ({ authImg, formStyle, imageHldStyle, subImgHoldStyle, formHoldStyle, headingStyle, heading, innerFormStyle, authMessage, subAuthMessage, authStyle, authMsgStyle, formInHolder, error, fgTxt, btnText, link, subLink, singleSubLink, SubLink}) => {
     return (
-        <div className="w-full flex items-start">
-            <div className="w-full">
+        <div className="w-full h-screen flex items-start">
+            <div className="w-full relative">
                 <div className={`${formStyle}`}>
                     {authImg &&
                         <div className={`${imageHldStyle}`}>
@@ -43,15 +43,17 @@ export const FormCard = ({ authImg, formStyle, imageHldStyle, subImgHoldStyle, f
                                                     <Link to='/reset-pass'>{fgTxt}</Link>
                                                 </div>
                                             }
-                                            <div className="w-full text-center capitalize text-lg text-white">
-                                                <button className="bg-auth h-12 w-full rounded-md" type="submit">{btnText}</button>
-                                            </div>
+                                            {btnText &&
+                                                <div className="w-full text-center capitalize text-lg text-white">
+                                                    <button className="bg-auth h-12 w-full rounded-md">{btnText}</button>
+                                                </div>
+                                            }
                                             {singleSubLink ? 
                                                 (<div className="md:text-base text-sm font-normal capitalize text-center">
                                                     <Link to={link}>{subLink}</Link>
                                                 </div>) : 
-                                                (<div className="md:text-base text-sm font-normal capitalize text-center flex">
-                                                    {SubLInk.map((lnk, i) => (
+                                                (<div className="md:text-base text-sm font-normal capitalize text-center flex justify-between">
+                                                    {SubLink.map((lnk, i) => (
                                                         <Link to={lnk.link} key={i}>{lnk.subLink}</Link>
                                                     ))}
                                                 </div>)
