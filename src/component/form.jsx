@@ -4,7 +4,7 @@ import { Link } from "react-router-dom";
 
 export const FormCard = ({ authImg, formStyle, imageHldStyle, subImgHoldStyle, formHoldStyle, headingStyle, heading, innerFormStyle, authMessage, subAuthMessage, authStyle, authMsgStyle, formInHolder, error, fgTxt, btnText, link, subLink, singleSubLink, SubLink}) => {
     return (
-        <div className="w-full h-screen flex items-start">
+        <div className="w-full flex items-start">
             <div className="w-full relative">
                 <div className={`${formStyle}`}>
                     {authImg &&
