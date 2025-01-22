@@ -22,7 +22,7 @@ export const ForgotAccountDetails = () => {
             SubLink={link}
             btnText='Send reset link'
 
-            formStyle='flex flex-col gap-4 bg-ec lg:h-screen h-svh'
+            formStyle='flex flex-col gap-4 bg-ec lg:h-screen h-svh overflow-hidden'
             formHoldStyle='flex flex-col gap-5'
             innerFormStyle='flex flex-col gap-4 lg:w-3/6 md:w-4/5 w-full lg:p-0 px-4'
             headingStyle='bg-white p-5 shadow text-auth font-semibold xl:text-4xl lg:text-3xl text-2xl'
