@@ -23,7 +23,7 @@ export const Login = () => {
 
 
             formStyle="flex lg:h-screen h-svh w-full relative"
-            imageHldStyle="lg:h-screen h-svh lg:w-2/5 w-full"
+            imageHldStyle="lg:h-screen h-svh lg:w-2/5 w-full overflow-hidden"
             subImgHoldStyle="lg:h-screen h-svh w-full"
             headingStyle="font-semibold xl:text-4xl lg:text-3xl text-2xl lg:text-auth text-white"
             formHoldStyle="lg:w-3/5 w-full py-6 lg:px-8 md:px-6 px-4 flex flex-col gap-9 lg:relative absolute bg-ab-bg-color lg:bg-transparent h-full"
