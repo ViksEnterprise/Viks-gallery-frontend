@@ -24,10 +24,10 @@ export const SignUp = () => {
 
 
             formStyle="flex h-full w-full relative"
-            imageHldStyle="h-full lg:w-2/5 w-full"
+            imageHldStyle="lg:relative absolute h-full lg:w-2/5 w-full bottom-0"
             subImgHoldStyle="h-full w-full"
             headingStyle="font-semibold xl:text-4xl lg:text-3xl text-2xl lg:text-auth text-white"
-            formHoldStyle="lg:w-3/5 w-full py-6 lg:px-8 md:px-6 px-4 flex flex-col gap-9 lg:relative absolute bg-ab-bg-color lg:bg-transparent h-full"
+            formHoldStyle="lg:w-3/5 w-full py-6 lg:px-8 md:px-6 px-4 flex flex-col gap-9 relative bg-ab-bg-color lg:bg-transparent h-fit z-10"
             innerFormStyle="lg:w-4/5 flex flex-col gap-5 w-full bg-white lg:bg-transparent p-3 rounded-lg"
             authMsgStyle="text-center font-semibold xl:text-3xl text-xl text-auth capitalize"
         />
