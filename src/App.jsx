@@ -1,11 +1,11 @@
 import { Route, Routes } from "react-router-dom";
 import { Home } from "./pages/Home";
 import "./App.css";
-import { About } from "./pages/About";
+import { About } from "./pages/about";
 import { LoginAccount } from "./accounts/login";
-import { SignUp } from "./accounts/Register";
+import { SignUp } from "./accounts/register";
 import { ForgotAccountDetails } from "./accounts/Forget";
-import { Gallery } from "./pages/Gallery";
+import { Gallery } from "./pages/gallery";
 import { Error404 } from "./views/NotFound";
 
 function App() {
