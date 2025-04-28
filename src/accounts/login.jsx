@@ -2,7 +2,7 @@ import React from "react";
 import { FormCard } from "../component/Form";
 import login from "../assets/login.jpg";
 
-export const Login = () => {
+export const LoginAccount = () => {
   const form = [
     { for: "email", label: "email", type: "email", name: "email" },
     { for: "password", label: "password", type: "password", name: "password" },
