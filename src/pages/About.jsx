@@ -232,7 +232,7 @@ export const About = () => {
                         to={icon.link}
                         target="_blank"
                       >
-                        {icon.icon}
+                        <icon.icon />
                       </Link>
                     </li>
                   ))}
@@ -268,7 +268,7 @@ export const About = () => {
                         to={icon.link}
                         target="_blank"
                       >
-                        {icon.icon}
+                        <icon.icon />
                       </Link>
                     </li>
                   ))}
