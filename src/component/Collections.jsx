@@ -1,6 +1,6 @@
 import React from "react";
 import bestSell from "../assets/home.jpg";
-import { Card } from "./Card";
+import { Card } from "./card";
 
 export const Seller = () => {
   const popularSales = [

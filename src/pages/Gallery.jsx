@@ -1,26 +1,30 @@
 import React from "react";
-import bestSell from '../assets/home.jpg';
-import { Card } from "../component/Card";
+import bestSell from "../assets/home.jpg";
+import { Card } from "../component/card";
 import { Subscribe } from "../component/Subscription";
-import { Footer } from "../component/Footer";
+import { Footer } from "../component/footer";
 import { NavBar } from "../component/NavBar";
-import { FaArrowDown, FaArrowUp, FaChevronDown, FaSearch} from "react-icons/fa";
+import {
+  FaArrowDown,
+  FaArrowUp,
+  FaChevronDown,
+  FaSearch,
+} from "react-icons/fa";
 
 export const Gallery = () => {
-
   const popularSales = [
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'},
-    {image: bestSell, name: 'The lonely tales'}
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
+    { image: bestSell, name: "The lonely tales" },
   ];
 
   return (
@@ -80,4 +84,4 @@ export const Gallery = () => {
       <Footer />
     </>
   );
-}
+};

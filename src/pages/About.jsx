@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Footer } from "../component/Footer";
+import { Footer } from "../component/footer";
 import { Subscribe } from "../component/Subscription";
-import { Card } from "../component/Card";
+import { Card } from "../component/card";
 import artise from "../assets/artise.jpg";
 import nature from "../assets/nature.jpg";
 import dance from "../assets/dance.jpg";
@@ -37,7 +37,6 @@ export const About = () => {
     { num: autoMetricCount(clientNum), items: "Happy clients" },
     { num: autoMetricCount(countryNum), items: "Countries reached" },
   ];
-
 
   useEffect(() => {
     const checkScreenSizeForWhyCVG = () => {
