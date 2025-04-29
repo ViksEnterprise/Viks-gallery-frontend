@@ -1,6 +1,6 @@
 import React from "react";
 import signUpImg from "../assets/register.jpg";
-import { FormCard } from "../component/Form";
+import { FormCard } from "../component/form";
 
 export const SignUp = () => {
   const form = [

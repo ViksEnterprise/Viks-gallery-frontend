@@ -1,5 +1,5 @@
 import React from "react";
-import { FormCard } from "../component/Form";
+import { FormCard } from "../component/form";
 import login from "../assets/login.jpg";
 
 export const LoginAccount = () => {
