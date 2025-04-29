@@ -46,10 +46,10 @@ const WCVGText = [
   ];
 
 const ArtiseHandels = [
-    { icon: `<FaFacebook />`, style: "text-blue-900", link: "#" },
-    { icon: `<FaLinkedin />`, style: "text-blue-900", link: "#" },
-    { icon: `<FaXTwitter />`, link: "#" },
-    { icon: `<FaInstagram />`, link: "#" },
+    { icon: FaFacebook, style: "text-blue-900", link: "#" },
+    { icon: FaLinkedin, style: "text-blue-900", link: "#" },
+    { icon: FaXTwitter, link: "#" },
+    { icon: FaInstagram, link: "#" },
 ];
 
 const Teams = [
@@ -58,10 +58,10 @@ const Teams = [
       name: "Victor Bassey",
       role: "Chief executive officer",
       handels: [
-        { icon: `<FaFacebook />`, style: "text-blue-900", link: "#" },
-        { icon: `<FaLinkedin />`, style: "text-blue-900", link: "#" },
-        { icon: `<FaXTwitter />`, link: "#" },
-        { icon: `<FaInstagram />`, link: "#" },
+        { icon: FaFacebook, style: "text-blue-900", link: "#" },
+        { icon: FaLinkedin, style: "text-blue-900", link: "#" },
+        { icon: FaXTwitter, link: "#" },
+        { icon: FaInstagram, link: "#" },
       ],
     },
     {
@@ -69,10 +69,10 @@ const Teams = [
       name: "Victor Bassey",
       role: "Chief executive officer",
       handels: [
-        { icon: `<FaFacebook />`, style: "text-blue-900", link: "#" },
-        { icon: `<FaLinkedin />`, style: "text-blue-900", link: "#" },
-        { icon: `<FaXTwitter />`, link: "#" },
-        { icon: `<FaInstagram />`, link: "#" },
+        { icon: FaFacebook, style: "text-blue-900", link: "#" },
+        { icon: FaLinkedin, style: "text-blue-900", link: "#" },
+        { icon: FaXTwitter, link: "#" },
+        { icon: FaInstagram, link: "#" },
       ],
     },
     {
@@ -80,10 +80,10 @@ const Teams = [
       name: "Victor Bassey",
       role: "Chief executive officer",
       handels: [
-        { icon: `<FaFacebook />`, style: "text-blue-900", link: "#" },
-        { icon: `<FaLinkedin />`, style: "text-blue-900", link: "#" },
-        { icon: `<FaXTwitter />`, link: "#" },
-        { icon: `<FaInstagram />`, link: "#" },
+        { icon: FaFacebook, style: "text-blue-900", link: "#" },
+        { icon: FaLinkedin, style: "text-blue-900", link: "#" },
+        { icon: FaXTwitter, link: "#" },
+        { icon: FaInstagram, link: "#" },
       ],
     },
 ];
