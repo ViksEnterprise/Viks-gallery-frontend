@@ -1,5 +1,5 @@
 import React from "react";
-import { FormCard } from "../component/Form";
+import { FormCard } from "../component/form";
 
 export const ForgotAccountDetails = () => {
   const form = [{ for: "email", label: "email", type: "email", name: "email" }];
