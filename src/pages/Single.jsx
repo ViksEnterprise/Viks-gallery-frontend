@@ -1,14 +1,85 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { NavBar } from "../component/NavBar";
 import { Subscribe } from "../component/Subscription";
 import { Footer } from "../component/footer";
 import { Testimonial } from "../component/Reviews";
 import { CardComp } from "../component/card";
+import artise from "../assets/artise.jpg";
+import nature from "../assets/nature.jpg";
+import dance from "../assets/dance.jpg";
+import dance2 from "../assets/dance2.jpg";
 
 export const Single = () => {
+  const [singleArtImage, setSingleArtImage] = useState(artise);
+
+  const [subImg, setSubImg] = useState([]);
+
+  const changeLargeImg = (id) => {
+    setSingleArtImage(id);
+  };
+
+  useEffect(() => {
+    setSubImg({ img: artise, img2: nature, img3: dance, img4: dance2 });
+  }, []);
   return (
     <>
       <NavBar />
+      <div className="flex md:flex-row flex-col gap-3 w-full md:p-9 p-3">
+        <div className="md:w-1/2 w-full flex md:flex-row flex-col-reverse gap-2">
+          <div className="md:w-[20%] w-full flex md:flex-col flex-row gap-2">
+            <div
+              className={
+                singleArtImage == subImg?.img
+                  ? "w-full h-16 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
+                  : "w-full h-16 rounded-[4px] overflow-hidden cursor-pointer"
+              }
+              onClick={() => changeLargeImg(subImg?.img)}
+            >
+              <img className="h-full w-full" src={subImg?.img} alt="" />
+            </div>
+            <div
+              className={
+                singleArtImage == subImg?.img2
+                  ? "w-full h-16 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
+                  : "w-full h-16 rounded-[4px] overflow-hidden cursor-pointer"
+              }
+              onClick={() => changeLargeImg(subImg?.img2)}
+            >
+              <img className="h-full w-full" src={subImg?.img2} alt="" />
+            </div>
+            <div
+              className={
+                singleArtImage == subImg?.img3
+                  ? "w-full h-16 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
+                  : "w-full h-16 rounded-[4px] overflow-hidden cursor-pointer"
+              }
+              onClick={() => changeLargeImg(subImg?.img3)}
+            >
+              <img className="h-full w-full" src={subImg?.img3} alt="" />
+            </div>
+            <div
+              className={
+                singleArtImage == subImg?.img4
+                  ? "w-full h-16 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
+                  : "w-full h-16 rounded-[4px] overflow-hidden cursor-pointer"
+              }
+              onClick={() => changeLargeImg(subImg?.img4)}
+            >
+              <img className="h-full w-full" src={subImg?.img4} alt="" />
+            </div>
+          </div>
+          <div className="w-full h-[17.5em] rounded-[6px] overflow-hidden">
+            <img className="h-[inherit] w-full" src={singleArtImage} />
+          </div>
+        </div>
+        <div>
+          <div></div>
+          <div></div>
+          <div></div>
+          <div></div>
+        </div>
+      </div>
+      <hr />
       <CardComp
         title="Product description"
         titleStyle="uppercase text-lg font-[500] text-start w-full"
@@ -23,19 +94,19 @@ export const Single = () => {
               <div className="w-full flex flex-col gap-5 items-start">
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Original created:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Material:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Styles:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Medium:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
               </div>
             </div>
@@ -47,30 +118,30 @@ export const Single = () => {
               <div className="w-full flex flex-col gap-5 items-start">
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Painting:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Size:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Frame:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Ready to hang:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Packaging:</span>
-                  <span className="font-[400] capitalize">htj</span>
+                  <span className="font-[400] capitalize"></span>
                 </div>
               </div>
             </div>
           </div>
         }
-        secStyle="w-full flex items-center justify-center py-4"
-        subSecStyle="w-full md:p-9 p-3 flex flex-col gap-4 w-[95%] bg-tes-col shadow-md shadow-slate-400 rounded-[6px]"
+        secStyle="w-full flex items-center justify-center py-4 px-2"
+        subSecStyle="md:p-9 p-3 flex flex-col gap-4 w-[95%] bg-tes-col shadow-md shadow-slate-400 rounded-[6px]"
         style="w-full"
         subStyle="w-full"
       />
@@ -83,28 +154,28 @@ export const Single = () => {
           <div className="w-full flex flex-col gap-5 items-start">
             <div className="flex items-center font-[500] gap-1 text-xs">
               <span className="uppercase">Delivery time:</span>
-              <span className="font-[400] capitalize">htj</span>
+              <span className="font-[400] capitalize"></span>
             </div>
             <div className="flex items-center font-[500] gap-1 text-xs">
               <span className="uppercase">Delivery cost:</span>
-              <span className="font-[400] capitalize">htj</span>
+              <span className="font-[400] capitalize"></span>
             </div>
             <div className="flex items-center font-[500] gap-1 text-xs">
               <span className="uppercase">Returns:</span>
-              <span className="font-[400] capitalize">htj</span>
+              <span className="font-[400] capitalize"></span>
             </div>
             <div className="flex items-center font-[500] gap-1 text-xs">
               <span className="uppercase">Handling:</span>
-              <span className="font-[400] capitalize">htj</span>
+              <span className="font-[400] capitalize"></span>
             </div>
             <div className="flex items-center font-[500] gap-1 text-xs">
               <span className="uppercase">Ship from:</span>
-              <span className="font-[400] capitalize">htj</span>
+              <span className="font-[400] capitalize"></span>
             </div>
           </div>
         }
-        secStyle="w-full flex items-center justify-center py-4"
-        subSecStyle="w-full md:p-9 p-3 flex flex-col gap-4 w-[95%] bg-tes-col shadow-md shadow-slate-400 rounded-[6px]"
+        secStyle="w-full flex items-center justify-center py-4 px-2"
+        subSecStyle="md:p-9 p-3 flex flex-col gap-4 w-[95%] bg-tes-col shadow-md shadow-slate-400 rounded-[6px]"
         style="w-full"
         subStyle="w-full"
       />
