@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import bestSell from "../assets/home.jpg";
-import { Card } from "../component/card";
+import { CardComp } from "../component/card";
 import { Subscribe } from "../component/Subscription";
 import { Footer } from "../component/footer";
 import { NavBar } from "../component/NavBar";
@@ -122,7 +122,7 @@ export const Gallery = () => {
         </div>
       </div>
       <hr />
-      <Card
+      <CardComp
         items={popularSales}
         renderItem={(sale) => (
           <div className="flex items-start justify-start flex-col gap-[4px] w-full h-fit">

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Footer } from "../component/footer";
 import { Subscribe } from "../component/Subscription";
-import { Card } from "../component/card";
+import { CardComp } from "../component/card";
 import artise from "../assets/artise.jpg";
 import nature from "../assets/nature.jpg";
 import dance from "../assets/dance.jpg";
@@ -149,7 +149,7 @@ export const About = () => {
           </div>
         </div>
       </section>
-      <Card
+      <CardComp
         normalDiv={true}
         renderItem={
           <div className="flex items-start lg:items-center justify-start lg:justify-center md:flex-row flex-col lg:gap-8 gap-5 w-full h-fit">
@@ -186,7 +186,7 @@ export const About = () => {
         subStyle="w-full flex-initial h-fit overflow-hidden"
       />
       <hr />
-      <Card
+      <CardComp
         title="Meet our artist"
         titleStyle="text-xl md:text-2xl lg:text-3xl capitalize font-[500]"
         normalDiv={true}
@@ -245,7 +245,7 @@ export const About = () => {
         subStyle="w-full flex-initial h-fit overflow-hidden"
       />
       <hr />
-      <Card
+      <CardComp
         title="Meet our amazing team"
         titleStyle="text-xl md:text-2xl lg:text-3xl capitalize font-[500]"
         items={Teams}
