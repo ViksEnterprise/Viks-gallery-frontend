@@ -7,6 +7,9 @@ import { SignUp } from "./accounts/register";
 import { ForgotAccountDetails } from "./accounts/forget";
 import { Gallery } from "./pages/Gallery";
 import { Error404 } from "./views/NotFound";
+import { Contact } from "./pages/contact";
+import { ShoppingCart } from "./views/Carts";
+import { Single } from "./pages/Single";
 
 function App() {
   return (
@@ -15,10 +18,15 @@ function App() {
         <Route path="/" element={<Home />}></Route>
         <Route path="/about" element={<About />}></Route>
         <Route path="/art-gallery" element={<Gallery />}></Route>
-        <Route path="/*" element={<Error404 />}></Route>
+        <Route path='/contact' element={<Contact />}></Route>
+        <Route path="/myCart" element={<ShoppingCart />} ></Route>
+        <Route path='/single' element={<Single />}></Route>
         <Route path="/login" element={<LoginAccount />}></Route>
         <Route path="/signUp" element={<SignUp />}></Route>
         <Route path="/reset-pass" element={<ForgotAccountDetails />}></Route>
+
+        
+        <Route path="/*" element={<Error404 />}></Route>
       </Routes>
     </>
   );

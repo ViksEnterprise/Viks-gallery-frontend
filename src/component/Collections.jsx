@@ -1,6 +1,6 @@
 import React from "react";
 import bestSell from "../assets/home.jpg";
-import { Card } from "./card";
+import { CardComp } from "./card";
 
 export const Seller = () => {
   const popularSales = [
@@ -13,7 +13,7 @@ export const Seller = () => {
   ];
 
   return (
-    <Card
+    <CardComp
       title="Explore Our Latest Collections"
       titleStyle="text-xl md:text-2xl lg:text-3xl uppercase text-[#09067C] font-[500]"
       items={popularSales}
