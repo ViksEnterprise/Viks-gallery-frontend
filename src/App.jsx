@@ -7,7 +7,7 @@ import { SignUp } from "./accounts/register";
 import { ForgotAccountDetails } from "./accounts/forget";
 import { Gallery } from "./pages/Gallery";
 import { Error404 } from "./views/NotFound";
-import { Contact } from "./pages/contact";
+import { Contact } from "./pages/Contact";
 import { ShoppingCart } from "./views/Carts";
 import { Single } from "./pages/Single";
 
