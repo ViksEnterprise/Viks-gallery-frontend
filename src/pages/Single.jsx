@@ -8,6 +8,8 @@ import artise from "../assets/artise.jpg";
 import nature from "../assets/nature.jpg";
 import dance from "../assets/dance.jpg";
 import dance2 from "../assets/dance2.jpg";
+import { Model } from "../component/modal/Modal";
+import { BiDollar, BiHeart } from "react-icons/bi";
 
 export const Single = () => {
   const [singleArtImage, setSingleArtImage] = useState(artise);
@@ -24,7 +26,7 @@ export const Single = () => {
   return (
     <>
       <NavBar />
-      <div className="flex md:flex-row flex-col gap-3 w-full md:p-9 p-3">
+      <div className="flex md:flex-row flex-col gap-3 md:justify-between w-full md:p-9 p-3">
         <div className="md:w-1/2 w-full flex md:flex-row flex-col-reverse gap-2">
           <div className="md:w-[20%] w-full flex md:flex-col flex-row gap-2">
             <div
@@ -72,11 +74,49 @@ export const Single = () => {
             <img className="h-[inherit] w-full" src={singleArtImage} />
           </div>
         </div>
-        <div>
-          <div></div>
-          <div></div>
-          <div></div>
-          <div></div>
+        <div className="flex flex-col gap-5 justify-start items-center py-5 px-3 bg-tes-col shadow-md shadow-slate-400 rounded-[6px] md:w-2/5 w-full">
+          <div className="flex flex-col gap-3 items-start w-full">
+            <div className="flex flex-col gap-1 items-start w-full">
+              <div className="flex justify-between w-full items-center text-lg capitalize font-[500]">
+                <h4>Krystal yarn painting</h4>
+                <BiHeart className="cursor-pointer" />
+              </div>
+              <div className="text-sm capitalize text-red-600">
+                <span>Victor</span>
+              </div>
+            </div>
+            <div className="flex flex-col gap-2 items-start w-full font-[400] text-sm">
+              <span className="capitalize">Yarn painting</span>
+              <span>
+                Size: <span>61W &times; 51H &times; 6.1D cm</span>
+              </span>
+              <span>Ship in a box</span>
+            </div>
+          </div>
+          <div className="text-[#0A078E] text-start md:text-2xl text-xl flex items-start font-[600] w-full p-0">
+            <span className="flex items-center gap-[-2px] p-0">
+              <BiDollar />
+              1700
+            </span>
+          </div>
+          <div className="flex flex-col gap-3 items-start w-full">
+            <button
+              type="button"
+              className="h-12 flex items-center rounded-[8px] text-base font-[500] bg-blue-900 text-white w-full justify-center"
+            >
+              Add to cart
+            </button>
+            <button
+              type="button"
+              className="h-12 flex items-center rounded-[8px] text-base font-[500] border-[1px] border-blue-800 border-solid w-full justify-center"
+            >
+              Make an offer
+            </button>
+          </div>
+          <div className="flex flex-col gap-3 w-full items-start text-sm">
+            <span>Shipping included</span>
+            <span>7-days satisfaction guarantee</span>
+          </div>
         </div>
       </div>
       <hr />
@@ -207,6 +247,8 @@ export const Single = () => {
       <Subscribe />
       <hr />
       <Footer />
+
+      <Model modal={true} modalDisplay={false} icon="success" />
     </>
   );
 };

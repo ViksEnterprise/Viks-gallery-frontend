@@ -10,6 +10,7 @@ import { Error404 } from "./views/NotFound";
 import { Contact } from "./pages/Contact";
 import { ShoppingCart } from "./views/Carts";
 import { Single } from "./pages/Single";
+import { UpdatePassword } from "./accounts/Update";
 
 function App() {
   return (
@@ -21,9 +22,11 @@ function App() {
         <Route path='/contact' element={<Contact />}></Route>
         <Route path="/myCart" element={<ShoppingCart />} ></Route>
         <Route path='/single' element={<Single />}></Route>
+        {/* <Route path='/<id:id>/single' element={<Single />}></Route> */}
         <Route path="/login" element={<LoginAccount />}></Route>
         <Route path="/signUp" element={<SignUp />}></Route>
         <Route path="/reset-pass" element={<ForgotAccountDetails />}></Route>
+        <Route path="/update-password" element={<UpdatePassword />}></Route>
 
         
         <Route path="/*" element={<Error404 />}></Route>
