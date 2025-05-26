@@ -2,38 +2,25 @@ import React, { useEffect } from "react";
 import { useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { FaTimes } from "react-icons/fa";
-import { useNavigate } from "react-router-dom";
 
 export const Model = ({
   message,
   icon,
   title,
-  direction,
   buttonText,
   modal,
+  button,
   modalDisplay,
   notModalDisplay,
 }) => {
-  const navigate = useNavigate();
-  const [mode, setMode] = useState(modalDisplay);
-  const routePage = () => {
-    if (direction) {
-      navigate(direction);
-      setMode(false);
-    } else {
-      setMode(false);
-    }
-  };
   useEffect(() => {
-    if (mode == true) {
+    if (modalDisplay) {
       document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "auto";
     }
-  }, []);
+  }, [modalDisplay]);
   return (
     <>
-      <div className={mode == true ? "block" : "hidden"}>
+      <div className={modalDisplay ? "block" : "hidden"}>
         <div
           className={
             modal
@@ -47,13 +34,13 @@ export const Model = ({
                 className={
                   icon == "success"
                     ? "flex items-center justify-center h-14 w-14 rounded-full bg-green-500 text-white"
-                    : "flex items-center justify-center h-14 w-14 rounded-full bg-red-500 text-white"
+                    : "flex items-center justify-center h-12 w-12 rounded-full bg-red-500 text-white p-2"
                 }
               >
                 {icon == "success" ? (
                   <BiCheck className=" text-[24em]" />
                 ) : (
-                  <FaTimes className=" text-[24em]" />
+                  <FaTimes className=" text-[2em]" />
                 )}
               </div>
             </div>
@@ -73,7 +60,7 @@ export const Model = ({
             </div>
             <div className="h-12 w-full">
               <button
-                onClick={routePage}
+                onClick={button}
                 type="button"
                 className="h-[inherit] bg-blue-600 text-white items-center flex justify-center rounded-[8px] w-full text-lg font-[500]"
               >
