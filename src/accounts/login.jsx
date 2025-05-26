@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 import { FormCard } from "../component/form";
 import login from "../assets/login.jpg";
-import { postToApi } from "../service/baseAPI";
 import { Model } from "../component/modal/Modal";
+import axios from "../service/axios";
 
 export const LoginAccount = () => {
   const [formData, setFormData] = useState({
@@ -15,7 +15,6 @@ export const LoginAccount = () => {
     modal: true,
     message: "",
     icon: "",
-    display: true,
     direction: "",
   });
 
@@ -25,7 +24,6 @@ export const LoginAccount = () => {
   ];
 
   useEffect(() => {
-    
     setModalMsg({
       modal: false,
       message: "login successfully",
@@ -33,7 +31,7 @@ export const LoginAccount = () => {
       display: false,
       icon: "success",
     });
-  }, [])
+  }, []);
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -57,16 +55,17 @@ export const LoginAccount = () => {
       const url = "login";
       setLoader(true);
       try {
-        const response = await postToApi(url, formData);
+        const response = await axios.post(url, formData);
         if (response) {
-          sessionStorage.setItem("MVtoken", response.access_token);
+          sessionStorage.setItem("MVtoken", response.data.access_token);
           localStorage.setItem(
             "userData",
             JSON.stringify({
-              name: `${response.user_name}`,
-              pic: `${response.profile_pic}`,
+              name: `${response.data.user_name}`,
+              pic: `${response.data.profile_pic}`,
             })
           );
+          console.log(response)
         }
       } catch (err) {
         console.log("err", err);
@@ -109,13 +108,15 @@ export const LoginAccount = () => {
         innerFormStyle="lg:w-4/5 flex flex-col gap-5 w-full bg-white lg:bg-transparent p-3 rounded-lg"
         authMsgStyle="text-center font-semibold xl:text-3xl text-xl text-auth capitalize"
       />
-      <Model
-        modal={modalMsg.modal}
-        modalDisplay={modalMsg.display}
-        icon={modalMsg.icon}
-        message={modalMsg.message}
-        direction={modalMsg.direction}
-      />
+      {modalMsg.modal && (
+        <Model
+          modal={true}
+          modalDisplay={true}
+          icon={modalMsg.icon}
+          message={modalMsg.message}
+          direction={modalMsg.direction}
+        />
+      )}
     </>
   );
 };

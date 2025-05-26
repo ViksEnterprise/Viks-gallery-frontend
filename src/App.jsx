@@ -21,7 +21,7 @@ function App() {
         <Route path="/art-gallery" element={<Gallery />}></Route>
         <Route path="/contact" element={<Contact />}></Route>
         <Route path="/myCart" element={<ShoppingCart />}></Route>
-        <Route path="/single" element={<Single />}></Route>
+        <Route path="/:artworkId/art-gallery" element={<Single />}></Route>
         <Route path="/login" element={<LoginAccount />}></Route>
         <Route path="/signUp" element={<SignUp />}></Route>
         <Route path="/reset-pass" element={<ForgotAccountDetails />}></Route>
