@@ -17,10 +17,11 @@ import axios, { axiosPrivate } from "../service/axios";
 export const Gallery = () => {
   const navigate = useNavigate();
   const [noOfItemsInCart, setNoOfItemsInCart] = useState(0);
-  const [noOfItemsInFavourite, setNoOfItemsInFavourite] = useState([]);
+  const [noOfItemsInFavourite, setNoOfItemsInFavourite] = useState(0);
   const [hoverFav, setHoverFav] = useState(false);
   const [listOfArtwork, setListOfArtwork] = useState([]);
   const [search, setSearch] = useState("");
+  const [loading, setLoading] = useState(false);
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -34,6 +35,7 @@ export const Gallery = () => {
 
   const getArtwork = async (value) => {
     const url = `artwork/${value ? `?search=${value}` : ""}`;
+    setLoading(true);
     try {
       const response = await axios.get(url);
       if (response) {
@@ -41,6 +43,8 @@ export const Gallery = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -50,7 +54,20 @@ export const Gallery = () => {
     try {
       const res = await axiosPrivate.get(url);
       if (res) {
-        setNoOfItemsInFavourite(res.data);
+        setNoOfItemsInFavourite(res.data?.total_items_added);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getTotalNoOfItemsInCart = async () => {
+    const url = "cart/cart-summary";
+
+    try {
+      const res = await axiosPrivate.get(url);
+      if (res) {
+        setNoOfItemsInCart(res.data?.total_product);
       }
     } catch (err) {
       console.log(err);
@@ -104,6 +121,14 @@ export const Gallery = () => {
     };
   }, []);
 
+  useEffect(() => {
+    getArtwork();
+
+    getTotalNoOfFav();
+
+    getTotalNoOfItemsInCart();
+  }, []);
+
   return (
     <>
       <NavBar />
@@ -139,7 +164,7 @@ export const Gallery = () => {
                 }
               >
                 <BsTriangleFill className="absolute top-[-0.6em] text-[8px] text-blue-600" />
-                {noOfItemsInFavourite.total_items_added || 0}
+                {noOfItemsInFavourite}
               </div>
             </div>
             <div
@@ -173,7 +198,11 @@ export const Gallery = () => {
         </div>
       </div>
       <hr />
-      {!search && listOfArtwork.length > 0 ? (
+      {loading ? (
+        <div className="w-full flex items-centers justify-center h-full relative p-3">
+          <span className="h-16 w-16 rounded-full bg-white before:bg-transparent before:border-t-blue-500 before:border-solid before:border-[4px] before:content-[''] before:h-16 before:w-16 before:rounded-full before:flex before:animate-spin inset-5"></span>
+        </div>
+      ) : !search && listOfArtwork.length > 0 ? (
         <CardComp
           normalDiv={false}
           swipe={false}

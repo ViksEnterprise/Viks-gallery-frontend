@@ -2,11 +2,11 @@ import React, { useEffect, useState } from "react";
 import { Footer } from "../component/footer";
 import { CartNav } from "../component/CartNav";
 import { CardComp } from "../component/card";
-import Flower from "../assets/flower.jpg";
 import { BiArrowBack, BiMinus, BiPlus, BiTrash } from "react-icons/bi";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { BsCartPlusFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
+import { axiosPrivate } from "../service/axios";
 
 export const ShoppingCart = () => {
   const navigate = useNavigate();
@@ -15,10 +15,36 @@ export const ShoppingCart = () => {
   const [totalItems, setTotalItems] = useState(0);
   const [totalPrice, setTotalPrice] = useState(0);
 
+  const getCartItems = async () => {
+    const url = `cart/`;
+    try {
+      const response = await axiosPrivate.get(url);
+      if (response) {
+        setCart(response.data);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const getCartSummary = async () => {
+    const url = "cart/cart-summary";
+
+    try {
+      const res = await axiosPrivate.get(url);
+      if (res) {
+        setTotalItems(res.data?.total_product);
+        setTotalPrice(res.data?.total_price);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
   const increaseNoOfArtNeeded = (id) => {
-    const item = cart.find((i) => i.id === id);
+    const item = cart.find((i) => i.userCartId === id);
     if (!item) return;
-    if (item.quantity >= 25) {
+    if (item.product?.quantity >= 25) {
       if (count[id] == 10) {
         return;
       } else {
@@ -36,25 +62,65 @@ export const ShoppingCart = () => {
           [id]: prev[id] + 1,
         }));
       }
-    }
+    };
+
+    updateCartSummary(count[id] + 1, item.product.artworkId);
   };
 
   const decreaseNoOfArtNeeded = (id) => {
+    const item = cart.find((i) => i.userCartId === id);
+    if (!item) return;
     if (count[id] == 1) {
       return;
     } else {
       setCount((prev) => ({ ...prev, [id]: prev[id] - 1 }));
+    };
+    updateCartSummary(count[id] - 1, item.product.artworkId);
+  };
+  
+  const updateCartSummary = async (val, artworkId) => {
+    const url = `cart/${artworkId}/update-quantity`;
+    try {
+      const response = await axiosPrivate.put(url, {
+        quantity_of_product: val,
+      });
+      if (response) {
+        getCartSummary();
+        setCount((prev) => ({
+          ...prev, [artworkId]: response.data.data.quantity_of_product,
+        }));
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
+
+  const removeCartItem = async (id) => {
+    const url = `cart/${id}/delete`;
+    try {
+      const response = await axiosPrivate.delete(url);
+      if (response) {
+        getCartItems();
+        getCartSummary();
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  }
 
   const back = () => {
     navigate("/art-gallery");
   };
 
   useEffect(() => {
+    getCartItems();
+    getCartSummary();
+  }, []);
+
+  useEffect(() => {
     const initialCount = {};
     cart.forEach((item) => {
-      initialCount[item?.id] = 1;
+      initialCount[item?.userCartId] = item?.quantity_of_product;
     });
     setCount(initialCount);
   }, [cart]);
@@ -112,63 +178,88 @@ export const ShoppingCart = () => {
                         <div className="flex gap-2 md:flex-row flex-col w-full">
                           <div className="md:w-52 w-full rounded-[3px] md:h-32 h-48 overflow-hidden">
                             <img
-                              src={item.img}
+                              src={item.product?.full_artwork_image}
                               className="w-full h-[inherit]"
                             />
                           </div>
-                          <div className="flex flex-col gap-3 w-full">
+                          <div className="flex flex-col gap-1 w-full">
                             <div className="flex flex-col items-start gap-1">
                               <span className="font-[500] text-lg">
-                                {item.name}
+                                {item.product.artwork_title}
                               </span>
                               <span className="capitalize text-sm text-[#6B6B6B] font-[500]">
-                                {item.type}
+                                {item.product.artworkDimension?.painting_type}
                               </span>
                             </div>
-                            {item.price && (
+                            {item.product.price && (
                               <div className="w-full flex items-center justify-between gap-2 text-base font-[500] capitalize">
                                 <span>Artwork price</span>
                                 <span className="flex items-center gap-[1px]">
                                   <TbCurrencyNaira />
-                                  {item.price}
+                                  {item.product.price}
                                 </span>
                               </div>
                             )}
                           </div>
                         </div>
                         <div className="flex items-center justify-between gap-2 w-full">
-                          <div className="text-red-500 text-sm font-[500] flex items-center gap-[1px] uppercase">
+                          <div
+                            className="text-red-500 text-sm font-[500] flex items-center gap-[1px] uppercase cursor-pointer"
+                            onClick={() =>
+                              removeCartItem(item.product.artworkId)
+                            }
+                          >
                             <BiTrash />
                             <span className="text-xs">Remove</span>
                           </div>
                           <div className="flex items-center gap-1">
                             <button
                               className={
-                                count[item.id] == 1
+                                count[item.userCartId] == 1
                                   ? "border-none h-6 w-6 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
                                   : "border-none h-6 w-6 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
                               }
                               type="button"
-                              onClick={() => decreaseNoOfArtNeeded(item.id)}
-                              disabled={count[item.id] == 1}
+                              onClick={() =>
+                                decreaseNoOfArtNeeded(item.userCartId)
+                              }
+                              disabled={count[item.userCartId] == 1}
                             >
                               <BiMinus />
                             </button>
-                            <div>{count[item.id]}</div>
-                            <button
+                            <div>{count[item.userCartId]}</div>
+                            {item.product.quantity >=25 ? <button
                               className={
-                                count[item.id] == 10 || count[item.id] == 5
+                                count[item.userCartId] == 10
                                   ? "border-none h-6 w-6 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
                                   : "border-none h-6 w-6 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
                               }
                               type="button"
-                              onClick={() => increaseNoOfArtNeeded(item.id)}
+                              onClick={() =>
+                                increaseNoOfArtNeeded(item.userCartId)
+                              }
                               disabled={
-                                count[item.id] == 10 || count[item.id] == 5
+                                count[item.userCartId] == 10
                               }
                             >
                               <BiPlus />
-                            </button>
+                            </button> :
+                            <button
+                              className={
+                                count[item.userCartId] == 5
+                                  ? "border-none h-6 w-6 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
+                                  : "border-none h-6 w-6 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
+                              }
+                              type="button"
+                              onClick={() =>
+                                increaseNoOfArtNeeded(item.userCartId)
+                              }
+                              disabled={
+                                count[item.userCartId] == 5
+                              }
+                            >
+                              <BiPlus />
+                            </button>}
                           </div>
                         </div>
                         <div>
