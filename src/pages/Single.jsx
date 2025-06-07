@@ -5,7 +5,7 @@ import { Footer } from "../component/footer";
 import { Testimonial } from "../component/Reviews";
 import { CardComp } from "../component/card";
 import { Model } from "../component/modal/Modal";
-import { BiDollar, BiHeart } from "react-icons/bi";
+import { BiDollar, BiHeart, BiMinus, BiPlus } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import axios, { axiosPrivate } from "../service/axios";
 import { Error404 } from "../views/NotFound";
@@ -21,6 +21,8 @@ export const Single = () => {
     icon: "",
   });
   const [toggleModal, setToggleModal] = useState(false);
+  const [quantity, setQuantity] = useState(0);
+  const [count, setCount] = useState(0);
 
   const getArtworkDetails = async () => {
     const url = `artwork/${artworkId}`;
@@ -28,7 +30,7 @@ export const Single = () => {
       const response = await axios.get(url);
       if (response) {
         setSingleArtwork(response.data);
-        console.log(response);
+        setQuantity(response.data?.quantity);
       } else {
         window.location.href = "/artwork";
       }
@@ -87,15 +89,101 @@ export const Single = () => {
       const response = await axiosPrivate.get(url);
       if (response) {
         setFavId(response.data);
-      } else {
-        console.log(response);
       }
     } catch (err) {
       console.log(err);
     }
   };
 
+  const checkIfItemIsInCart = async () => {
+    const url = `cart/${artworkId}/getQuantity`;
+    try {
+      const response = await axiosPrivate.get(url);
+      if (response) {
+        setCount(response.data?.quantity_of_product);
+      }
+    } catch (err) {
+      console.log(err);
+    }
+  };
+
+  const increaseNoOfArtNeeded = () => {
+    if (quantity >= 25) {
+      if (count !== 10) {
+        setCount((prev) => prev + 1);
+      } else {
+        return;
+      }
+    }
+
+    if (quantity < 25) {
+      if (count !== 5) {
+        setCount((prev) => prev + 1);
+      } else {
+        return;
+      }
+    }
+    updateCart(count + 1);
+  };
+
+  const decreaseNoOfArtNeeded = () => {
+    if (count == 1) {
+      return;
+    } else {
+      setCount((prev) => prev - 1);
+    }
+    updateCart(count - 1);
+  };
+
+  const updateCart = async (val) => {
+    const disableButton = document.getElementById(".but");
+    const url = `cart/${artworkId}/update-quantity`;
+    try {
+      const response = await axiosPrivate.put(url, {
+        quantity_of_product: val,
+      });
+      disableButton.disabled = true;
+      if (response) {
+        setCount(response.data?.data?.quantity_of_product);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      disableButton.enabled = true;
+    }
+  };
+
+  const addToCart = async (id) => {
+    const url = `cart/add-to-cart`;
+    try {
+      const response = await axiosPrivate.post(url, {
+        cart_product: id,
+        quantity_of_product: count + 1,
+      });
+      if (response) {
+        setModalMsg({
+          message: "Product added to your cart",
+          icon: "success",
+        });
+        setToggleModal(true);
+        checkIfItemIsInCart();
+      }
+    } catch (err) {
+      if (err) {
+        if (err.status == 401) {
+          setModalMsg({
+            message: "Login Required",
+            icon: "error",
+          });
+          setToggleModal(true);
+        }
+      }
+      console.log(err);
+    }
+  };
+
   useEffect(() => {
+    checkIfItemIsInCart();
     getArtworkDetails();
     getFavId();
   }, []);
@@ -226,12 +314,61 @@ export const Single = () => {
                 </span>
               </div>
               <div className="flex flex-col gap-3 items-start w-full">
-                <button
-                  type="button"
-                  className="h-12 flex items-center rounded-[8px] text-base font-[500] bg-blue-900 text-white w-full justify-center"
-                >
-                  Add to cart
-                </button>
+                {count !== 0 ? (
+                  <div className="flex items-center justify-between gap-1 w-full">
+                    <button
+                      className={
+                        count == 1
+                          ? "border-none h-8 w-8 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
+                          : "border-none h-8 w-8 flex items-center justify-center bg-blue-600 text-[#fff] rounded-[3px] text-sm"
+                      }
+                      type="button"
+                      onClick={() => decreaseNoOfArtNeeded()}
+                      disabled={count == 1}
+                      id="but"
+                    >
+                      <BiMinus />
+                    </button>
+                    <div className="text-xl font-semibold">{count}</div>
+                    {quantity >= 25 ? (
+                      <button
+                        className={
+                          count == 10
+                            ? "border-none h-8 w-8 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
+                            : "border-none h-8 w-8 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
+                        }
+                        type="button"
+                        onClick={() => increaseNoOfArtNeeded()}
+                        disabled={count == 10}
+                        id="but"
+                      >
+                        <BiPlus />
+                      </button>
+                    ) : (
+                      <button
+                        className={
+                          count == 5
+                            ? "border-none h-8 w-8 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
+                            : "border-none h-8 w-8 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
+                        }
+                        type="button"
+                        onClick={() => increaseNoOfArtNeeded()}
+                        disabled={count == 5}
+                        id="but"
+                      >
+                        <BiPlus />
+                      </button>
+                    )}
+                  </div>
+                ) : (
+                  <button
+                    type="button"
+                    className="h-12 flex items-center rounded-[8px] text-base font-[500] bg-blue-900 text-white w-full justify-center"
+                    onClick={() => addToCart(singleArtwork.artworkId)}
+                  >
+                    Add to cart
+                  </button>
+                )}
                 <button
                   type="button"
                   className="h-12 flex items-center rounded-[8px] text-base font-[500] border-[1px] border-blue-800 border-solid w-full justify-center"
