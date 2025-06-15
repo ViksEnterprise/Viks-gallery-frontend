@@ -76,7 +76,7 @@ export const FormCard = ({
                                 value={fih.value}
                                 onChange={handleChange}
                               />
-                              <p className="text-sm text-danger capitalize font-normal">
+                              <p className="text-xs text-danger capitalize font-normal">
                                 {error[fih.name]}
                               </p>
                             </div>

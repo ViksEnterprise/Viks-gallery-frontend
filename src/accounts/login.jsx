@@ -12,26 +12,21 @@ export const LoginAccount = () => {
   const [error, setError] = useState({});
   const [loader, setLoader] = useState(false);
   const [modalMsg, setModalMsg] = useState({
-    modal: true,
     message: "",
     icon: "",
     direction: "",
   });
+  const [toggleModal, setToggleModal] = useState(false);
 
   const form = [
     { for: "email", label: "email", type: "email", name: "email" },
     { for: "password", label: "password", type: "password", name: "password" },
   ];
 
-  useEffect(() => {
-    setModalMsg({
-      modal: false,
-      message: "login successfully",
-      direction: "/",
-      display: false,
-      icon: "success",
-    });
-  }, []);
+  const button = () => {
+    setToggleModal(false);
+    document.body.style.overflow = "auto";
+  };
 
   const handleInput = (e) => {
     const { name, value } = e.target;
@@ -65,10 +60,37 @@ export const LoginAccount = () => {
               pic: `${response.data.profile_pic}`,
             })
           );
-          console.log(response)
+          setModalMsg({
+            message: "login successfully",
+            direction: "/",
+            icon: "success",
+          });
+          setToggleModal(true);
         }
       } catch (err) {
-        console.log("err", err);
+        if(err) {
+          if(err.status == 403) {
+            setModalMsg({
+              message: `${err.response.data?.detail}`,
+              icon: "error",
+            });
+            setToggleModal(true);
+          }
+
+          if(err.status == 500) {
+            setModalMsg({
+              message: "server error",
+              icon: "error",
+            });
+            setToggleModal(true);
+          }
+
+          setModalMsg({
+            message: `${err.message}`,
+            icon: "error",
+          });
+          setToggleModal(true);
+        }
         return;
       } finally {
         setLoader(false);
@@ -108,13 +130,15 @@ export const LoginAccount = () => {
         innerFormStyle="lg:w-4/5 flex flex-col gap-5 w-full bg-white lg:bg-transparent p-3 rounded-lg"
         authMsgStyle="text-center font-semibold xl:text-3xl text-xl text-auth capitalize"
       />
-      {modalMsg.modal && (
+      {toggleModal && (
         <Model
           modal={true}
-          modalDisplay={true}
+          modalDisplay={toggleModal}
           icon={modalMsg.icon}
           message={modalMsg.message}
           direction={modalMsg.direction}
+          buttonText="Back to home"
+          button={button}
         />
       )}
     </>
