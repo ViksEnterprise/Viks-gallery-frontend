@@ -1,11 +1,18 @@
 import React, { useEffect, useState } from "react";
 import { BUTTON, LOGO, NAVLINKS } from "../libs/Navbar";
 import { FaTimes } from "react-icons/fa";
+import { checkTokenStatus } from "../utils/tokenDecoil";
+import { BiChevronDown } from "react-icons/bi";
 
 export const NavBar = () => {
   const [scroll, setScroll] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [showNav, setShowNav] = useState(false);
+  const [data, setData] = useState(() => {
+    const user = JSON.parse(localStorage.getItem("userData"));
+    return user ? user : [];
+  });
+  const [activeToggle, setActiveToggle] = useState(false);
 
   const activateScrollBarView = () => {
     window.pageYOffset > 0 ? setScroll(true) : setScroll(false);
@@ -19,6 +26,16 @@ export const NavBar = () => {
   const closeNav = () => {
     setShowNav(false);
     document.body.style.overflow = "auto";
+  };
+
+  const openActiveToggle = () => {
+    setActiveToggle(!activeToggle);
+  };
+
+  const logOut = () => {
+    localStorage.removeItem("userData");
+    sessionStorage.removeItem("MVtoken");
+    setData([]);
   };
 
   useEffect(() => {
@@ -54,6 +71,24 @@ export const NavBar = () => {
     window.addEventListener("scroll", activateScrollBarView);
     window.addEventListener("resize", responsiveNavBar);
   }, [mobile]);
+
+  useEffect(() => {
+    const clearLogoutUser = () => {
+      const token = sessionStorage.getItem("MVtoken");
+
+      if (token) {
+        const exp = checkTokenStatus(token);
+
+        if (exp) {
+          localStorage.removeItem("userData");
+          sessionStorage.removeItem("MVtoken");
+          setData([]);
+        }
+      }
+    };
+
+    clearLogoutUser();
+  }, []);
   return (
     <>
       <div
@@ -89,12 +124,50 @@ export const NavBar = () => {
                 ))}
               </ul>
               <div>
-                <a
-                  className="text-white h-11 w-[120px] flex items-center text-center bg-blue-700 rounded-[7px] text-lg capitalize justify-center hover:bg-black"
-                  href="/login"
-                >
-                  {BUTTON}
-                </a>
+                {data.length !== 0 ? (
+                  <div className="flex items-center gap-2 w-full relative justify-center">
+                    <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
+                      <img src={`http://127.0.0.1:8000/${data.pic}`} alt="" />
+                    </div>
+                    <div>
+                      <span>{data.name}</span>
+                    </div>
+                    <div className="w-fit flex items-end flex-col gap-2 h-fit">
+                      <div
+                        className="w-fit cursor-pointer"
+                        onClick={() => openActiveToggle()}
+                      >
+                        <BiChevronDown className="text-[2em]" />
+                      </div>
+                      {activeToggle ? (
+                        <div
+                          className={
+                            scroll
+                              ? "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-3em] top-[2.5em] z-[999] bg-white"
+                              : "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-2em] top-[2.5em] z-[999] bg-white"
+                          }
+                        >
+                          <button
+                            onClick={() => logOut()}
+                            className="h-12 w-full rounded-[8px] border-solid border-red-500 border-[2px]"
+                            type="button"
+                          >
+                            Logout
+                          </button>
+                        </div>
+                      ) : (
+                        ""
+                      )}
+                    </div>
+                  </div>
+                ) : (
+                  <a
+                    className="text-white h-11 w-[120px] flex items-center text-center bg-blue-700 rounded-[7px] text-lg capitalize justify-center hover:bg-black"
+                    href="/login"
+                  >
+                    {BUTTON}
+                  </a>
+                )}
               </div>
             </nav>
           )}
@@ -135,12 +208,45 @@ export const NavBar = () => {
                   ))}
                 </ul>
                 <div className="w-full">
-                  <a
-                    className="text-white h-11 w-100 flex items-center text-center bg-blue-700 rounded-[7px] text-lg capitalize justify-center hover:bg-black"
-                    href="/login"
-                  >
-                    {BUTTON}
-                  </a>
+                  {data.length !== 0 ? (
+                    <div className="flex items-center justify-between relative w-full">
+                      <div className="flex items-center gap-2 relative">
+                        <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
+                          <img
+                            src={`http://127.0.0.1:8000/${data.pic}`}
+                            alt=""
+                          />
+                        </div>
+                        <div>
+                          <span>{data.name}</span>
+                        </div>
+                      </div>
+                      <div className="w-full flex items-end gap-2 flex-col">
+                        <div className="w-fit cursor-pointer">
+                          <BiChevronDown className="text-[2em]" />
+                        </div>
+                        {activeToggle ? (
+                          <div className="h-fit p-2 w-full rounded-[7px] border-solid border-slate-300 border-[1px] absolute top-[3em] start-0 end-0 bg-white">
+                            <button
+                              className="h-12 w-full rounded-[8px] border-solid border-red-700 border-[1px]"
+                              type="button"
+                            >
+                              Logout
+                            </button>
+                          </div>
+                        ) : (
+                          ""
+                        )}
+                      </div>
+                    </div>
+                  ) : (
+                    <a
+                      className="text-white h-11 w-100 flex items-center text-center bg-blue-700 rounded-[7px] text-lg capitalize justify-center hover:bg-black"
+                      href="/login"
+                    >
+                      {BUTTON}
+                    </a>
+                  )}
                 </div>
               </nav>
             </div>

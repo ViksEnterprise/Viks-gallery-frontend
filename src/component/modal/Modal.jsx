@@ -1,5 +1,4 @@
 import React, { useEffect } from "react";
-import { useState } from "react";
 import { BiCheck } from "react-icons/bi";
 import { FaTimes } from "react-icons/fa";
 
@@ -9,10 +8,17 @@ export const Model = ({
   title,
   buttonText,
   modal,
-  button,
+  direction,
   modalDisplay,
+  button,
   notModalDisplay,
 }) => {
+
+  const route = () => {
+   window.location.href = `${direction}`;
+    document.body.style.overflow = "auto";
+  };
+
   useEffect(() => {
     if (modalDisplay) {
       document.body.style.overflow = "hidden";
@@ -59,13 +65,23 @@ export const Model = ({
               {message}
             </div>
             <div className="h-12 w-full">
-              <button
-                onClick={button}
-                type="button"
-                className="h-[inherit] bg-blue-600 text-white items-center flex justify-center rounded-[8px] w-full text-lg font-[500]"
-              >
-                {buttonText ? `${buttonText}` : "Ok"}
-              </button>
+              {direction ? (
+                <button
+                  onClick={() => route()}
+                  type="button"
+                  className="h-[inherit] bg-blue-600 text-white items-center flex justify-center rounded-[8px] w-full text-lg font-[500]"
+                >
+                  {buttonText}
+                </button>
+              ) : (
+                <button
+                  onClick={button}
+                  type="button"
+                  className="h-[inherit] bg-blue-600 text-white items-center flex justify-center rounded-[8px] w-full text-lg font-[500]"
+                >
+                  Ok
+                </button>
+              )}
             </div>
           </div>
         </div>

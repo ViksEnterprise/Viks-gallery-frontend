@@ -23,9 +23,13 @@ export const Single = () => {
   const [toggleModal, setToggleModal] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [count, setCount] = useState(0);
+  const [loading, setLoading] = useState(false);
+  const [loader, setLoader] = useState(false);
+  const [load, setLoad] = useState(false);
 
   const getArtworkDetails = async () => {
     const url = `artwork/${artworkId}`;
+    setLoading(true);
     try {
       const response = await axios.get(url);
       if (response) {
@@ -36,6 +40,8 @@ export const Single = () => {
       }
     } catch (err) {
       console.log(err);
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -128,6 +134,7 @@ export const Single = () => {
 
   const decreaseNoOfArtNeeded = () => {
     if (count == 1) {
+      removeCartItem()
       return;
     } else {
       setCount((prev) => prev - 1);
@@ -136,25 +143,25 @@ export const Single = () => {
   };
 
   const updateCart = async (val) => {
-    const disableButton = document.getElementById(".but");
     const url = `cart/${artworkId}/update-quantity`;
+    setLoad(true);
     try {
       const response = await axiosPrivate.put(url, {
         quantity_of_product: val,
       });
-      disableButton.disabled = true;
       if (response) {
         setCount(response.data?.data?.quantity_of_product);
       }
     } catch (err) {
       console.log(err);
     } finally {
-      disableButton.enabled = true;
+      setLoad(false);
     }
   };
 
   const addToCart = async (id) => {
     const url = `cart/add-to-cart`;
+    setLoader(true);
     try {
       const response = await axiosPrivate.post(url, {
         cart_product: id,
@@ -179,6 +186,20 @@ export const Single = () => {
         }
       }
       console.log(err);
+    } finally {
+      setLoader(false);
+    }
+  };
+
+  const removeCartItem = async () => {
+    const url = `cart/${artworkId}/delete`;
+    try {
+      const response = await axiosPrivate.delete(url);
+      if (response) {
+        setCount(0)
+      }
+    } catch (err) {
+      console.log(err);
     }
   };
 
@@ -189,7 +210,11 @@ export const Single = () => {
   }, []);
   return (
     <>
-      {singleArtwork.length !== 0 ? (
+      {loading ? (
+        <div className="w-full flex items-center justify-center h-svh flex-col relative p-3">
+          <span className="h-16 w-16 rounded-full bg-white before:bg-transparent before:border-t-blue-700 before:border-solid before:border-[4px] before:content-[''] before:h-16 before:w-16 before:rounded-full before:flex before:animate-spin inset-5"></span>
+        </div>
+      ) : singleArtwork.length !== 0 ? (
         <>
           <NavBar />
           <div className="flex md:flex-row flex-col gap-3 md:justify-between w-full md:p-9 p-3">
@@ -324,8 +349,7 @@ export const Single = () => {
                       }
                       type="button"
                       onClick={() => decreaseNoOfArtNeeded()}
-                      disabled={count == 1}
-                      id="but"
+                      disabled={load}
                     >
                       <BiMinus />
                     </button>
@@ -339,8 +363,7 @@ export const Single = () => {
                         }
                         type="button"
                         onClick={() => increaseNoOfArtNeeded()}
-                        disabled={count == 10}
-                        id="but"
+                        disabled={count == 10 || load}
                       >
                         <BiPlus />
                       </button>
@@ -353,8 +376,7 @@ export const Single = () => {
                         }
                         type="button"
                         onClick={() => increaseNoOfArtNeeded()}
-                        disabled={count == 5}
-                        id="but"
+                        disabled={count == 5 || load}
                       >
                         <BiPlus />
                       </button>
@@ -366,7 +388,11 @@ export const Single = () => {
                     className="h-12 flex items-center rounded-[8px] text-base font-[500] bg-blue-900 text-white w-full justify-center"
                     onClick={() => addToCart(singleArtwork.artworkId)}
                   >
-                    Add to cart
+                    {loader ? (
+                      <span className="border-white border-t-transparent border-b-solid border-[3px] rounded-full h-7 w-7 animate-spin flex"></span>
+                    ) : (
+                      <span>Add to cart</span>
+                    )}
                   </button>
                 )}
                 <button
@@ -529,13 +555,13 @@ export const Single = () => {
               <div className="w-full flex md:flex-row flex-col md:gap-5 gap-3 items-center justify-center">
                 <button
                   type="button"
-                  className="h-12 text-white rounded-[6px] flex items-center bg-blue-800 md:w-1/4 w-full justify-center test-base font-[500]"
+                  className="h-12 text-white rounded-[6px] flex items-center bg-blue-800 lg:w-1/4 md:w-[38%] w-full justify-center test-base font-[500]"
                 >
                   Chat with an art advisory
                 </button>
                 <a
                   href="/contact"
-                  className="h-12 text-decoration-none text-white rounded-[6px] flex items-center bg-blue-800 md:w-1/4 w-full justify-center test-base font-[500]"
+                  className="h-12 text-decoration-none text-white rounded-[6px] flex items-center bg-blue-800 lg:w-1/4 md:w-[38%] w-full justify-center test-base font-[500]"
                 >
                   Contact customer support
                 </a>
