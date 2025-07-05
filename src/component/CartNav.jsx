@@ -6,7 +6,7 @@ import { BiChevronDown } from "react-icons/bi";
 export const CartNav = () => {
   const [scroll, setScroll] = useState(false);
   const [data, setData] = useState(() => {
-    const user = JSON.parse(localStorage.getItem("userData"));
+    const user = JSON.parse(sessionStorage.getItem("userInfo"));
     return user ? user : [];
   });
   const [activeToggle, setActiveToggle] = useState(false);
@@ -20,7 +20,7 @@ export const CartNav = () => {
   };
 
   const logOut = () => {
-    localStorage.removeItem("userData");
+    sessionStorage.removeItem("userInfo");
     sessionStorage.removeItem("MVtoken");
     setData([]);
   };
@@ -33,8 +33,7 @@ export const CartNav = () => {
         const exp = checkTokenStatus(token);
 
         if (exp) {
-          localStorage.removeItem("userData");
-          sessionStorage.removeItem("MVtoken");
+          sessionStorage.clear();
           setData([]);
         }
       }

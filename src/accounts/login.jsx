@@ -53,8 +53,8 @@ export const LoginAccount = () => {
         const response = await axios.post(url, formData);
         if (response) {
           sessionStorage.setItem("MVtoken", response.data.access_token);
-          localStorage.setItem(
-            "userData",
+          sessionStorage.setItem(
+            "userInfo",
             JSON.stringify({
               name: `${response.data.user_name}`,
               pic: `${response.data.profile_pic}`,

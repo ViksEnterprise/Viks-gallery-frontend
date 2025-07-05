@@ -121,6 +121,10 @@ export const ShoppingCart = () => {
     navigate("/art-gallery");
   };
 
+  const checkout = () => {
+    navigate('/cart/checkout')
+  }
+
   useEffect(() => {
     getCartItems();
     getCartSummary();
@@ -323,6 +327,7 @@ export const ShoppingCart = () => {
                               <button
                                 className="w-full h-12 rounded-[6px] flex items-center justify-center text-base font-[500] bg-blue-800 text-white"
                                 type="button"
+                                onClick={checkout}
                               >
                                 Checkout
                               </button>
