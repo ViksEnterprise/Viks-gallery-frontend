@@ -561,7 +561,7 @@ export const Single = () => {
                 </button>
                 <a
                   href="/contact"
-                  className="h-12 text-decoration-none text-white rounded-[6px] flex items-center bg-blue-800 lg:w-1/4 md:w-[38%] w-full justify-center test-base font-[500]"
+                  className="h-12 text-decoration-none rounded-[6px] flex items-center border-blue-800 border lg:w-1/4 md:w-[38%] w-full justify-center test-base font-[500]"
                 >
                   Contact customer support
                 </a>

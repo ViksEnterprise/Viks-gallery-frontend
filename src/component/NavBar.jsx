@@ -9,7 +9,7 @@ export const NavBar = () => {
   const [mobile, setMobile] = useState(false);
   const [showNav, setShowNav] = useState(false);
   const [data, setData] = useState(() => {
-    const user = JSON.parse(localStorage.getItem("userData"));
+    const user = JSON.parse(sessionStorage.getItem("userInfo"));
     return user ? user : [];
   });
   const [activeToggle, setActiveToggle] = useState(false);
@@ -33,7 +33,7 @@ export const NavBar = () => {
   };
 
   const logOut = () => {
-    localStorage.removeItem("userData");
+    sessionStorage.removeItem("userInfo");
     sessionStorage.removeItem("MVtoken");
     setData([]);
   };
@@ -80,8 +80,7 @@ export const NavBar = () => {
         const exp = checkTokenStatus(token);
 
         if (exp) {
-          localStorage.removeItem("userData");
-          sessionStorage.removeItem("MVtoken");
+          sessionStorage.clear();
           setData([]);
         }
       }
@@ -222,7 +221,10 @@ export const NavBar = () => {
                         </div>
                       </div>
                       <div className="w-full flex items-end gap-2 flex-col">
-                        <div className="w-fit cursor-pointer">
+                        <div
+                          className="w-fit cursor-pointer"
+                          onClick={() => openActiveToggle()}
+                        >
                           <BiChevronDown className="text-[2em]" />
                         </div>
                         {activeToggle ? (
@@ -230,6 +232,7 @@ export const NavBar = () => {
                             <button
                               className="h-12 w-full rounded-[8px] border-solid border-red-700 border-[1px]"
                               type="button"
+                              onClick={() => logOut()}
                             >
                               Logout
                             </button>
