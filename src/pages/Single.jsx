@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from "react";
 import { NavBar } from "../component/NavBar";
 import { Subscribe } from "../component/Subscription";
-import { Footer } from "../component/footer";
+import { Footer } from "../component/FooterNav";
 import { Testimonial } from "../component/Reviews";
-import { CardComp } from "../component/card";
+import { CardComp } from "../component/CardModal";
 import { Model } from "../component/modal/Modal";
 import { BiDollar, BiHeart, BiMinus, BiPlus } from "react-icons/bi";
 import { useParams } from "react-router-dom";

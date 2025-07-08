@@ -1,6 +1,6 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import signUpImg from "../assets/register.jpg";
-import { FormCard } from "../component/form";
+import { FormCard } from "../component/FormModal";
 import { Model } from "../component/modal/Modal";
 import axios from "../service/axios";
 
@@ -78,23 +78,17 @@ export const SignUp = () => {
       try {
         const response = await axios.post(url, formData);
         if (response) {
-          sessionStorage.setItem("MVtoken", response.data.access_token);
-          localStorage.setItem(
-            "userData",
-            JSON.stringify({
-              name: `${response.data.user_name}`,
-              pic: `${response.data.profile_pic}`,
-            })
-          );
           setModalMsg({
-            message: "login successfully",
-            direction: "/",
+            message: "Sign up successfully. Check your email for a code",
+            direction: "/verification",
             icon: "success",
           });
           setToggleModal(true);
+          localStorage.setItem("user_reset_email", formData.email);
+          localStorage.setItem("request_type", "Verify Account");
         }
       } catch (err) {
-        console.log(err)
+        console.log(err);
         if (err) {
           if (
             err.status == 400 &&
@@ -112,7 +106,7 @@ export const SignUp = () => {
           if (err.status == 400 && err.response.data.email) {
             error.email = err.response.data.email[0];
           }
-          
+
           if (err.status == 403) {
             setModalMsg({
               message: `${err.response.data?.detail}`,
@@ -137,7 +131,7 @@ export const SignUp = () => {
             setToggleModal(true);
           }
 
-          if(err.message == 'Network Error') {
+          if (err.message == "Network Error") {
             setModalMsg({
               message: `${err.message}`,
               icon: "error",
@@ -175,7 +169,7 @@ export const SignUp = () => {
         loading={loader}
         link="/login"
         subLink="Login"
-        formStyle="flex h-full w-full relative"
+        formStyle="flex flex-row-reverse h-full w-full relative"
         imageHldStyle="lg:relative absolute h-full lg:w-2/5 w-full bottom-0"
         subImgHoldStyle="h-full w-full"
         headingStyle="font-semibold xl:text-4xl lg:text-3xl text-2xl lg:text-auth text-white"
@@ -190,7 +184,7 @@ export const SignUp = () => {
           icon={modalMsg.icon}
           message={modalMsg.message}
           direction={modalMsg.direction}
-          buttonText="Back to home"
+          buttonText="Verify account"
           button={button}
         />
       )}

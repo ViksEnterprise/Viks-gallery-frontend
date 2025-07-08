@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import "swiper/css";
 import Flower from '../assets/flower.jpg'
-import { CardComp } from "./card";
+import { CardComp } from "./CardModal";
 
 export const Testimonial = () => {
     const slide = true

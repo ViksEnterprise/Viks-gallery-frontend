@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { CardComp } from "./card";
+import { CardComp } from "./CardModal";
 import axios from "../service/axios";
 import { useNavigate } from "react-router-dom";
 

@@ -12,6 +12,7 @@ import { ShoppingCart } from "./views/Carts";
 import { Single } from "./pages/Single";
 import { UpdatePassword } from "./accounts/update";
 import { Checkout } from "./views/CheckOutView";
+import { Verification } from "./accounts/Verification";
 
 function App() {
   return (
@@ -24,10 +25,16 @@ function App() {
         <Route path="/myCart" element={<ShoppingCart />}></Route>
         <Route path="/:artworkId/art-gallery" element={<Single />}></Route>
         <Route path="/cart/checkout" element={<Checkout />}></Route>
+
+        {/* Authentications Route */}
+
         <Route path="/login" element={<LoginAccount />}></Route>
         <Route path="/signUp" element={<SignUp />}></Route>
         <Route path="/reset-pass" element={<ForgotAccountDetails />}></Route>
         <Route path="/update-password" element={<UpdatePassword />}></Route>
+        <Route path="/verification" element={<Verification />}></Route>
+
+        {/* 404 Route */}
 
         <Route path="/*" element={<Error404 />}></Route>
       </Routes>

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Footer } from "../component/footer";
+import { Footer } from "../component/FooterNav";
 import { Subscribe } from "../component/Subscription";
-import { CardComp } from "../component/card";
+import { CardComp } from "../component/CardModal";
 import artise from "../assets/artise.jpg";
 import nature from "../assets/nature.jpg";
 import dance from "../assets/dance.jpg";

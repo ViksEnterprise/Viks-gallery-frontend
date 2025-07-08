@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useState } from "react";
-import { CardComp } from "../component/card";
+import { CardComp } from "../component/CardModal";
 import { Subscribe } from "../component/Subscription";
-import { Footer } from "../component/footer";
+import { Footer } from "../component/FooterNav";
 import { NavBar } from "../component/NavBar";
 import {
   FaArrowDown,

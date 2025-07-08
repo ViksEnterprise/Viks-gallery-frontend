@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import { FormCard } from "../component/form";
+import { FormCard } from "../component/FormModal";
 import axios from "../service/axios";
 import { Model } from "../component/modal/Modal";
 
@@ -12,6 +12,7 @@ export const ForgotAccountDetails = () => {
   const [modalMsg, setModalMsg] = useState({
     message: "",
     icon: "",
+    direction: "",
   });
   const [toggleModal, setToggleModal] = useState(false);
 
@@ -58,9 +59,12 @@ export const ForgotAccountDetails = () => {
         const res = await axios.post(url, formD);
         setModalMsg({
           message: `${res.data.message}`,
+          direction: "/verification",
           icon: "success",
         });
         setToggleModal(true);
+        localStorage.setItem('user_reset_email', formD.email)
+        localStorage.setItem('request_type', 'Reset Password')
       } catch (err) {
         if (err) {
           const lErr = formatErrorMessage(
@@ -117,7 +121,9 @@ export const ForgotAccountDetails = () => {
           modal={true}
           modalDisplay={toggleModal}
           icon={modalMsg.icon}
+          direction={modalMsg.direction}
           message={modalMsg.message}
+          buttonText='Ok'
           button={button}
         />
       )}
