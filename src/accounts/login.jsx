@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { FormCard } from "../component/form";
+import { FormCard } from "../component/FormModal";
 import login from "../assets/login.jpg";
 import { Model } from "../component/modal/Modal";
 import axios from "../service/axios";
@@ -68,8 +68,8 @@ export const LoginAccount = () => {
           setToggleModal(true);
         }
       } catch (err) {
-        if(err) {
-          if(err.status == 403) {
+        if (err) {
+          if (err.status == 403) {
             setModalMsg({
               message: `${err.response.data?.detail}`,
               icon: "error",
@@ -77,7 +77,7 @@ export const LoginAccount = () => {
             setToggleModal(true);
           }
 
-          if(err.status == 500) {
+          if (err.status == 500) {
             setModalMsg({
               message: "server error",
               icon: "error",
@@ -102,6 +102,11 @@ export const LoginAccount = () => {
       return;
     }
   };
+
+  useEffect(() => {
+    localStorage.removeItem("request_type");
+    localStorage.removeItem("user_reset_email");
+  }, [])
 
   return (
     <>

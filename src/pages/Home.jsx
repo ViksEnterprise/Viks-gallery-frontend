@@ -5,7 +5,7 @@ import { Seller } from "../component/Collections";
 import { Subscribe } from "../component/Subscription";
 import { HiChevronRight } from "react-icons/hi";
 import { useEffect } from "react";
-import { Footer } from "../component/footer";
+import { Footer } from "../component/FooterNav";
 import { NavBar } from "../component/NavBar";
 
 export const Home = () => {

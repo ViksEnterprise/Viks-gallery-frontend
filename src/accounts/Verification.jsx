@@ -4,81 +4,75 @@ import login from "../assets/login.jpg";
 import { Model } from "../component/modal/Modal";
 import axios from "../service/axios";
 
-export const UpdatePassword = () => {
-  const [formD, setFormD] = useState({
-    password: "",
-    password2: "",
+export const Verification = () => {
+  const [formData, setFormData] = useState({
     email: "",
+    code: "",
   });
-  const form = [
-    {
-      for: "password",
-      label: "new password",
-      type: "password",
-      name: "password",
-    },
-    {
-      for: "password",
-      label: "confirm password",
-      type: "password",
-      name: "password2",
-    },
-  ];
+  const [error, setError] = useState({});
+  const [loader, setLoader] = useState(false);
   const [modalMsg, setModalMsg] = useState({
     message: "",
     icon: "",
     direction: "",
   });
   const [toggleModal, setToggleModal] = useState(false);
-  const [loader, setLoader] = useState(false);
-  const [error, setError] = useState({});
+  const [request, setRequest] = useState('')
+
+  const form = [
+    {
+      for: "code",
+      label: "enter the code sent to your mail",
+      type: "text",
+      name: "code",
+    },
+  ];
 
   const button = () => {
     setToggleModal(false);
     document.body.style.overflow = "auto";
   };
 
-  const handleChange = (e) => {
+  const handleInput = (e) => {
     const { name, value } = e.target;
-
-    setFormD({ ...formD, [name]: value });
+    setFormData({ ...formData, [name]: value });
     setError({ ...error, [name]: undefined });
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const symbols = /[!#$%^&*()]/;
     const newErr = {};
 
-    if (!formD.password) {
-      newErr.password = "password required";
-    } else if (!formD.password2) {
-      newErr.password2 = "confirm password required";
-    } else if (formD.password2 != formD.password) {
-      newErr.password2 = "password doesn't match";
+    if (!formData.code) {
+      newErr.code = "code required";
+    } else if (symbols.test(formData.code)) {
+      newErr.code = "Invalid code";
     } else {
-      formD.email = localStorage.getItem("user_reset_email");
-      const url = "set-new-password";
+      const request = localStorage.getItem("request_type");
+      formData.email = localStorage.getItem("user_reset_email");
+
+      let url;
+
+      setRequest(request)
+
+      if (request == "Reset Password") url = "verify-reset-password-code";
+
+      if (request == "Verify Account") url = "verify-user-account";
+      
       setLoader(true);
       try {
-        const response = await axios.patch(url, formD);
+        const response = await axios.post(url, formData);
         if (response) {
           setModalMsg({
             message: `${response.data.message}`,
-            direction: "/login",
+            direction: request == "Verify Account" ? '/login' : '/update-password',
             icon: "success",
           });
           setToggleModal(true);
         }
       } catch (err) {
         if (err) {
-          if (err.status == 403) {
-            setModalMsg({
-              message: `${err.response.data?.detail}`,
-              icon: "error",
-            });
-            setToggleModal(true);
-          }
-
           if (err.response.data?.non_field_errors?.[0]) {
             setModalMsg({
               message: `${err.response.data.non_field_errors[0]}`,
@@ -112,17 +106,19 @@ export const UpdatePassword = () => {
       <FormCard
         authImg={login}
         heading="ViksGallery"
-        authMessage="Set New Password"
+        authMessage="Verify Code"
         formInHolder={form.map((f) => ({
           ...f,
-          value: formD[f.name],
+          value: formData[f.name],
         }))}
         error={error}
-        handleChange={(e) => handleChange(e)}
+        handleChange={(e) => handleInput(e)}
         handleSubmit={(e) => handleFormSubmit(e)}
         loading={loader}
-        btnText="Update Password"
+        fgTxt="resend code"
+        btnText="Send"
         singleSubLink={true}
+        link="/signUp"
         formStyle="flex lg:h-screen h-svh w-full relative"
         imageHldStyle="lg:h-screen h-svh lg:w-2/5 w-full overflow-hidden"
         subImgHoldStyle="lg:h-screen h-svh w-full"
@@ -138,7 +134,11 @@ export const UpdatePassword = () => {
           icon={modalMsg.icon}
           message={modalMsg.message}
           direction={modalMsg.direction}
-          buttonText="Login"
+          buttonText={
+            (request == "Verify Account"
+                ? "Login"
+                : "Set new password")
+          }
           button={button}
         />
       )}

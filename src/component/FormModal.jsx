@@ -63,7 +63,7 @@ export const FormCard = ({
                             key={i}
                           >
                             <label
-                              className="text-label font-normal xl:text-lg text-base"
+                              className="text-label font-normal text-base"
                               htmlFor={fih.for}
                             >
                               {fih.label}

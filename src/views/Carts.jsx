@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
-import { Footer } from "../component/footer";
+import { Footer } from "../component/FooterNav";
 import { CartNav } from "../component/CartNav";
-import { CardComp } from "../component/card";
+import { CardComp } from "../component/CardModal";
 import { BiArrowBack, BiMinus, BiPlus, BiTrash } from "react-icons/bi";
 import { TbCurrencyNaira } from "react-icons/tb";
 import { BsCartPlusFill } from "react-icons/bs";

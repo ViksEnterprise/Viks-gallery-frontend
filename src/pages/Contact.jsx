@@ -1,6 +1,6 @@
 import React from "react";
 import { NavBar } from "../component/NavBar";
-import { Footer } from "../component/footer";
+import { Footer } from "../component/FooterNav";
 import contactImg from "../assets/contact.jpg";
 import { FiMail } from "react-icons/fi";
 import { BiPhoneCall } from "react-icons/bi";
