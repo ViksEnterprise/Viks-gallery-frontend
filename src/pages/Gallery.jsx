@@ -42,7 +42,7 @@ export const Gallery = () => {
         setListOfArtwork(response.data?.data);
       }
     } catch (err) {
-      console.log(err);
+      return
     } finally {
       setLoading(false);
     }
@@ -57,7 +57,7 @@ export const Gallery = () => {
         setNoOfItemsInFavourite(res.data?.total_items_added);
       }
     } catch (err) {
-      console.log(err);
+      return
     }
   };
 
@@ -70,7 +70,7 @@ export const Gallery = () => {
         setNoOfItemsInCart(res.data?.total_product);
       }
     } catch (err) {
-      console.log(err);
+      return
     }
   };
 

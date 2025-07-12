@@ -10,7 +10,7 @@ import { useEffect, useRef, useState } from "react";
 import { CardComp } from "../component/CardModal";
 import axios, { axiosPrivate } from "../service/axios";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
-import { Model } from "../component/modal/Modal";
+import { Model } from "../component/Model/Modal";
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -35,6 +35,7 @@ export const Checkout = () => {
     message: "",
     icon: "",
   });
+  const [loading, setLoading] = useState(true);
   const [formData, setFormData] = useState({
     first_name: "",
     last_name: "",
@@ -49,7 +50,10 @@ export const Checkout = () => {
   const [type, setType] = useState({
     card_details: false,
     paypal: false,
+    payment_address_id: "",
   });
+  const [payment_url, setPayment_URL] = useState("");
+  const [orderDisable, setOrderDisable] = useState(true);
 
   const paymentType = [
     {
@@ -57,7 +61,11 @@ export const Checkout = () => {
       name: "Debit or credit card",
       name_type: "card_details",
     },
-    { type: "payment", name: "Paypal", name_type: "paypal" },
+    {
+      type: "payment",
+      name: "PayPal",
+      name_type: "paypal",
+    },
   ];
 
   const button = () => {
@@ -66,11 +74,12 @@ export const Checkout = () => {
   };
 
   const handleTypeChange = (selectedKey) => {
-    const newState = {};
-    paymentType.forEach((name) => {
-      newState[name.name_type] = name.name_type === selectedKey ? true : false;
+    setType({
+      card_details: selectedKey != "card_details",
+      paypal: selectedKey != "paypal",
+      payment_address_id: "",
     });
-    setType(newState);
+    payment_Type();
   };
 
   const handleChange = (e) => {
@@ -177,14 +186,15 @@ export const Checkout = () => {
       try {
         const response = axiosPrivate.post(url, payload);
         if (response) {
+          getAddress();
           setModalMsg({
             message: "Address saved successfully",
             icon: "success",
           });
-          getAddress();
+          setToggleModal(true);
         }
       } catch (err) {
-        console.log(err);
+        return;
       } finally {
         setLoader(false);
       }
@@ -197,16 +207,51 @@ export const Checkout = () => {
     }
   };
 
+  const payment_Type = async () => {
+    if (!type.card_details && !type.paypal) {
+      setModalMsg({
+        message: "Opps try again",
+        icon: "error",
+      });
+      setToggleModal(true);
+    } else if (address.length == 0) {
+      setModalMsg({ message: "Fill in your address", icon: "error" });
+      setToggleModal(true);
+    } else if (type.paypal) {
+      setModalMsg({
+        message: "Payment type is not available at the moment",
+        icon: "error",
+      });
+      setToggleModal(true);
+    } else {
+      const url = `payments/payment-type`;
+      const payload = {
+        ...type,
+        payment_address_id: address?.[0].payment_address_ID,
+      };
+
+      try {
+        const res = await axiosPrivate.patch(url, payload);
+        if (res) {
+          getPaymentLink();
+        }
+      } catch (err) {
+        console.error(err);
+      }
+    }
+  };
+
   const getCartItems = async () => {
     const url = `cart/`;
     try {
       const response = await axiosPrivate.get(url);
       if (response) {
         setCart(response.data);
-        console.log(cart);
       }
     } catch (err) {
-      console.log(err);
+      return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -216,10 +261,10 @@ export const Checkout = () => {
       const response = await axiosPrivate.get(url);
       if (response) {
         setAddress(response.data);
-        console.log(response);
+        setOrderDisable(false)
       }
     } catch (err) {
-      console.log(err);
+      return;
     }
   };
 
@@ -232,7 +277,7 @@ export const Checkout = () => {
         setTotalPrice(res.data?.total_price);
       }
     } catch (err) {
-      console.log(err);
+      return;
     }
   };
 
@@ -250,7 +295,7 @@ export const Checkout = () => {
         setCountries(response.data);
       }
     } catch (err) {
-      console.log(err);
+      return;
     }
   };
 
@@ -270,7 +315,7 @@ export const Checkout = () => {
         setStates(response.data);
       }
     } catch (err) {
-      console.log(err);
+      return;
     }
   };
 
@@ -292,8 +337,29 @@ export const Checkout = () => {
         console.log(formData.country);
       }
     } catch (err) {
-      console.log(err);
+      return;
     }
+  };
+
+  const getPaymentLink = async () => {
+    const url = `payments/pay-by-stripe`;
+    const payload = {
+      cart_id: cart?.[0].cart_id,
+    };
+    setOrderDisable(true);
+    try {
+      const response = await axiosPrivate.post(url, payload);
+      if (response) {
+        setPayment_URL(response.data.checkout_url);
+        setOrderDisable(false);
+      }
+    } catch (err) {
+      return;
+    }
+  };
+
+  const placeOrder = () => {
+    window.location = `${payment_url}`;
   };
 
   const showContent = (key) => {
@@ -316,16 +382,24 @@ export const Checkout = () => {
       setYear(year);
     };
 
+    if (address.length == 0) {
+      getCountry();
+    }
+
     getCurrentYear();
     getCartItems();
-    getCountry();
     getCartSummary();
     getAddress();
-
-    console.log(type)
   }, []);
 
   useEffect(() => {
+    if (!loading) {
+      const token = sessionStorage.getItem("MVtoken");
+      if (token && cart.length === 0) {
+        navigate("/art-gallery");
+      }
+    }
+
     checkFieldState();
   }, [formData]);
 
@@ -399,8 +473,8 @@ export const Checkout = () => {
                   />
                 ) : (
                   <div className="flex items-center gap-1 flex-wrap">
-                    {cart.map((item) => (
-                      <span className="font-[500] text-xs">
+                    {cart.map((item, i) => (
+                      <span className="font-[500] text-xs" key={i}>
                         {item.product.artwork_title},
                       </span>
                     ))}
@@ -647,13 +721,14 @@ export const Checkout = () => {
                       type="radio"
                       className="h-3 w-3 cursor-pointer"
                       name={name.type}
-                      checked={type[name.name_type] == true}
-                      value={name.name_type}
+                      value={type[name.name_type]}
                       onChange={() => handleTypeChange(name.name_type)}
+                      disabled={address.length == 0 || orderDisable}
+                      id={name.name_type}
                     />
                     <label
                       className="font-semibold text-sm cursor-pointer"
-                      htmlFor="Debit or credit card"
+                      htmlFor={name.name_type}
                     >
                       {name.name}
                     </label>
@@ -702,8 +777,14 @@ export const Checkout = () => {
           </div>
           <div className="w-full">
             <button
-              className="h-11 rounded-[7px] p-2 bg-blue-800 md:w-3/6 w-full text-white font-semibold text-base"
+              className={
+                orderDisable
+                  ? "h-11 rounded-[7px] p-2 bg-blue-100 md:w-3/6 w-full text-white font-semibold text-base"
+                  : "h-11 rounded-[7px] p-2 bg-blue-800 md:w-3/6 w-full text-white font-semibold text-base"
+              }
               type="button"
+              disabled={orderDisable}
+              onClick={() => placeOrder()}
             >
               Place order
             </button>

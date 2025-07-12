@@ -126,7 +126,7 @@ export const NavBar = () => {
                 {data.length !== 0 ? (
                   <div className="flex items-center gap-2 w-full relative justify-center">
                     <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
-                      <img src={`http://127.0.0.1:8000/${data.pic}`} alt="" />
+                      <img src={data.pic} alt="" />
                     </div>
                     <div>
                       <span>{data.name}</span>

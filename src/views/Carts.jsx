@@ -2,8 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Footer } from "../component/FooterNav";
 import { CartNav } from "../component/CartNav";
 import { CardComp } from "../component/CardModal";
-import { BiArrowBack, BiMinus, BiPlus, BiTrash } from "react-icons/bi";
-import { TbCurrencyNaira } from "react-icons/tb";
+import { BiArrowBack, BiMinus, BiPlus, BiPound, BiTrash } from "react-icons/bi";
 import { BsCartPlusFill } from "react-icons/bs";
 import { useNavigate } from "react-router-dom";
 import { axiosPrivate } from "../service/axios";
@@ -213,7 +212,7 @@ export const ShoppingCart = () => {
                                 <div className="w-full flex items-center justify-between gap-2 text-base font-[500] capitalize">
                                   <span className="text-blue-700 font-[700!important]">Artwork price</span>
                                   <span className="flex items-center gap-[1px]">
-                                    <TbCurrencyNaira />
+                                    < BiPound />
                                     {item.product.price}
                                   </span>
                                 </div>
@@ -313,7 +312,7 @@ export const ShoppingCart = () => {
                               <div className="flex items-center justify-between w-full font-[500] text-sm">
                                 <span className="text-base">SubTotal</span>
                                 <span className="flex items-center gap-[2px]">
-                                  <TbCurrencyNaira /> {totalPrice}
+                                  <BiPound /> {totalPrice}
                                 </span>
                               </div>
                               <div>

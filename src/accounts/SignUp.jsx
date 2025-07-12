@@ -1,7 +1,7 @@
 import { useState } from "react";
 import signUpImg from "../assets/register.jpg";
 import { FormCard } from "../component/FormModal";
-import { Model } from "../component/modal/Modal";
+import { Model } from "../component/Model/Modal";
 import axios from "../service/axios";
 
 export const SignUp = () => {

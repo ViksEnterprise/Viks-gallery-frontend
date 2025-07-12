@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormCard } from "../component/FormModal";
 import login from "../assets/login.jpg";
-import { Model } from "../component/modal/Modal";
+import { Model } from "../component/Model/Modal";
 import axios from "../service/axios";
 
 export const Verification = () => {
@@ -17,7 +17,9 @@ export const Verification = () => {
     direction: "",
   });
   const [toggleModal, setToggleModal] = useState(false);
-  const [request, setRequest] = useState('')
+  const [request, setRequest] = useState("");
+  const [count, setCount] = useState(30);
+  const [disable, setDisable] = useState(false);
 
   const form = [
     {
@@ -39,6 +41,22 @@ export const Verification = () => {
     setError({ ...error, [name]: undefined });
   };
 
+  const startCountdown = () => {
+    setDisable(true);
+    setCount(30);
+
+    const resendCount = setInterval(() => {
+      setCount((prev) => {
+        if (prev <= 1) {
+          clearInterval(resendCount);
+          setDisable(false);
+          return 0;
+        }
+        return prev - 1;
+      });
+    }, 2500);
+  };
+
   const handleFormSubmit = async (e) => {
     e.preventDefault();
     const symbols = /[!#$%^&*()]/;
@@ -54,19 +72,20 @@ export const Verification = () => {
 
       let url;
 
-      setRequest(request)
+      setRequest(request);
 
       if (request == "Reset Password") url = "verify-reset-password-code";
 
       if (request == "Verify Account") url = "verify-user-account";
-      
+
       setLoader(true);
       try {
         const response = await axios.post(url, formData);
         if (response) {
           setModalMsg({
             message: `${response.data.message}`,
-            direction: request == "Verify Account" ? '/login' : '/update-password',
+            direction:
+              request == "Verify Account" ? "/login" : "/update-password",
             icon: "success",
           });
           setToggleModal(true);
@@ -101,6 +120,65 @@ export const Verification = () => {
     }
   };
 
+  const resendCode = async () => {
+    const request = localStorage.getItem("request_type");
+    const email = localStorage.getItem("user_reset_email");
+
+    let url;
+    let payload;
+
+    setRequest(request);
+
+    if (request == "Reset Password")
+      (url = "resend-password-reset-code"),
+        (payload = {
+          email: email,
+          verification_type: "Reset Password",
+        });
+
+    if (request == "Verify Account")
+      (url = "resend-verification-code"),
+        (payload = {
+          email: email,
+          verification_type: "Email Verification",
+        });
+
+    setLoader(true);
+
+    try {
+      const response = await axios.post(url, payload);
+      if (response) {
+        setModalMsg({
+          message: `${response.data.message}`,
+          icon: "success",
+        });
+        setToggleModal(true);
+        startCountdown();
+      }
+    } catch (err) {
+      if (err) {
+        if (err.response.data?.non_field_errors?.[0]) {
+          setModalMsg({
+            message: `${err.response.data.non_field_errors[0]}`,
+            icon: "error",
+          });
+          setToggleModal(true);
+        }
+
+        if (err.status == 500) {
+          setModalMsg({
+            message: "server error",
+            icon: "error",
+          });
+          setToggleModal(true);
+        }
+      }
+      return;
+    } finally {
+      setLoader(false);
+    }
+  };
+
   return (
     <>
       <FormCard
@@ -114,10 +192,12 @@ export const Verification = () => {
         error={error}
         handleChange={(e) => handleInput(e)}
         handleSubmit={(e) => handleFormSubmit(e)}
+        resendButton={() => resendCode()}
         loading={loader}
-        fgTxt="resend code"
+        resendBtn={disable ? `${count}s resend code` : `resend code`}
         btnText="Send"
         singleSubLink={true}
+        disable={disable}
         link="/signUp"
         formStyle="flex lg:h-screen h-svh w-full relative"
         imageHldStyle="lg:h-screen h-svh lg:w-2/5 w-full overflow-hidden"
@@ -135,9 +215,7 @@ export const Verification = () => {
           message={modalMsg.message}
           direction={modalMsg.direction}
           buttonText={
-            (request == "Verify Account"
-                ? "Login"
-                : "Set new password")
+            request == "Verify Account" ? "Login" : "Set new password"
           }
           button={button}
         />

@@ -3,9 +3,9 @@ const LOGO = "viks gallery";
 const NAVLINKS = [
   { link: "home", to: "/" },
   { link: "about", to: "/about" },
-  { link: "news", to: "#" },
+  { link: "news", to: "/blog" },
   { link: "gallery", to: "/art-gallery" },
-  { link: "career", to: "#" },
+  { link: "career", to: "/career" },
   { link: "contact", to: "/contact" },
 ];
 

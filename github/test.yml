@@ -1,0 +1,33 @@
+name: VKIS GALLERY
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up nodeJs
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+
+      - name: Clean and Install Dependencies
+        run: 
+          rm -rf node_modules package-lock.json
+          npm install
+      
+      - name: Create .env
+        run: |
+          echo 'VKIS_API_URL=${{ secrets.VKIS_API_URL}}' >> .env
+          echo 'VKIS_RAPID_API_KEY=${{ secrets.VKIS_RAPID_API_KEY}}' >> .env
+          echo 'VKIS_API_KEY=${{ secrets.VKIS_API_KEY}}' >> .env
+
+      - name: Build Vkis App
+        run: npm run build

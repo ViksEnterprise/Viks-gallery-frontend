@@ -5,8 +5,12 @@ export const Subscribe = () => {
   const [user_name, setUser_Name] = useState("");
   const [email, setEmail] = useState("");
   const [error, setError] = useState({});
-  const [message, setMessage] = useState("");
   const [loader, setLoader] = useState(false);
+  const [modalMsg, setModalMsg] = useState({
+    message: "",
+    icon: "",
+  });
+  const [toggleModal, setToggleModal] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -41,15 +45,34 @@ export const Subscribe = () => {
       try {
         const res = await axios.post(url, payload);
         if (res) {
-          setMessage(res.data?.message);
+          setModalMsg({
+            message: `${res.data?.message}`,
+            icon: "success",
+          });
+          setToggleModal(true);
         }
       } catch (err) {
         if (err) {
-          if (err.status == 400) {
-            setMessage(err.response?.data?.non_field_errors[0]);
+          if (err.response?.data?.[0]) {
+            setModalMsg({
+              message: `${err.response?.data[0]}`,
+              icon: "error",
+            });
+            setToggleModal(true);
+          } else if (err.response.data.non_field_errors?.[0]) {
+            setModalMsg({
+              message: `${err.response.data.non_field_errors?.[0]}`,
+              icon: "error",
+            });
+            setToggleModal(true);
+          } else {
+            setModalMsg({
+              message: `${err.message}`,
+              icon: "error",
+            });
+            setToggleModal(true);
           }
         }
-        console.log(err);
       } finally {
         setLoader(false);
       }
@@ -62,14 +85,10 @@ export const Subscribe = () => {
   };
 
   return (
-    <section
-      className={
-        message
-          ? "text-center w-full py-5 px-3 lg:p-9 text-lg font-[500]"
-          : "w-full py-5 px-3 lg:p-9"
-      }
-    >
-      {!message ? (
+    <>
+      <section
+        className="w-full py-5 px-3 lg:p-9"
+      >
         <div className="flex gap-3 items-start flex-col">
           <div className="flex-initial w-full lg:w-1/3 flex flex-col gap-3">
             <h2 className="text-lg lg:text-xl font-semibold uppercase text-black">
@@ -120,9 +139,18 @@ export const Subscribe = () => {
             </form>
           </div>
         </div>
-      ) : (
-        message
+      </section>
+      {toggleModal && (
+        <Model
+          modal={true}
+          modalDisplay={toggleModal}
+          icon={modalMsg.icon}
+          message={modalMsg.message}
+          direction={modalMsg.direction}
+          buttonText="Back to home"
+          button={button}
+        />
       )}
-    </section>
+    </>
   );
 };
