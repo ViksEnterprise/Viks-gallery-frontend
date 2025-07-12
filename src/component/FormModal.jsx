@@ -25,13 +25,10 @@ export const FormCard = ({
   handleChange,
   handleSubmit,
   loading,
+  resendBtn,
+  resendButton,
+  disable,
 }) => {
-  const navigate = useNavigate();
-  const handleClick = () => {
-    if (btnText === "Send reset link") {
-      navigate("/update-password");
-    }
-  };
   return (
     <div className="w-full flex items-start">
       <div className="w-full relative">
@@ -86,6 +83,24 @@ export const FormCard = ({
                       {fgTxt && (
                         <div className="md:text-base text-sm font-normal capitalize">
                           <Link to="/reset-pass">{fgTxt}</Link>
+                        </div>
+                      )}
+                      {resendBtn && (
+                        <div
+                          className={
+                            disable
+                              ? "md:text-sm text-xs font-normal w-full text-end text-slate-300"
+                              : "md:text-base text-sm font-normal w-full text-end"
+                          }
+                        >
+                          <button
+                            type="button"
+                            className="capitalize"
+                            onClick={() => resendButton()}
+                            disabled={disable}
+                          >
+                            {resendBtn}
+                          </button>
                         </div>
                       )}
                       {btnText && (

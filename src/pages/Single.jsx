@@ -4,7 +4,7 @@ import { Subscribe } from "../component/Subscription";
 import { Footer } from "../component/FooterNav";
 import { Testimonial } from "../component/Reviews";
 import { CardComp } from "../component/CardModal";
-import { Model } from "../component/modal/Modal";
+import { Model } from "../component/Model/Modal";
 import { BiDollar, BiHeart, BiMinus, BiPlus } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import axios, { axiosPrivate } from "../service/axios";
@@ -39,7 +39,7 @@ export const Single = () => {
         window.location.href = "/artwork";
       }
     } catch (err) {
-      console.log(err);
+      return
     } finally {
       setLoading(false);
     }
@@ -55,7 +55,7 @@ export const Single = () => {
   };
 
   const addToFav = async (id) => {
-    const url = `favourite/add-to-fav/`;
+    const url = `favorite/add-to-fav/`;
     try {
       const res = await axiosPrivate.post(url, {
         productId: id,
@@ -73,31 +73,31 @@ export const Single = () => {
           setToggleModal(true);
         }
       }
-      console.log(err);
+      return
     }
   };
 
   const removeFromFav = async (id) => {
-    const url = `favourite/${id}/delete`;
+    const url = `favorite/${id}/delete`;
     try {
       const response = await axiosPrivate.delete(url);
       if (response) {
         setFavId("");
       }
     } catch (err) {
-      console.log(err);
+      return
     }
   };
 
   const getFavId = async () => {
-    const url = `favourite/${artworkId}/favId`;
+    const url = `favorite/${artworkId}/favId`;
     try {
       const response = await axiosPrivate.get(url);
       if (response) {
         setFavId(response.data);
       }
     } catch (err) {
-      console.log(err);
+      return
     }
   };
 
@@ -109,7 +109,7 @@ export const Single = () => {
         setCount(response.data?.quantity_of_product);
       }
     } catch (err) {
-      console.log(err);
+      return
     }
   };
 
@@ -134,7 +134,7 @@ export const Single = () => {
 
   const decreaseNoOfArtNeeded = () => {
     if (count == 1) {
-      removeCartItem()
+      removeCartItem();
       return;
     } else {
       setCount((prev) => prev - 1);
@@ -153,7 +153,7 @@ export const Single = () => {
         setCount(response.data?.data?.quantity_of_product);
       }
     } catch (err) {
-      console.log(err);
+      return
     } finally {
       setLoad(false);
     }
@@ -185,7 +185,7 @@ export const Single = () => {
           setToggleModal(true);
         }
       }
-      console.log(err);
+      return
     } finally {
       setLoader(false);
     }
@@ -196,10 +196,10 @@ export const Single = () => {
     try {
       const response = await axiosPrivate.delete(url);
       if (response) {
-        setCount(0)
+        setCount(0);
       }
     } catch (err) {
-      console.log(err);
+      return
     }
   };
 
@@ -510,7 +510,7 @@ export const Single = () => {
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Delivery time:</span>
                   <span className="font-[400] capitalize">
-                    {singleArtwork.artworkReturn?.delivery_day}
+                    {singleArtwork.artworkReturn?.delivery_day} days
                   </span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
@@ -522,7 +522,7 @@ export const Single = () => {
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Returns:</span>
                   <span className="font-[400] capitalize">
-                    {singleArtwork.artworkReturn?.returns}
+                    {singleArtwork.artworkReturn?.returns} days
                   </span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">

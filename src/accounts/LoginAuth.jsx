@@ -1,70 +1,68 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormCard } from "../component/FormModal";
 import login from "../assets/login.jpg";
-import { Model } from "../component/modal/Modal";
+import { Model } from "../component/Model/Modal";
 import axios from "../service/axios";
 
-export const UpdatePassword = () => {
-  const [formD, setFormD] = useState({
-    password: "",
-    password2: "",
+export const LoginAccount = () => {
+  const [formData, setFormData] = useState({
     email: "",
+    password: "",
   });
-  const form = [
-    {
-      for: "password",
-      label: "new password",
-      type: "password",
-      name: "password",
-    },
-    {
-      for: "password",
-      label: "confirm password",
-      type: "password",
-      name: "password2",
-    },
-  ];
+  const [error, setError] = useState({});
+  const [loader, setLoader] = useState(false);
   const [modalMsg, setModalMsg] = useState({
     message: "",
     icon: "",
     direction: "",
   });
   const [toggleModal, setToggleModal] = useState(false);
-  const [loader, setLoader] = useState(false);
-  const [error, setError] = useState({});
+
+  const form = [
+    { for: "email", label: "email", type: "email", name: "email" },
+    { for: "password", label: "password", type: "password", name: "password" },
+  ];
 
   const button = () => {
     setToggleModal(false);
     document.body.style.overflow = "auto";
   };
 
-  const handleChange = (e) => {
+  const handleInput = (e) => {
     const { name, value } = e.target;
-
-    setFormD({ ...formD, [name]: value });
+    setFormData({ ...formData, [name]: value });
     setError({ ...error, [name]: undefined });
   };
 
   const handleFormSubmit = async (e) => {
     e.preventDefault();
+    const symbols = /[!#$%^&*()]/;
     const newErr = {};
 
-    if (!formD.password) {
+    if (!formData.email) {
+      newErr.email = "email required";
+    } else if (symbols.test(formData.email)) {
+      newErr.email =
+        "email must not contain or starts with any of this symbols";
+    } else if (!formData.password) {
       newErr.password = "password required";
-    } else if (!formD.password2) {
-      newErr.password2 = "confirm password required";
-    } else if (formD.password2 != formD.password) {
-      newErr.password2 = "password doesn't match";
     } else {
-      formD.email = localStorage.getItem("user_reset_email");
-      const url = "set-new-password";
+      const url = "login";
       setLoader(true);
       try {
-        const response = await axios.patch(url, formD);
+        const response = await axios.post(url, formData);
         if (response) {
+          sessionStorage.setItem("MVtoken", response.data.access_token);
+          sessionStorage.setItem(
+            "userInfo",
+            JSON.stringify({
+              name: `${response.data.user_name}`,
+              pic: `${response.data.profile_pic}`,
+            })
+          );
           setModalMsg({
-            message: `${response.data.message}`,
-            direction: "/login",
+            message: "login successfully",
+            direction: "/",
             icon: "success",
           });
           setToggleModal(true);
@@ -77,19 +75,15 @@ export const UpdatePassword = () => {
               icon: "error",
             });
             setToggleModal(true);
-          }
-
-          if (err.response.data?.non_field_errors?.[0]) {
+          } else if (err.status == 500) {
             setModalMsg({
-              message: `${err.response.data.non_field_errors[0]}`,
+              message: "server error",
               icon: "error",
             });
             setToggleModal(true);
-          }
-
-          if (err.status == 500) {
+          } else {
             setModalMsg({
-              message: "server error",
+              message: `${err.message}`,
               icon: "error",
             });
             setToggleModal(true);
@@ -107,22 +101,30 @@ export const UpdatePassword = () => {
     }
   };
 
+  useEffect(() => {
+    localStorage.removeItem("request_type");
+    localStorage.removeItem("user_reset_email");
+  }, []);
+
   return (
     <>
       <FormCard
         authImg={login}
         heading="ViksGallery"
-        authMessage="Set New Password"
+        authMessage="Welcome back"
         formInHolder={form.map((f) => ({
           ...f,
-          value: formD[f.name],
+          value: formData[f.name],
         }))}
         error={error}
-        handleChange={(e) => handleChange(e)}
+        handleChange={(e) => handleInput(e)}
         handleSubmit={(e) => handleFormSubmit(e)}
         loading={loader}
-        btnText="Update Password"
+        fgTxt="forgot password?"
+        btnText="Login"
         singleSubLink={true}
+        link="/signUp"
+        subLink="Sign up now"
         formStyle="flex lg:h-screen h-svh w-full relative"
         imageHldStyle="lg:h-screen h-svh lg:w-2/5 w-full overflow-hidden"
         subImgHoldStyle="lg:h-screen h-svh w-full"
@@ -138,7 +140,7 @@ export const UpdatePassword = () => {
           icon={modalMsg.icon}
           message={modalMsg.message}
           direction={modalMsg.direction}
-          buttonText="Login"
+          buttonText="Back to home"
           button={button}
         />
       )}
