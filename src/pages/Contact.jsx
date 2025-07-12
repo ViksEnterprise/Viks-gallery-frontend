@@ -11,11 +11,11 @@ export const Contact = () => {
       <NavBar />
       <hr />
       <section>
-        <div className="flex items-center w-full">
+        <div className="flex items-center w-full mt-3">
           <div className="flex items-start gap-3 md:gap-5 lg:gap-8 md:flex-row flex-col w-full md:p-11 p-5">
             <div className="lg:w-[40%] md:w-1/2 w-full">
               <img
-                className="w-full lg:h-96 md:h-56 h-48 rounded-[3px]"
+                className="w-full lg:h-96 md:h-56 h-60 rounded-[3px]"
                 src={contactImg}
                 alt=""
               />
