@@ -130,6 +130,7 @@ export const About = () => {
           </div>
         </div>
       </section>
+      <hr />
       <section className="md:py-6 md:px-5 py-3 px-4">
         <div className="container flex items-center">
           <div className="flex justify-between items-center lg:w-4/5 w-full lg:mx-auto md:mx-2 m-0">
@@ -149,6 +150,7 @@ export const About = () => {
           </div>
         </div>
       </section>
+      <hr />
       <CardComp
         normalDiv={true}
         renderItem={
