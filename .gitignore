@@ -13,6 +13,7 @@ dist-ssr
 package-lock.json
 README.md
 *.local
+.env
 
 # Editor directories and files
 .vscode/*
@@ -24,4 +25,3 @@ README.md
 *.njsproj
 *.sln
 *.sw?
-.env

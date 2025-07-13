@@ -21,7 +21,7 @@ export const Gallery = () => {
   const [hoverFav, setHoverFav] = useState(false);
   const [listOfArtwork, setListOfArtwork] = useState([]);
   const [search, setSearch] = useState("");
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
 
   const handleChange = (e) => {
     const { value } = e.target;

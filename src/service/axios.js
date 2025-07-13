@@ -1,9 +1,9 @@
 import axios from "axios";
-const base_url = import.meta.env.VITE_API_URL;
+const base_url = import.meta.env.VKIS_API_URL;
 
 const token = sessionStorage.getItem("MVtoken");
 
-const key = import.meta.env.VITE_VIKS_API_KEY;
+const key = import.meta.env.VIKS_API_KEY;
 
 export default axios.create({
   baseURL: base_url,
