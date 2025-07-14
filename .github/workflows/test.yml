@@ -3,47 +3,46 @@ name: VKIS GALLERY
 on:
   push:
     branches:
-      - main  # ✅ Trigger on push to main branch
+      - main  # Trigger on push to main branch
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: vkis-gallery  # ✅ Must match your GitHub environment name
+    environment: vkis-gallery  # Must match your GitHub environment name
 
     steps:
-      # ⬇️ Check out your code
+      # Check out your code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # ⬇️ Set up Node.js
+      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: "20"
+          node-version: '20'
 
-      # ⬇️ Clean and install dependencies
-      - name: Clean and Install dependencies
+      # Clean and install dependencies
+      - name: Clean and Install Dependencies
         run: |
           rm -rf node_modules package-lock.json
           npm install
 
-      # ⬇️ Create .env file from environment variables
-      # (These come from the `vkis-gallery` environment's variables in GitHub)
-      - name: Create env file
+      # Create .env file from environment variables
+      - name: Create .env File
         run: |
           echo "VITE_VKIS_API_URL=${{ vars.VITE_VKIS_API_URL }}" > .env
-          echo "VITE_VKIS_APP_API_KEY=${{ vars.VITE_VKIS_APP_API_KEY }}" > .env
-          echo "VITE_VKIS_RAPID_API_KEY=${{ vars.VITE_VKIS_RAPID_API_KEY }}" > .env
+          echo "VITE_VKIS_APP_API_KEY=${{ vars.VITE_VKIS_APP_API_KEY }}" >> .env
+          echo "VITE_VKIS_RAPID_API_KEY=${{ vars.VITE_VKIS_RAPID_API_KEY }}" >> .env
 
-      # ⬇️ Build the Vite app
+      # Build the Vite app
       - name: Build Vkis App
         run: npm run build
 
-      - name: Deploy to netlify
-        uses: netlify/actions/cli@master
+      # Deploy to Netlify
+      - name: Deploy to Netlify
+        uses: netlify/actions/cli@v2  # Pin to a specific version
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
-          args: deploy --dir=build --prod
-          secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'
+          args: deploy --dir=dist --prod  # Use `dist` for Vite's default output directory
