@@ -39,13 +39,11 @@ jobs:
       - name: Build Vkis App
         run: npm run build
 
-      - name: Install Netlify CLI
-        run: npm install -g netlify-cli
-
-      - name: Deploy to Netlify
-        run: |
-          netlify deploy \
-            --prod \
-            --dir=dist \
-            --auth=${{ secrets.NETLIFY_AUTH_TOKEN }} \
-            --site=${{ secrets.NETLIFY_SITE_ID }}
+      - name: Deploy to netlify
+        uses: netlify/actions/cli@master
+        env:
+          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
+          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+        with:
+          args: deploy --dir=build --prod
+          secrets: '["NETLIFY_AUTH_TOKEN", "NETLIFY_SITE_ID"]'
