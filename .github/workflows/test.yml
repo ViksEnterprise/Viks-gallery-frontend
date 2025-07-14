@@ -3,54 +3,44 @@ name: VKIS GALLERY
 on:
   push:
     branches:
-      - main  # Trigger on push to main branch
+      - main
 
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    environment: vkis-gallery  # Must match your GitHub environment name
+    environment: vkis-gallery
 
     steps:
-      # Check out your code
       - name: Checkout Code
         uses: actions/checkout@v4
 
-      # Set up Node.js
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'  # Use latest patch version of Node.js 20
-          cache: 'npm'  # Cache npm dependencies
+          node-version: "20"
 
-      # Clean and install dependencies
-      - name: Clean and Install Dependencies
+      - name: Clean and Install dependencies
         run: |
           rm -rf node_modules package-lock.json
           npm install
 
-      # Create .env file from environment variables
-      - name: Create .env File
+      - name: Create .env file
         run: |
-          echo "VITE_VKIS_API_URL=${{ vars.VITE_VKIS_API_URL }}" > .env
+          echo "VITE_VKIS_API_URL=${{ vars.VITE_VKIS_API_URL }}" >> .env
           echo "VITE_VKIS_API_KEY=${{ vars.VITE_VKIS_API_KEY }}" >> .env
           echo "VITE_VKIS_RAPID_API_KEY=${{ vars.VITE_VKIS_RAPID_API_KEY }}" >> .env
 
-      # Build the Vite app
       - name: Build Vkis App
         run: npm run build
 
-      # Verify build output (debugging step)
-      - name: Verify Build Output
-        run: ls -la dist  # Confirm the dist directory exists
-
-      # Install Netlify CLI
       - name: Install Netlify CLI
         run: npm install -g netlify-cli
 
-      # Deploy to Netlify
       - name: Deploy to Netlify
         run: |
-          netlify deploy --dir=dist --prod --site=${{ secrets.NETLIFY_SITE_ID }} --auth=${{ secrets.NETLIFY_AUTH_TOKEN }} --debug
-        env:
-          NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
-          NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
+          netlify deploy \
+            --dir=dist \
+            --prod \
+            --site=${{ secrets.NETLIFY_SITE_ID }} \
+            --auth=${{ secrets.NETLIFY_AUTH_TOKEN }}
+            
