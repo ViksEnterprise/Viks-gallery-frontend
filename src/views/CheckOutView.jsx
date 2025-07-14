@@ -286,7 +286,7 @@ export const Checkout = () => {
     try {
       const response = await axios.get(url, {
         headers: {
-          "X-RapidAPI-Key": import.meta.env.VKIS_RAPID_API_KEY,
+          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
           "X-RapidAPI-Host":
             "country-state-city-search-rest-api.p.rapidapi.com",
         },
@@ -306,7 +306,7 @@ export const Checkout = () => {
       const response = await axios.get(url, {
         params: payload,
         headers: {
-          "X-RapidAPI-Key": import.meta.env.VKIS_RAPID_API_KEY,
+          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
           "X-RapidAPI-Host":
             "country-state-city-search-rest-api.p.rapidapi.com",
         },
@@ -326,7 +326,7 @@ export const Checkout = () => {
       const response = await axios.get(url, {
         params: payload,
         headers: {
-          "X-RapidAPI-Key": import.meta.env.VKIS_RAPID_API_KEY,
+          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
           "X-RapidAPI-Host":
             "country-state-city-search-rest-api.p.rapidapi.com",
         },

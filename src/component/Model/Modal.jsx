@@ -57,8 +57,8 @@ export const Model = ({
             <div
               className={
                 icon == "success"
-                  ? "text-base capitalize m-0 p-0 font-[500] text-gray-400"
-                  : "text-base capitalize m-0 p-0 font-[500] text-gray-400"
+                  ? "text-base capitalize text-center m-0 p-0 font-[500] text-gray-400"
+                  : "text-base capitalize text-center m-0 p-0 font-[500] text-gray-400"
               }
             >
               {message}
