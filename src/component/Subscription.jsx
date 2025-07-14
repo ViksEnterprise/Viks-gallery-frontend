@@ -1,5 +1,6 @@
 import { useState } from "react";
 import axios from "../service/axios";
+import { Model } from "../component/Model/Modal";
 
 export const Subscribe = () => {
   const [user_name, setUser_Name] = useState("");

@@ -4,12 +4,12 @@ import axios from "../service/axios";
 import { useNavigate } from "react-router-dom";
 
 export const Seller = () => {
-  const navigate = useNavigate()
+  const navigate = useNavigate();
   const [latestArtwork, setLatestArtwork] = useState([]);
   const [loading, setLoading] = useState(false);
 
   const getLatestArtwork = async () => {
-    const url = `artwork/?newest=latest&newestNo=3`;
+    const url = `artwork/?newest=latest&newestNo=6`;
     setLoading(true);
     try {
       const response = await axios.get(url);

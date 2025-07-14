@@ -214,7 +214,7 @@ export const Single = () => {
         <div className="w-full flex items-center justify-center h-svh flex-col relative p-3">
           <span className="h-16 w-16 rounded-full bg-white before:bg-transparent before:border-t-blue-700 before:border-solid before:border-[4px] before:content-[''] before:h-16 before:w-16 before:rounded-full before:flex before:animate-spin inset-5"></span>
         </div>
-      ) : singleArtwork.length > 0 ? (
+      ) : singleArtwork.length !== 0 ? (
         <>
           <NavBar />
           <div className="flex md:flex-row flex-col gap-3 md:justify-between w-full md:p-9 p-3">
