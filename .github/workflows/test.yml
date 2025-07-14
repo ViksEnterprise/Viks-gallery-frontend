@@ -19,7 +19,7 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20'
+          node-version: '20.x'  # Use a more precise version range
 
       # Clean and install dependencies
       - name: Clean and Install Dependencies
@@ -45,4 +45,4 @@ jobs:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
         with:
-          args: deploy --dir=dist --prod  # Use `dist` for Vite's default output directory
+          args: deploy --dir=dist --prod  # Use `dist` for Vite’s default output directory
