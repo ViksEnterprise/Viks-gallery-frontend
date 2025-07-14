@@ -19,7 +19,8 @@ jobs:
       - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
-          node-version: '20.x'  # Use a more precise version range
+          node-version: '20.x'  # Use a stable LTS version
+          cache: 'npm'  # Cache npm dependencies
 
       # Clean and install dependencies
       - name: Clean and Install Dependencies
@@ -40,7 +41,7 @@ jobs:
 
       # Deploy to Netlify
       - name: Deploy to Netlify
-        uses: netlify/actions/cli@v2  # Pin to a specific version
+        uses: netlify/actions/cli@v2  # Correct action reference
         env:
           NETLIFY_AUTH_TOKEN: ${{ secrets.NETLIFY_AUTH_TOKEN }}
           NETLIFY_SITE_ID: ${{ secrets.NETLIFY_SITE_ID }}
