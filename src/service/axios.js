@@ -1,14 +1,10 @@
 import axios from "axios";
-const base_url = "http://127.0.0.1:8000/api/";
-// const base_url = import.meta.env.VKIS_API_URL;
 
-console.log(base_url)
+const base_url = import.meta.env.VITE_VKIS_API_URL;
 
 const token = sessionStorage.getItem("MVtoken");
 
-const key =
-  "qiCRC7p7cv8YMhZZuyabB2ovC1v4l79kM22FPB0G9PCticx6g6WAnq1TsS8laI9Fb7Y6";
-// const key = import.meta.env.VIKS_API_KEY;
+const key = import.meta.env.VITE_VKIS_APP_API_KEY;
 
 // 
 export default axios.create({

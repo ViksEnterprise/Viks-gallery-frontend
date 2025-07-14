@@ -21,6 +21,11 @@ export const Subscribe = () => {
     setEmail(name === "email" ? value : email);
   };
 
+  const button = () => {
+    setToggleModal(false);
+    document.body.style.overflow = "auto";
+  };
+
   const subscribeSubmit = async (e) => {
     e.preventDefault();
     const err = {};
@@ -147,8 +152,7 @@ export const Subscribe = () => {
           modalDisplay={toggleModal}
           icon={modalMsg.icon}
           message={modalMsg.message}
-          direction={modalMsg.direction}
-          buttonText="Back to home"
+          buttonText="Ok"
           button={button}
         />
       )}
