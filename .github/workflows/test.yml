@@ -19,7 +19,7 @@ jobs:
           node-version: '20'
 
       - name: Clean and Install dependencies
-        run: 
+        run: |
           npm install
           rm -rf node_modules package-lock.json
       
