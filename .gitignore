@@ -1,4 +1,5 @@
 # Logs
+.env
 logs
 *.log
 npm-debug.log*
@@ -13,7 +14,6 @@ dist-ssr
 package-lock.json
 README.md
 *.local
-.env
 
 # Editor directories and files
 .vscode/*
