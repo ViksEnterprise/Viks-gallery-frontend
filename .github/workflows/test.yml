@@ -25,9 +25,9 @@ jobs:
 
       - name: Create .env
         run: |
-          echo 'VITE_VKIS_API_URL=${{ secrets.VITE_VKIS_API_URL}}' >> .env
-          echo 'VITE_VKIS_RAPID_API_KEY=${{ secrets.VITE_VKIS_RAPID_API_KEY}}' >> .env
-          echo 'VITE_VKIS_API_KEY=${{ secrets.VITE_VKIS_API_KEY}}' >> .env
+          echo "VITE_VKIS_API_URL=${{ var.VITE_VKIS_API_URL }}" >> .env
+          echo "VITE_VKIS_RAPID_API_KEY=${{ var.VITE_VKIS_RAPID_API_KEY }}" >> .env
+          echo "VITE_VKIS_API_KEY=${{ var.VITE_VKIS_API_KEY }}" >> .env
 
       - name: Build Vkis App
         run: npm run build
