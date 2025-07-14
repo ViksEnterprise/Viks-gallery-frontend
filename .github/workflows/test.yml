@@ -29,26 +29,23 @@ jobs:
 
       # ⬇️ Create .env file from environment variables
       # (These come from the `vkis-gallery` environment's variables in GitHub)
-      - name: Create .env file
+      - name: Create env file
         run: |
-          echo "VITE_VKIS_API_URL=${{ vars.VITE_VKIS_API_URL }}" >> .env
-          echo "VITE_VKIS_API_KEY=${{ vars.VITE_VKIS_API_KEY }}" >> .env
-          echo "VITE_VKIS_RAPID_API_KEY=${{ vars.VITE_VKIS_RAPID_API_KEY }}" >> .env
+          echo "VITE_VKIS_API_URL=${{ vars.VITE_VKIS_API_URL }}" > .env
+          echo "VITE_VKIS_API_KEY=${{ vars.VITE_VKIS_API_KEY }}" > .env
+          echo "VITE_VKIS_RAPID_API_KEY=${{ vars.VITE_VKIS_RAPID_API_KEY }}" > .env
 
       # ⬇️ Build the Vite app
       - name: Build Vkis App
         run: npm run build
 
-      # ⬇️ Deploy to Netlify
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
       - name: Deploy to Netlify
-        uses: nwtgck/actions-netlify@v2.0.0
-        with:
-          publish-dir: "./dist"  # ✅ Vite build output folder
-          production-branch: main
-          github-token: ${{ secrets.GITHUB_TOKEN }}  # ✅ Built-in GitHub Actions token
-          deploy-message: "Deployed by GitHub Actions 🚀"
-          enable-commit-comment: false
-          enable-pull-request-comment: false
-          enable-commit-status: true
-          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}  # ✅ Your Netlify Personal Access Token
-          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}        # ✅ Your Netlify Site ID
+        run: |
+          netlify deploy \
+            --dir=dist \
+            --prod \
+            --site=${{ secrets.NETLIFY_SITE_ID }} \
+            --auth=${{ secrets.NETLIFY_AUTH_TOKEN }}
