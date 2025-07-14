@@ -3,31 +3,52 @@ name: VKIS GALLERY
 on:
   push:
     branches:
-      - main
+      - main  # ✅ Trigger on push to main branch
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
+    environment: vkis-gallery  # ✅ Must match your GitHub environment name
 
     steps:
+      # ⬇️ Check out your code
       - name: Checkout Code
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
-      - name: Set up NodeJs
+      # ⬇️ Set up Node.js
+      - name: Set up Node.js
         uses: actions/setup-node@v4
         with:
           node-version: "20"
 
+      # ⬇️ Clean and install dependencies
       - name: Clean and Install dependencies
         run: |
           rm -rf node_modules package-lock.json
           npm install
 
-      - name: Create .env
+      # ⬇️ Create .env file from environment variables
+      # (These come from the `vkis-gallery` environment's variables in GitHub)
+      - name: Create .env file
         run: |
           echo "VITE_VKIS_API_URL=${{ vars.VITE_VKIS_API_URL }}" >> .env
-          echo "VITE_VKIS_RAPID_API_KEY=${{ vars.VITE_VKIS_RAPID_API_KEY }}" >> .env
           echo "VITE_VKIS_API_KEY=${{ vars.VITE_VKIS_API_KEY }}" >> .env
+          echo "VITE_VKIS_RAPID_API_KEY=${{ vars.VITE_VKIS_RAPID_API_KEY }}" >> .env
 
+      # ⬇️ Build the Vite app
       - name: Build Vkis App
         run: npm run build
+
+      # ⬇️ Deploy to Netlify
+      - name: Deploy to Netlify
+        uses: nwtgck/actions-netlify@v2.0.0
+        with:
+          publish-dir: "./dist"  # ✅ Vite build output folder
+          production-branch: main
+          github-token: ${{ secrets.GITHUB_TOKEN }}  # ✅ Built-in GitHub Actions token
+          deploy-message: "Deployed by GitHub Actions 🚀"
+          enable-commit-comment: false
+          enable-pull-request-comment: false
+          enable-commit-status: true
+          netlify-auth-token: ${{ secrets.NETLIFY_AUTH_TOKEN }}  # ✅ Your Netlify Personal Access Token
+          netlify-site-id: ${{ secrets.NETLIFY_SITE_ID }}        # ✅ Your Netlify Site ID
