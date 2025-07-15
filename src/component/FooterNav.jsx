@@ -28,7 +28,7 @@ export const Footer = () => {
               <div className="flex flex-col gap-6 items-start">
                 <div className="flex flex-col gap-3 items-start">
                   <div className="h-full flex items-start w-36 justify-start">
-                    <img className="h-36 w-full" src={Logo} alt="Viks gallery logo" />
+                    <img className="h-36 w-36" src={Logo} alt="Viks gallery logo" />
                   </div>
                   <span className="lg:text-base text-sm font-normal">
                     Find art that speaks to your heart
