@@ -1,5 +1,3 @@
-const LOGO = "viks gallery";
-
 const NAVLINKS = [
   { link: "home", to: "/" },
   { link: "about", to: "/about" },
@@ -11,4 +9,4 @@ const NAVLINKS = [
 
 const BUTTON = 'login'
 
-export {LOGO, NAVLINKS, BUTTON}
+export {NAVLINKS, BUTTON}
