@@ -106,10 +106,10 @@ export const NavBar = () => {
           }
         >
           <a
-            className="text-decoration-none pointer-cursor w-18"
+            className="text-decoration-none pointer-cursor w-16"
             href="/"
           >
-            <img className="h-18 w-[inherit]" src={Logo} alt="Viks gallery logo" />
+            <img className="h-16 w-[inherit]" src={Logo} alt="Viks gallery logo" />
           </a>
           {!mobile && (
             <nav className="flex items-center justify-between xl:w-[50%] w-[62%]">
