@@ -60,10 +60,10 @@ export const CartNav = () => {
           }
         >
           <a
-            className="text-decoration-none pointer-cursor w-18"
+            className="text-decoration-none pointer-cursor w-16"
             href="/"
           >
-            <img className="h-18 w-[inherit]" src={Logo} alt="Viks gallery logo" />
+            <img className="h-16 w-[inherit]" src={Logo} alt="Viks gallery logo" />
           </a>
           {data.length !== 0 ? (
             <div className="flex items-center gap-2 w-fit relative justify-center">
