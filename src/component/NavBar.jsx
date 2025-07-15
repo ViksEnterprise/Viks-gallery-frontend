@@ -1,8 +1,9 @@
 import React, { useEffect, useState } from "react";
-import { BUTTON, LOGO, NAVLINKS } from "../libs/Navbar";
+import { BUTTON, NAVLINKS } from "../libs/Navbar";
 import { FaTimes } from "react-icons/fa";
 import { checkTokenStatus } from "../utils/tokenDecoil";
 import { BiChevronDown } from "react-icons/bi";
+import Logo from "../assets/VIKS Gallery transparent.png"
 
 export const NavBar = () => {
   const [scroll, setScroll] = useState(false);
@@ -104,9 +105,12 @@ export const NavBar = () => {
               : "w-full py-3 md:px-12 px-3 h-20 flex items-center justify-between bg-white"
           }
         >
-          <div className="uppercase text-[#0A078E] text-2xl font-[500]">
-            {LOGO}
-          </div>
+          <a
+            className="text-decoration-none pointer-cursor w-18"
+            href="/"
+          >
+            <img className="h-18 w-[inherit]" src={Logo} alt="Viks gallery logo" />
+          </a>
           {!mobile && (
             <nav className="flex items-center justify-between xl:w-[50%] w-[62%]">
               <ul className="flex items-center gap-3 list-style-none">
