@@ -26,9 +26,9 @@ export const Footer = () => {
           <footer className="lg:px-8 lg:pt-9 lg:pb-6 md:px-6 md:pt-7 md:pb-4 py-7 px-5 flex flex-col gap-4">
             <div className="flex md:justify-start gap-6 flex-col items-start">
               <div className="flex flex-col gap-6 items-start">
-                <div className="flex flex-col gap-3">
-                  <div className="h-full flex items-start w-full justify-start">
-                    <img className="h-36 w-56" src={Logo} alt="Viks gallery logo" />
+                <div className="flex flex-col gap-3 items-start">
+                  <div className="h-full flex items-start w-36 justify-start">
+                    <img className="h-36 w-full" src={Logo} alt="Viks gallery logo" />
                   </div>
                   <span className="lg:text-base text-sm font-normal">
                     Find art that speaks to your heart
