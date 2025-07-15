@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaEnvelope, FaFacebook, FaInstagram, FaPhoneVolume, FaPinterest, FaTiktok, FaXTwitter } from "react-icons/fa6";
-import { Logo } from "../assets/VIKS Gallery transparent.png"
+import Logo from "../assets/VIKS Gallery transparent.png"
 
 export const Footer = () => {
     const [year, setYear] = useState(null);
