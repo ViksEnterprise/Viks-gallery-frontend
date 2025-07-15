@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { FaEnvelope, FaFacebook, FaInstagram, FaPhoneVolume, FaPinterest, FaTiktok, FaXTwitter } from "react-icons/fa6";
+import { Logo } from "../assets/VIKS Gallery transparent.png"
 
 export const Footer = () => {
     const [year, setYear] = useState(null);
@@ -26,9 +27,9 @@ export const Footer = () => {
             <div className="flex md:justify-start gap-6 flex-col items-start">
               <div className="flex flex-col gap-6 items-start">
                 <div className="flex flex-col gap-3">
-                  <h2 className="lg:text-4xl text-2xl font-semibold uppercase text-[#0A078E]">
-                    Viks Gallery
-                  </h2>
+                  <div className="h-full">
+                    <img className="h-56" src={Logo} alt="Viks gallery logo" />
+                  </div>
                   <span className="lg:text-base text-sm font-normal">
                     Find art that speaks to your heart
                   </span>
