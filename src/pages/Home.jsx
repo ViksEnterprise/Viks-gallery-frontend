@@ -96,7 +96,7 @@ export const Home = () => {
           {welcomeMSG.map((msg, index) => (
             <div
               key={index}
-              className="text-7xl stroke-text text-transparent flex-initial w-125 font-blod uppercase"
+              className="text-7xl stroke-text text-transparent flex-initial w-5xl font-blod uppercase"
             >
               <h3>{msg.msg}</h3>
             </div>
