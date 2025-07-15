@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { LOGO } from "../libs/Navbar";
+import Logo from "../assets/VIKS Gallery transparent.png"
 import { checkTokenStatus } from "../utils/tokenDecoil";
 import { BiChevronDown } from "react-icons/bi";
 
@@ -59,9 +59,12 @@ export const CartNav = () => {
               : "w-full py-3 md:px-12 px-3 h-20 flex items-center justify-between bg-white"
           }
         >
-          <div className="uppercase text-[#0A078E] text-2xl font-[500]">
-            {LOGO}
-          </div>
+          <a
+            className="text-decoration-none pointer-cursor w-18"
+            href="/"
+          >
+            <img className="h-18 w-[inherit]" src={Logo} alt="Viks gallery logo" />
+          </a>
           {data.length !== 0 ? (
             <div className="flex items-center gap-2 w-fit relative justify-center">
               <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
