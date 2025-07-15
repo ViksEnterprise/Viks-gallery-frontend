@@ -150,7 +150,7 @@ export const ShoppingCart = () => {
             className={
               cart.length != 0
                 ? "flex flex-col gap-4 items-start w-full"
-                : "flex flex-col gap-[2px] items-start w-full"
+                : "flex flex-col gap-3 items-start w-full"
             }
           >
             {cart.length != 0 && (
@@ -172,7 +172,7 @@ export const ShoppingCart = () => {
               </div>
             )}
             {cart.length == 0 ? (
-              <div className="w-full flex items-center flex-col gap-2 justify-center">
+              <div className="w-full flex items-center flex-col gap-3 justify-center h-72">
                 <BsCartPlusFill className="fill-[blue!important] stroke-white h-10 w-12 m-0 p-0" />
                 <span className="text-base">Your cart is empty</span>
                 <a
