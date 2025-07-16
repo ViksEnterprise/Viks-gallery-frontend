@@ -3,7 +3,7 @@ import { BUTTON, NAVLINKS } from "../libs/Navbar";
 import { FaTimes } from "react-icons/fa";
 import { checkTokenStatus } from "../utils/tokenDecoil";
 import { BiChevronDown } from "react-icons/bi";
-import Logo from "../assets/VIKS Gallery transparent.png"
+import Logo from "../assets/VIKS Gallery transparent.webp"
 
 export const NavBar = () => {
   const [scroll, setScroll] = useState(false);
