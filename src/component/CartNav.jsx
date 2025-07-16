@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Logo from "../assets/VIKS Gallery transparent.png"
+import Logo from "../assets/VIKS Gallery transparent.webp"
 import { checkTokenStatus } from "../utils/tokenDecoil";
 import { BiChevronDown } from "react-icons/bi";
 
