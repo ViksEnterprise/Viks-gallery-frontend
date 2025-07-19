@@ -53,7 +53,8 @@ export const Checkout = () => {
     payment_address_id: "",
   });
   const [payment_url, setPayment_URL] = useState("");
-  const [orderDisable, setOrderDisable] = useState(true);
+  const [typeDisable, setTypeDisable] = useState(true);
+  const [orderDisable, setOrderDisable] = useState(false);
 
   const paymentType = [
     {
@@ -74,12 +75,13 @@ export const Checkout = () => {
   };
 
   const handleTypeChange = (selectedKey) => {
-    setType({
-      card_details: selectedKey != "card_details",
-      paypal: selectedKey != "paypal",
-      payment_address_id: "",
-    });
-    payment_Type();
+    const newType = {
+      card_details: selectedKey === "card_details",
+      paypal: selectedKey === "paypal",
+      payment_address_id: address?.[0]?.payment_address_ID || "",
+    };
+    setType(newType);
+    payment_Type(newType);
   };
 
   const handleChange = (e) => {
@@ -207,8 +209,8 @@ export const Checkout = () => {
     }
   };
 
-  const payment_Type = async () => {
-    if (!type.card_details && !type.paypal) {
+  const payment_Type = async (typeData) => {
+    if (!typeData.card_details && !typeData.paypal) {
       setModalMsg({
         message: "Opps try again",
         icon: "error",
@@ -217,7 +219,7 @@ export const Checkout = () => {
     } else if (address.length == 0) {
       setModalMsg({ message: "Fill in your address", icon: "error" });
       setToggleModal(true);
-    } else if (type.paypal) {
+    } else if (typeData.paypal) {
       setModalMsg({
         message: "Payment type is not available at the moment",
         icon: "error",
@@ -226,8 +228,7 @@ export const Checkout = () => {
     } else {
       const url = `payments/payment-type`;
       const payload = {
-        ...type,
-        payment_address_id: address?.[0].payment_address_ID,
+        ...typeData,
       };
 
       try {
@@ -261,7 +262,7 @@ export const Checkout = () => {
       const response = await axiosPrivate.get(url);
       if (response) {
         setAddress(response.data);
-        setOrderDisable(false)
+        setOrderDisable(false);
       }
     } catch (err) {
       return;
@@ -347,11 +348,13 @@ export const Checkout = () => {
       cart_id: cart?.[0].cart_id,
     };
     setOrderDisable(true);
+    setTypeDisable(true);
     try {
       const response = await axiosPrivate.post(url, payload);
       if (response) {
         setPayment_URL(response.data.checkout_url);
         setOrderDisable(false);
+        setTypeDisable(false);
       }
     } catch (err) {
       return;
@@ -721,9 +724,10 @@ export const Checkout = () => {
                       type="radio"
                       className="h-3 w-3 cursor-pointer"
                       name={name.type}
-                      value={type[name.name_type]}
+                      value={name.name_type}
+                      checked={type[name.name_type]}
                       onChange={() => handleTypeChange(name.name_type)}
-                      disabled={address.length == 0 || orderDisable}
+                      disabled={address.length == 0 || typeDisable}
                       id={name.name_type}
                     />
                     <label
