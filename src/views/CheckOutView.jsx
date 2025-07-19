@@ -47,13 +47,13 @@ export const Checkout = () => {
     phone_number: "",
     alternative_phone_number: "",
   });
+  const [conDisable, setConDisable] = useState(true);
   const [type, setType] = useState({
     card_details: false,
     paypal: false,
     payment_address_id: "",
   });
   const [payment_url, setPayment_URL] = useState("");
-  const [orderDisable, setOrderDisable] = useState(true);
   const [typeDisable, setTypeDisable] = useState(true);
 
   const paymentType = [
@@ -347,13 +347,13 @@ export const Checkout = () => {
     const payload = {
       cart_id: cart?.[0].cart_id,
     };
-    setOrderDisable(true);
+    setConDisable(true);
     setTypeDisable(true);
     try {
       const response = await axiosPrivate.post(url, payload);
       if (response) {
         setPayment_URL(response.data.checkout_url);
-        setOrderDisable(false);
+        setConDisable(false);
         setTypeDisable(true);
       }
     } catch (err) {
@@ -782,12 +782,12 @@ export const Checkout = () => {
           <div className="w-full">
             <button
               className={
-                typeDisable
+                conDisable
                   ? "h-11 rounded-[7px] p-2 bg-blue-100 md:w-3/6 w-full text-white font-semibold text-base"
                   : "h-11 rounded-[7px] p-2 bg-blue-800 md:w-3/6 w-full text-white font-semibold text-base"
               }
               type="button"
-              disabled={typeDisable}
+              disabled={conDisable}
               onClick={() => placeOrder()}
             >
               Place order
