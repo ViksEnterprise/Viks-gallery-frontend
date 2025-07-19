@@ -782,12 +782,12 @@ export const Checkout = () => {
           <div className="w-full">
             <button
               className={
-                orderDisable
+                typeDisable
                   ? "h-11 rounded-[7px] p-2 bg-blue-100 md:w-3/6 w-full text-white font-semibold text-base"
                   : "h-11 rounded-[7px] p-2 bg-blue-800 md:w-3/6 w-full text-white font-semibold text-base"
               }
               type="button"
-              disabled={orderDisable}
+              disabled={typeDisable}
               onClick={() => placeOrder()}
             >
               Place order
