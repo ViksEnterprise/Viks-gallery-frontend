@@ -54,7 +54,7 @@ export const Checkout = () => {
   });
   const [payment_url, setPayment_URL] = useState("");
   const [typeDisable, setTypeDisable] = useState(true);
-  const [orderDisable, setOrderDisable] = useState(false);
+  const [orderDisable, setOrderDisable] = useState(true);
 
   const paymentType = [
     {
@@ -727,7 +727,7 @@ export const Checkout = () => {
                       value={name.name_type}
                       checked={type[name.name_type]}
                       onChange={() => handleTypeChange(name.name_type)}
-                      disabled={address.length == 0 || typeDisable}
+                      disabled={address.length == 0 || !typeDisable}
                       id={name.name_type}
                     />
                     <label
