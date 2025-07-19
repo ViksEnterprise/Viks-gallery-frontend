@@ -347,14 +347,14 @@ export const Checkout = () => {
     const payload = {
       cart_id: cart?.[0].cart_id,
     };
-    setOrderDisable(true);
-    setTypeDisable(true);
+    setOrderDisable(false);
+    setTypeDisable(false);
     try {
       const response = await axiosPrivate.post(url, payload);
       if (response) {
         setPayment_URL(response.data.checkout_url);
-        setOrderDisable(false);
-        setTypeDisable(false);
+        setOrderDisable(true);
+        setTypeDisable(true);
       }
     } catch (err) {
       return;
