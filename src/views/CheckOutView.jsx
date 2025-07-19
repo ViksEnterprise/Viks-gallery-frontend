@@ -53,8 +53,8 @@ export const Checkout = () => {
     payment_address_id: "",
   });
   const [payment_url, setPayment_URL] = useState("");
-  const [typeDisable, setTypeDisable] = useState(true);
   const [orderDisable, setOrderDisable] = useState(true);
+  const [typeDisable, setTypeDisable] = useState(true);
 
   const paymentType = [
     {
