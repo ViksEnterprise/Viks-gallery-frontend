@@ -1,17 +1,58 @@
-import React, { useState } from "react";
 import "swiper/css";
-import Flower from '../assets/flower.jpg'
+import Ada from '../assets/tes-images/female-img-1.jpg'
+import Bisi from '../assets/tes-images/female-img-2.jpg'
+import Chuka from "../assets/tes-images/male-img-1.jpg";
+import Zainab from "../assets/tes-images/female-img-3.jpg";
+import Daniel from "../assets/tes-images/male-img-2.jpg";
+import AIfunanya from "../assets/tes-images/female-img-4.jpg";
+import Chinelo from "../assets/tes-images/male-image-3.jpg";
+import Ayo from "../assets/tes-images/male-image-4.jpg";
 import { CardComp } from "./CardModal";
 
 export const Testimonial = () => {
     const slide = true
 
     const tes = [
-        {img: Flower, name: 'Abraham John', tes: 'I was completely new to art collecting and didn’t know where to start, but the team at Viks Gallery was incredibly patient and helpful throughout the entire process. They took the time to educate me on different styles, mediums, and artists, which made me feel much more confident in my choices. Their recommendations were spot-on, and I ended up purchasing a beautiful piece that I absolutely love. It has brought so much character to my living room, and I couldn’t be more thrilled. The experience was both educational and enjoyable—thank you, Viks Gallery!'},
-        {img: Flower, name: 'Peter James', tes: 'I was completely new to art collecting and didn’t know where to start, but the team at Viks Gallery was incredibly patient and helpful throughout the entire process. They took the time to educate me on different styles, mediums, and artists, which made me feel much more confident in my choices. Their recommendations were spot-on, and I ended up purchasing a beautiful piece that I absolutely love. It has brought so much character to my living room, and I couldn’t be more thrilled. The experience was both educational and enjoyable—thank you, Viks Gallery!'},
-        {img: Flower, name: 'Anietie Peter', tes: 'I was completely new to art collecting and didn’t know where to start, but the team at Viks Gallery was incredibly patient and helpful throughout the entire process. They took the time to educate me on different styles, mediums, and artists, which made me feel much more confident in my choices. Their recommendations were spot-on, and I ended up purchasing a beautiful piece that I absolutely love. It has brought so much character to my living room, and I couldn’t be more thrilled. The experience was both educational and enjoyable—thank you, Viks Gallery!'},
-        {img: Flower, name: 'Joy Etim', tes: 'I was completely new to art collecting and didn’t know where to start, but the team at Viks Gallery was incredibly patient and helpful throughout the entire process. They took the time to educate me on different styles, mediums, and artists, which made me feel much more confident in my choices. Their recommendations were spot-on, and I ended up purchasing a beautiful piece that I absolutely love. It has brought so much character to my living room, and I couldn’t be more thrilled. The experience was both educational and enjoyable—thank you, Viks Gallery!'},
-        {img: Flower, name: 'Precious Con', tes: 'I was completely new to art collecting and didn’t know where to start, but the team at Viks Gallery was incredibly patient and helpful throughout the entire process. They took the time to educate me on different styles, mediums, and artists, which made me feel much more confident in my choices. Their recommendations were spot-on, and I ended up purchasing a beautiful piece that I absolutely love. It has brought so much character to my living room, and I couldn’t be more thrilled. The experience was both educational and enjoyable—thank you, Viks Gallery!'}
+      {
+        img: Ada,
+        name: "Ada O., Lagos",
+        tes: "The moment I unboxed my artwork, I was in awe. The colors, the texture, everything was even more beautiful than I imagined. It has completely transformed my living space. Thank you for making art so accessible!",
+      },
+      {
+        img: Bisi,
+        name: "Bisi A., Port Harcourt",
+        tes: "Absolutely in love with my new painting! The gallery team was super helpful, answered all my questions, and made sure I got updates until delivery. The art came in perfect condition and was even more breathtaking in person.",
+      },
+      {
+        img: Chuka,
+        name: "Chuka N",
+        tes: "Buying art online can feel risky, but this gallery made it feel easy and safe. From the customer support to the delivery, everything was top-notch. I’m already eyeing my next piece!",
+      },
+      {
+        img: Zainab,
+        name: "Zainab K",
+        tes: "ncredible service and even more incredible art! I found the perfect piece for my home, and the online photos were true to life. The quality is exceptional, and I get compliments all the time. Can’t wait to order again!",
+      },
+      {
+        img: Daniel,
+        name: "Daniel O",
+        tes: "I have ordered twice now, and both experiences were excellent. The team kept me updated every step of the way, and the artwork was delivered faster than I expected. I love the thoughtfulness behind the packaging and the handwritten note. So personal!",
+      },
+      {
+        img: AIfunanya,
+        name: "AIfunanya A",
+        tes: "I was a bit nervous about buying art online, but the entire process was seamless. The piece arrived beautifully packaged and in perfect condition. It looks even more stunning in person! I’m so happy with my purchase.",
+      },
+      {
+        img: Chinelo,
+        name: "Chinelo M., Lekki",
+        tes: "The artwork arrived safely and it was love at first sight. It now hangs in my office and brings me so much joy and peace every day. Thank you for making beautiful art so easy to own.",
+      },
+      {
+        img: Ayo,
+        name: "Ayo L., Ilorin",
+        tes: "I have never seen such attention to detail in both the artwork and the service. It’s clear that every step is done with passion and care. I’m already planning my next purchase",
+      },
     ];
 
     const tesSwipe = {
