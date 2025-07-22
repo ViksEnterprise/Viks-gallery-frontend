@@ -217,7 +217,7 @@ export const Gallery = () => {
               </div>
               <div className="text-base font-[500] text-black uppercase w-full flex justify-between">
                 <h6>{sale.artwork_title}</h6>
-                <span><BiPound />{sale.price}</span>
+                <span className="flex items-center gap-[2px]"><BiPound />{sale.price}</span>
               </div>
               <div className="flex gap-2 items-center m-0 p-0">
                 <span>{sale.artworkDescription?.medium}</span>
