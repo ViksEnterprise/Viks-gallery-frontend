@@ -261,7 +261,7 @@ export const Checkout = () => {
     try {
       const response = await axiosPrivate.get(url);
       if (response) {
-        setAddress(response.data);
+        setAddress([response.data]);
         setOrderDisable(false);
       }
     } catch (err) {
