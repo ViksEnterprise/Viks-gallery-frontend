@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FormCard } from "../component/FormModal";
-import login from "../assets/login.jpg";
+import login from "../assets/home/Viks 29.jpg";
 import { Model } from "../component/Model/Modal";
 import axios from "../service/axios";
 
@@ -110,7 +110,6 @@ export const LoginAccount = () => {
     <>
       <FormCard
         authImg={login}
-        heading="ViksGallery"
         authMessage="Welcome back"
         formInHolder={form.map((f) => ({
           ...f,
@@ -126,10 +125,10 @@ export const LoginAccount = () => {
         link="/signUp"
         subLink="Sign up now"
         formStyle="flex lg:h-screen h-svh w-full relative"
-        imageHldStyle="lg:h-screen h-svh lg:w-2/5 w-full overflow-hidden"
+        imageHldStyle="lg:h-screen h-svh lg:w-2/5 w-full overflow-hidden flex-1"
         subImgHoldStyle="lg:h-screen h-svh w-full"
         headingStyle="font-semibold xl:text-4xl lg:text-3xl text-2xl lg:text-auth text-white"
-        formHoldStyle="lg:w-3/5 w-full py-6 lg:px-8 md:px-6 px-4 flex flex-col gap-9 lg:relative absolute bg-ab-bg-color lg:bg-transparent h-full"
+        formHoldStyle="lg:w-2/5 flex-1 w-full py-6 lg:px-8 md:px-6 px-4 flex flex-col gap-9 lg:relative absolute bg-ab-bg-color lg:bg-transparent h-full"
         innerFormStyle="lg:w-4/5 flex flex-col gap-5 w-full bg-white lg:bg-transparent p-3 rounded-lg"
         authMsgStyle="text-center font-semibold xl:text-3xl text-xl text-auth capitalize"
       />

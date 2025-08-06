@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import Logo from "../assets/VIKS Gallery transparent.webp";
+import { Link } from "react-router-dom";
 
 export const FormCard = ({
   authImg,
@@ -8,7 +8,6 @@ export const FormCard = ({
   subImgHoldStyle,
   formHoldStyle,
   headingStyle,
-  heading,
   innerFormStyle,
   authMessage,
   subAuthMessage,
@@ -42,7 +41,13 @@ export const FormCard = ({
           )}
           <div className={`${formHoldStyle}`}>
             <div className={`${headingStyle}`}>
-              <h2>{heading}</h2>
+              <a className="text-decoration-none pointer-cursor w-16" href="/">
+                <img
+                  className="h-16 w-[inherit]"
+                  src={Logo}
+                  alt="Viks gallery logo"
+                />
+              </a>
             </div>
             <div className="w-full flex flex-col items-center justify-start">
               <div className={`${innerFormStyle}`}>

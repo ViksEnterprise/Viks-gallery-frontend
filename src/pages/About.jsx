@@ -3,9 +3,9 @@ import { Footer } from "../component/FooterNav";
 import { Subscribe } from "../component/Subscription";
 import { CardComp } from "../component/CardModal";
 import artise from "../assets/artise.jpg";
-import nature from "../assets/nature.jpg";
-import dance from "../assets/dance.jpg";
-import dance2 from "../assets/dance2.jpg";
+import nature from "../assets/home/VIKS 212.jpg";
+import friends from "../assets/home/Viks 210.jpg";
+import work from "../assets/home/Viks 25.jpg";
 import { Link } from "react-router-dom";
 import { ArtiseHandels, WCVGText, Teams, AboutMsg } from "../libs/AboutDetails";
 import { NavBar } from "../component/NavBar";
@@ -44,16 +44,16 @@ export const About = () => {
 
       if (desktop) {
         setWCVG(
-          <div className="w-full lg:h-96 flex gap-3 overflow-hidden">
+          <div className="w-full lg:h-80 flex gap-3 overflow-hidden">
             <img
               className="w-2/4 h-full flex-initial"
-              src={dance}
+              src={friends}
               alt="dance photo"
             />
             <img
               className="w-2/4 h-full flex-1"
-              src={dance2}
-              alt="dance2 photo"
+              src={work}
+              alt="work photo"
             />
           </div>
         );
@@ -156,7 +156,7 @@ export const About = () => {
         renderItem={
           <div className="flex items-start lg:items-center justify-start lg:justify-center md:flex-row flex-col lg:gap-8 gap-5 w-full h-fit">
             <div className="lg:w-1/2 md:w-2/4 w-full h-fit flex flex-col gap-3">
-              <div className="w-full md:h-96 lg:h-52 h-60">
+              <div className="w-full md:h-80 h-60">
                 <img
                   className="w-full h-full"
                   src={nature}

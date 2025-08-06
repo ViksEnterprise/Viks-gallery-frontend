@@ -1,6 +1,9 @@
 import React, { useState } from "react";
-import landingImg from "../assets/home.jpg";
-import aboutImg from "../assets/about.jpg";
+import landingImg from "../assets/home/Viks 214.jpg";
+import landingImg2 from "../assets/home/Viks 23.jpg";
+import landingImg3 from "../assets/home/Viks 24.jpg";
+import landingImg4 from "../assets/home/Viks 211.jpg";
+import aboutImg from "../assets/home/VIKS 213.jpg";
 import { Seller } from "../component/Collections";
 import { Subscribe } from "../component/Subscription";
 import { HiChevronRight } from "react-icons/hi";
@@ -21,9 +24,9 @@ export const Home = () => {
 
   const heroImg = [
     { img: landingImg },
-    { img: aboutImg },
-    { img: landingImg },
-    { img: aboutImg },
+    { img: landingImg2 },
+    { img: landingImg3 },
+    { img: landingImg4 },
   ];
 
   useEffect(() => {
@@ -72,9 +75,9 @@ export const Home = () => {
             </div>
           </div>
         </div>
-        <div className="flex-1 w-full md:w-1/2 lg:w-3/5 h-screen overflow-hidden">
+        <div className="flex-1 w-full md:w-1/2 lg:w-3/5 h-screen overflow-hidden object-fill">
           <div
-            className="w-full h-screen flex hero-hol"
+            className="w-full h-screen flex hero-hol object-fill"
             style={{
               transform: `translateX(-${heroImgLength * 100}%)`,
               opacity: `${opacity}`,
@@ -83,7 +86,7 @@ export const Home = () => {
             {heroImg.map((images, index) => (
               <img
                 key={index}
-                className="h-full w-full"
+                className="h-full w-full object-fill"
                 src={images.img}
                 alt=""
               />
@@ -106,7 +109,7 @@ export const Home = () => {
       </section>
       <section className="w-full lg:p-9 p-4">
         <div className="flex gap-5 items-center flex-col-reverse lg:flex-row">
-          <div className="flex-1 w-full lg:w-2/5 h-96 rounded-lg">
+          <div className="flex-0 w-full lg:w-[45%] h-80 rounded-lg">
             <img className="h-full w-full rounded-lg" src={aboutImg} alt="" />
           </div>
           <div className="flex-1 w-full lg:w-2/5">

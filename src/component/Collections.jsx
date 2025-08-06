@@ -33,14 +33,17 @@ export const Seller = () => {
 
   return (
     <>
+      <div className="text-center pt-4">
+        <h3 className="text-xl md:text-2xl lg:text-3xl uppercase text-[#09067C] font-[500]">
+          Explore Our Latest Collections
+        </h3>
+      </div>
       {loading ? (
         <div className="w-full flex items-center justify-center h-full relative p-3">
           <span className="h-16 w-16 rounded-full bg-white before:bg-transparent before:border-t-blue-700 before:border-solid before:border-[4px] before:content-[''] before:h-16 before:w-16 before:rounded-full before:flex before:animate-spin inset-5"></span>
         </div>
-      ) : (
+      ) : latestArtwork.length > 0 ? (
         <CardComp
-          title="Explore Our Latest Collections"
-          titleStyle="text-xl md:text-2xl lg:text-3xl uppercase text-[#09067C] font-[500]"
           items={latestArtwork}
           renderItem={(sale) => (
             <div
@@ -58,6 +61,10 @@ export const Seller = () => {
           style="flex items-center justify-start flex-wrap w-full lg:gap-3 gap-5"
           subStyle="w-full md:w-[48.5%] lg:w-[32.3%] flex-0 h-fit overflow-hidden"
         />
+      ) : (
+        <div className="text-base text-gray-600 font-[500] capitalize p-4 flex flex-col justify-center w-full items-center">
+          <span>Unable to load artwork. Please check your network</span>
+        </div>
       )}
     </>
   );
