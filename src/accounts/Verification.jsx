@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useState } from "react";
 import { FormCard } from "../component/FormModal";
-import login from "../assets/login.jpg";
+import ver from "../assets/home/Viks 28.jpg";
 import { Model } from "../component/Model/Modal";
 import axios from "../service/axios";
 
@@ -85,7 +85,7 @@ export const Verification = () => {
           setModalMsg({
             message: `${response.data.message}`,
             direction:
-              request == "Verify Account" ? "/login" : "/update-password",
+              request == "Verify Account" ? "/ver" : "/update-password",
             icon: "success",
           });
           setToggleModal(true);
@@ -182,7 +182,7 @@ export const Verification = () => {
   return (
     <>
       <FormCard
-        authImg={login}
+        authImg={ver}
         heading="ViksGallery"
         authMessage="Verify Code"
         formInHolder={form.map((f) => ({
@@ -215,7 +215,7 @@ export const Verification = () => {
           message={modalMsg.message}
           direction={modalMsg.direction}
           buttonText={
-            request == "Verify Account" ? "Login" : "Set new password"
+            request == "Verify Account" ? "ver" : "Set new password"
           }
           button={button}
         />

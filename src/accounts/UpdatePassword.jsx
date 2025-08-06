@@ -1,6 +1,6 @@
 import { useState } from "react";
 import { FormCard } from "../component/FormModal";
-import login from "../assets/login.jpg";
+import update from "../assets/home/Viks 22.jpg";
 import { Model } from "../component/Model/Modal";
 import axios from "../service/axios";
 
@@ -64,7 +64,7 @@ export const UpdatePassword = () => {
         if (response) {
           setModalMsg({
             message: `${response.data.message}`,
-            direction: "/login",
+            direction: "/update",
             icon: "success",
           });
           setToggleModal(true);
@@ -110,7 +110,7 @@ export const UpdatePassword = () => {
   return (
     <>
       <FormCard
-        authImg={login}
+        authImg={update}
         heading="ViksGallery"
         authMessage="Set New Password"
         formInHolder={form.map((f) => ({
@@ -138,7 +138,7 @@ export const UpdatePassword = () => {
           icon={modalMsg.icon}
           message={modalMsg.message}
           direction={modalMsg.direction}
-          buttonText="Login"
+          buttonText="update"
           button={button}
         />
       )}
