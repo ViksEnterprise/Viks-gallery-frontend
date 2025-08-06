@@ -1,0 +1,46 @@
+name: VKIS GALLERY
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    environment: vkis-gallery
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
+      - name: Clean and Install dependencies
+        run: |
+          rm -rf node_modules package-lock.json
+          npm install
+
+      - name: Create .env file
+        run: |
+          echo "VITE_VKIS_API_URL=${{ vars.VITE_VKIS_API_URL }}" >> .env
+          echo "VITE_VKIS_APP_API_KEY=${{ vars.VITE_VKIS_APP_API_KEY }}" >> .env
+          echo "VITE_VKIS_RAPID_API_KEY=${{ secrets.VITE_VKIS_RAPID_API_KEY }}" >> .env
+
+      - name: Build Vkis App
+        run: npm run build
+
+      - name: Install Netlify CLI
+        run: npm install -g netlify-cli
+
+      - name: Deploy to Netlify
+        run: |
+          netlify deploy \
+            --dir=dist \
+            --prod \
+            --site=${{ secrets.NETLIFY_SITE_ID }} \
+            --auth=${{ secrets.NETLIFY_AUTH_TOKEN }}
+            
