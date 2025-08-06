@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FormCard } from "../component/FormModal";
-import login from "../assets/home/Viks 29.jpg";
+import login from "../assets/home/VIKS 29.jpg";
 import { Model } from "../component/Model/Modal";
 import axios from "../service/axios";
 

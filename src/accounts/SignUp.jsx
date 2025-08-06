@@ -1,5 +1,5 @@
 import { useState } from "react";
-import signUpImg from "../assets/home/Viks 26.jpg";
+import signUpImg from "../assets/home/VIKS 26.jpg";
 import { FormCard } from "../component/FormModal";
 import { Model } from "../component/Model/Modal";
 import axios from "../service/axios";
