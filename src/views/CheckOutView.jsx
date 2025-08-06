@@ -509,14 +509,14 @@ export const Checkout = () => {
                 )}
               </div>
               <div className="flex flex-col items-start w-full">
-                {address.length > 0 ? (
+                {address.length !== 0 ? (
                   <div className="flex flex-col lg:gap-2 gap-3 items-start w-full">
                     <div className="flex gap-2 flex-col w-full">
                       <div className="flex flex-col gap-1 w-full">
                         <div className="flex flex-row justify-between items-center gap-1">
                           <span className="font-[500] text-xs">
                             {address?.[0].address}, {address?.[0].city},{" "}
-                            {address?.[0].state} state, {address?.[0].country}
+                            {address?.[0].state} {address?.[0].state && 'state'}, {address?.[0].country}
                           </span>
                         </div>
                       </div>
