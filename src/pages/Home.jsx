@@ -3,7 +3,7 @@ import landingImg from "../assets/home/VIKS 214.jpg";
 import landingImg2 from "../assets/home/VIKS 23.jpg";
 import landingImg3 from "../assets/home/VIKS 24.jpg";
 import landingImg4 from "../assets/home/VIKS 211.jpg";
-import aboutImg from "../assets/home/VIKS 213.jpg";
+import aboutImg from "../assets/home/VIKS_213.jpg";
 import { Seller } from "../component/Collections";
 import { Subscribe } from "../component/Subscription";
 import { HiChevronRight } from "react-icons/hi";
