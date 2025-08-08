@@ -19,7 +19,7 @@
 }
 
 .img-hold{
-  background-image: url(../src/assets/home/VIKS\ 213.jpg);
+  background-image: url(../src/assets/home/VIKS_213.jpg);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -40,7 +40,7 @@
   display: none;
   content: '';
   position: absolute;
-  background-image: url(../src/assets/home/VIKS\ 213.jpg);
+  background-image: url(../src/assets/home/VIKS_213.jpg);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -63,7 +63,7 @@
   display: none;
   content: '';
   position: absolute;
-  background-image: url(../src/assets/home/VIKS\ 27.jpg);
+  background-image: url(../src/assets/home/VIKS_27.jpg);
   background-repeat: no-repeat;
   background-position: center center;
   background-size: cover;
@@ -90,7 +90,7 @@
   .img-hold{
     width: 280px !important;
     height: 400px !important;
-    background-image: url(../src/assets/home/VIKS\ 2.jpg) !important;
+    background-image: url(../src/assets/home/VIKS_2.jpg) !important;
   }
 }
 @media only screen and (min-width: 765px) {
