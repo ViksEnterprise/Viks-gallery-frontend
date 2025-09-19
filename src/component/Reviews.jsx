@@ -73,30 +73,34 @@ export const Testimonial = () => {
     };
     
     return (
-        <CardComp 
-            title={'Customers review'}
-            sliperElement={tesSwipe}
-            items={tes}
-            renderItem={(tes) => (
-                <div className="flex items-center w-full flex-col gap-3 py-5 rounded-lg shadow-md shadow-slate-400 bg-tes-col overflow-hidden">
-                    <div className="flex items-center justify-between lg:gap-2 lg:justify-center w-full px-5">
-                        <div className="w-9 h-9 rounded-full">
-                            <img className="bg-black w-9 h-9 rounded-full" src={tes.img} alt="" />
-                        </div>
-                        <div className="text-base font-medium">
-                            <span>{tes.name}</span>
-                        </div>
-                    </div>
-                    <div className="w-full text-sm px-3">
-                        <span>"{tes.tes}"</span>
-                    </div>
-                </div>
-            )}
-            subSecStyle='w-full flex flex-col gap-4'
-            style='flex items-center justify-center text-start flex-col w-full'
-            inStyle='w-full rounded-lg'
-            titleStyle='uppercase text-lg font-[500] w-full text-start'
-            swipe={slide}
-        />
-    )
+      <CardComp
+        title={"Customers review"}
+        sliperElement={tesSwipe}
+        items={tes}
+        renderItem={(tes) => (
+          <div className="flex items-center w-full flex-col gap-3 py-5 rounded-lg shadow-md shadow-slate-400 bg-tes-col overflow-hidden h-full">
+            <div className="flex items-center justify-between lg:gap-2 lg:justify-center w-full px-5 h-full">
+              <div className="w-9 h-9 rounded-full">
+                <img
+                  className="bg-black w-9 h-9 rounded-full"
+                  src={tes.img}
+                  alt=""
+                />
+              </div>
+              <div className="text-base font-medium">
+                <span>{tes.name}</span>
+              </div>
+            </div>
+            <div className="w-full text-sm px-3">
+              <span>"{tes.tes}"</span>
+            </div>
+          </div>
+        )}
+        subSecStyle="w-full flex flex-col gap-4 h-full"
+        style="flex items-center justify-center text-start flex-col w-full h-[fit-content]"
+        inStyle="w-full rounded-lg h-[fit-content]"
+        titleStyle="uppercase text-lg font-[500] w-full text-start"
+        swipe={slide}
+      />
+    );
 }

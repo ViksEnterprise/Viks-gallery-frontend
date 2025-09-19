@@ -94,8 +94,8 @@ export const NavBar = () => {
       <div
         className={
           scroll
-            ? "w-full justify-center flex item-center bg-transparent top-0 z-[999] fixed"
-            : "w-full justify-center flex item-center bg-transparent top-0 z-[999]"
+            ? "w-full justify-center flex item-center bg-transparent top-0 z-[9999] fixed"
+            : "w-full justify-center flex item-center bg-transparent top-0 z-[9999]"
         }
       >
         <header
@@ -187,7 +187,7 @@ export const NavBar = () => {
             <div
               className={
                 showNav
-                  ? "fixed top-0 end-0 bg-black/80 z-[999] h-full bottom-0 w-full flex items-start justify-end"
+                  ? "fixed top-0 end-0 bg-black/80 z-[9999] h-full bottom-0 w-full flex items-start justify-end"
                   : "hidden"
               }
             >
@@ -216,7 +216,7 @@ export const NavBar = () => {
                       <div className="flex items-center gap-2 relative">
                         <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
                           <img
-                            src={`http://127.0.0.1:8000/${data.pic}`}
+                            src={data.pic}
                             alt=""
                           />
                         </div>

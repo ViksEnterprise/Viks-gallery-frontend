@@ -58,8 +58,8 @@ export const Seller = () => {
               </div>
             </div>
           )}
-          style="flex items-center justify-start flex-wrap w-full lg:gap-3 gap-5"
-          subStyle="w-full md:w-[48.5%] lg:w-[32.3%] flex-0 h-fit overflow-hidden"
+          style="grid lg:grid-cols-3 sm:grid-cols-2 grid-col items-center justify-start w-full lg:gap-3 gap-5"
+          subStyle="w-full flex-0 h-fit overflow-hidden"
         />
       ) : (
         <div className="text-base text-gray-600 font-[500] capitalize p-4 flex flex-col justify-center w-full items-center">

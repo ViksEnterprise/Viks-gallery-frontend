@@ -11,10 +11,12 @@ import { CardComp } from "../component/CardModal";
 import axios, { axiosPrivate } from "../service/axios";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import { Model } from "../component/Model/Modal";
+import { FaPen } from "react-icons/fa";
 
 export const Checkout = () => {
   const navigate = useNavigate();
   const [disable, setDisable] = useState(false);
+  const [edit, setEdit] = useState(false);
   const [details, setDetails] = useState({
     cart: false,
     address: true,
@@ -24,7 +26,7 @@ export const Checkout = () => {
   const [countries, setCountries] = useState([]);
   const [states, setStates] = useState([]);
   const [cities, setCities] = useState([]);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [prices, setPrices] = useState([]);
   const [year, setYear] = useState(null);
   const [selectedCountry, setSelectedCountry] = useState("");
   const [error, setError] = useState({});
@@ -48,6 +50,7 @@ export const Checkout = () => {
     alternative_phone_number: "",
   });
   const [conDisable, setConDisable] = useState(true);
+  const [hasFetchedLocation, setHasFetchedLocation] = useState(false);
   const [type, setType] = useState({
     card_details: false,
     paypal: false,
@@ -55,6 +58,7 @@ export const Checkout = () => {
   });
   const [payment_url, setPayment_URL] = useState("");
   const [typeDisable, setTypeDisable] = useState(true);
+  const [getCartAdd, setGetCartAdd] = useState([]);
 
   const paymentType = [
     {
@@ -122,6 +126,14 @@ export const Checkout = () => {
       ...prev,
       alternative_phone_number: undefined,
     }));
+  };
+
+  const editAddress = () => {
+    setEdit(true);
+  };
+
+  const unEditAddress = () => {
+    setEdit(false);
   };
 
   const checkFieldState = () => {
@@ -262,7 +274,33 @@ export const Checkout = () => {
       const response = await axiosPrivate.get(url);
       if (response) {
         setAddress(response.data);
-        setOrderDisable(false);
+        // setOrderDisable(false);
+
+        if (response.data.length > 0) {
+          const addr = response.data[0];
+          setGetCartAdd(addr);
+
+          setFormData((prev) => ({
+            ...prev,
+            first_name: addr.first_name || "",
+            last_name: addr.last_name || "",
+            address: addr.address || "",
+            country: addr.country || "",
+            state: addr.state || "",
+            city: addr.city || "",
+            zip_code: addr.zip_code || "",
+            phone_number:
+              String(addr.phone_number !== null && "+" + addr.phone_number) ||
+              "",
+            alternative_phone_number:
+              String(
+                addr.alternative_phone_number !== null
+                  ? "+" + addr.alternative_phone_number
+                  : ""
+              ) || "",
+          }));
+          console.log(formData);
+        }
       }
     } catch (err) {
       return;
@@ -275,7 +313,7 @@ export const Checkout = () => {
     try {
       const res = await axiosPrivate.get(url);
       if (res) {
-        setTotalPrice(res.data?.total_price);
+        setPrices(res.data);
       }
     } catch (err) {
       return;
@@ -320,8 +358,8 @@ export const Checkout = () => {
     }
   };
 
-  const getCity = async (id) => {
-    const payload = { countrycode: selectedCountry, statecode: id };
+  const getCity = async (con, id) => {
+    const payload = { countrycode: con || selectedCountry, statecode: id };
     const url = `https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode`;
     try {
       const response = await axios.get(url, {
@@ -394,6 +432,22 @@ export const Checkout = () => {
     getCartSummary();
     getAddress();
   }, []);
+
+  useEffect(() => {
+    if (hasFetchedLocation || !getCartAdd || countries.length === 0) return;
+
+    const countryCode = countries.find((c) => c.name === getCartAdd.country);
+    if (!countryCode?.isoCode) return;
+
+    // Fetch states first
+    getState(countryCode.isoCode).then(() => {
+      const stateObj = states.find((s) => s.name === getCartAdd.state);
+      if (stateObj?.isoCode) {
+        getCity(countryCode.isoCode, stateObj.isoCode);
+      }
+      setHasFetchedLocation(true);
+    });
+  }, [getCartAdd, countries, states, hasFetchedLocation]);
 
   useEffect(() => {
     if (!loading) {
@@ -509,17 +563,28 @@ export const Checkout = () => {
                 )}
               </div>
               <div className="flex flex-col items-start w-full">
-                {address.length !== 0 ? (
+                {address.length !== 0 && !edit ? (
                   <div className="flex flex-col lg:gap-2 gap-3 items-start w-full">
                     <div className="flex gap-2 flex-col w-full">
                       <div className="flex flex-col gap-1 w-full">
                         <div className="flex flex-row justify-between items-center gap-1">
                           <span className="font-[500] text-xs">
                             {address?.[0].address}, {address?.[0].city},{" "}
-                            {address?.[0].state} {address?.[0].state && 'state'}, {address?.[0].country}
+                            {address?.[0].state} {address?.[0].state && "state"}
+                            , {address?.[0].country}
                           </span>
                         </div>
                       </div>
+                    </div>
+
+                    <div className="w-full flex items-end justify-end">
+                      <button
+                        type="button"
+                        className="flex items-center w-fit text-sm gap-1 font-semibold"
+                        onClick={editAddress}
+                      >
+                        <FaPen className="size-3" /> Edit
+                      </button>
                     </div>
                   </div>
                 ) : (
@@ -536,7 +601,7 @@ export const Checkout = () => {
                               placeholder="First name"
                               type="text"
                               name="first_name"
-                              onChange={(e) => handleChange(e)}
+                              onChange={(e) => handleChange({ e })}
                               value={formData.first_name}
                             />
                             <p className="text-xs font-semibold text-red-500 m-0">
@@ -676,21 +741,34 @@ export const Checkout = () => {
                           </div>
                         </div>
                       </div>
-                      <button
-                        className={
-                          disable
-                            ? "h-11 rounded-[7px] p-2 bg-blue-800 md:w-3/6 w-full text-white font-semibold text-base"
-                            : "h-11 rounded-[7px] p-2 bg-blue-100 md:w-3/6 w-full text-white font-semibold text-base flex items-center justify-center"
-                        }
-                        type="submit"
-                        disabled={!disable}
-                      >
-                        {loader ? (
-                          <span className="border-white border-t-transparent border-b-solid border-[3px] rounded-full h-7 w-7 animate-spin flex"></span>
-                        ) : (
-                          "Save"
+                      <div className="grid sm:grid-cols-2 grid-cols gap-2 w-full">
+                        <button
+                          className={
+                            disable
+                              ? "h-11 rounded-[7px] p-2 bg-blue-800 w-full text-white font-semibold text-base"
+                              : "h-11 rounded-[7px] p-2 bg-blue-100 w-full text-white font-semibold text-base flex items-center justify-center"
+                          }
+                          type="submit"
+                          disabled={!disable}
+                        >
+                          {loader ? (
+                            <span className="border-white border-t-transparent border-b-solid border-[3px] rounded-full h-7 w-7 animate-spin flex"></span>
+                          ) : edit ? (
+                            "Update"
+                          ) : (
+                            "Save"
+                          )}
+                        </button>
+                        {edit && (
+                          <button
+                            className="h-11 rounded-[7px] p-2 border-red-600 border-[1.8px] border-solid w-full text-red-600 font-semibold text-base flex items-center justify-center"
+                            type="button"
+                            onClick={() => unEditAddress()}
+                          >
+                            Cancel
+                          </button>
                         )}
-                      </button>
+                      </div>
                     </div>
                   </form>
                 )}
@@ -751,22 +829,20 @@ export const Checkout = () => {
                       <div className="flex flex-col gap-2 items-start">
                         <div className="flex items-center justify-between w-full text-sm">
                           <span className="text-sm">Subtotal</span>
-                          <span className="flex items-center gap-[2px]">
-                            <BiPound /> {totalPrice}
+                          <span className="flex items-center">
+                            <BiPound /> {prices?.price}
                           </span>
                         </div>
-                        <div className="flex items-center justify-between w-full capitalize">
-                          <span className="text-sm text-[#6B6B6B]">
-                            Shipping
-                          </span>
-                          <span className="text-sm text-[#6B6B6B]">
-                            included
+                        <div className="flex items-center justify-between w-full capitalize text-sm text-[#6B6B6B]">
+                          <span>Shipping</span>
+                          <span className="flex items-center">
+                            <BiPound /> {prices?.shipping_fee}
                           </span>
                         </div>
                         <div className="flex items-center justify-between w-full text-sm">
                           <span className="text-sm">Total</span>
-                          <span className="flex items-center gap-[2px]">
-                            <BiPound /> {totalPrice}
+                          <span className="flex items-center">
+                            <BiPound /> {prices?.total_price}
                           </span>
                         </div>
                       </div>
@@ -798,7 +874,7 @@ export const Checkout = () => {
               <div className="text-lg uppercase w-full text-center font-[500]">
                 <h4>Need more help?</h4>
               </div>
-              <div className="w-full flex md:flex-row flex-col md:gap-5 gap-3 items-center justify-center">
+              <div className="w-full flex sm:flex-row flex-col md:gap-5 gap-3 items-center justify-center">
                 <button
                   type="button"
                   className="h-12 text-white rounded-[6px] flex items-center bg-blue-800 lg:w-1/4 md:w-[38%] w-full justify-center test-base font-[500]"
