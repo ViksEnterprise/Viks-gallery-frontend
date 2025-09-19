@@ -108,11 +108,11 @@ export const Home = () => {
         <hr className="text-5xl text-black" />
       </section>
       <section className="w-full lg:p-9 p-4">
-        <div className="flex gap-5 items-center flex-col-reverse lg:flex-row">
-          <div className="flex-0 w-full lg:w-[45%] h-80 rounded-lg">
+        <div className="flex gap-5 items-center flex-col-reverse sm:flex-row">
+          <div className="flex-0 w-full lg:w-[45%] md:w-1/2 lg:h-80 sm:h-full h-92 rounded-lg">
             <img className="h-full w-full rounded-lg" src={aboutImg} alt="" />
           </div>
-          <div className="flex-1 w-full lg:w-2/5">
+          <div className="flex-0 w-full lg:w-2/5 ">
             <div className="lg:p-4 md:p-2 flex flex-col gap-5">
               <div>
                 <h4 className="text-3xl text-center md:text-start text-abt-blue font-semibold uppercase">

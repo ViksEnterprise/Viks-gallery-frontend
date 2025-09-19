@@ -11,8 +11,7 @@ export const ShoppingCart = () => {
   const navigate = useNavigate();
   const [cart, setCart] = useState([]);
   const [count, setCount] = useState({});
-  const [totalItems, setTotalItems] = useState(0);
-  const [totalPrice, setTotalPrice] = useState(0);
+  const [cartSum, setCartSum] = useState([]);
   const [loading, setLoading] = useState(false);
   const [loader, setLoader] = useState(false);
 
@@ -37,8 +36,7 @@ export const ShoppingCart = () => {
     try {
       const res = await axiosPrivate.get(url);
       if (res) {
-        setTotalItems(res.data?.total_product);
-        setTotalPrice(res.data?.total_price);
+        setCartSum(res.data);
       }
     } catch (err) {
       console.log(err);
@@ -184,7 +182,7 @@ export const ShoppingCart = () => {
               </div>
             ) : (
               <div className="w-full">
-                <div className="flex items-start gap-4 md:flex-row flex-col-reverse">
+                <div className="flex items-start gap-4 sm:flex-row flex-col-reverse">
                   <div className="lg:w-2/3 md:w-1/2 w-full">
                     <CardComp
                       normalDiv={false}
@@ -210,9 +208,11 @@ export const ShoppingCart = () => {
                               </div>
                               {item.product.price && (
                                 <div className="w-full flex items-center justify-between gap-2 text-base font-[500] capitalize">
-                                  <span className="text-blue-700 font-[700!important]">Artwork price</span>
+                                  <span className="text-blue-700 font-[700!important]">
+                                    Artwork price
+                                  </span>
                                   <span className="flex items-center gap-[1px]">
-                                    < BiPound />
+                                    <BiPound />
                                     {item.product.price}
                                   </span>
                                 </div>
@@ -306,18 +306,25 @@ export const ShoppingCart = () => {
                           <div className="flex flex-col gap-2 w-full">
                             <div className="w-full flex items-center justify-between text-sm font-[500]">
                               <span>No. of items</span>
-                              <span>{totalItems}</span>
+                              <span>{cartSum?.total_product}</span>
                             </div>
-                            <div className="flex flex-col gap-[1px] items-start">
-                              <div className="flex items-center justify-between w-full font-[500] text-sm">
-                                <span className="text-base">SubTotal</span>
-                                <span className="flex items-center gap-[2px]">
-                                  <BiPound /> {totalPrice}
+                            <div className="flex flex-col gap-2 items-start">
+                              <div className="text-[0.75em] text-[#6B6B6B] font-[500] flex items-center justify-between w-full">
+                                <span>Price</span>
+                                <span className="flex items-center">
+                                  <BiPound /> {cartSum?.price}
                                 </span>
                               </div>
-                              <div>
-                                <span className="text-sm text-[#6B6B6B] font-[500]">
-                                  Shipping included
+                              <div className="text-[0.75em] text-[#6B6B6B] font-[500] flex items-center justify-between w-full">
+                                <span>Shipping fee</span>
+                                <span className="flex items-center">
+                                  <BiPound /> {cartSum?.shipping_fee}
+                                </span>
+                              </div>
+                              <div className="flex items-center justify-between w-full font-[500] text-sm">
+                                <span className="text-base">SubTotal</span>
+                                <span className="flex items-center">
+                                  <BiPound /> {cartSum?.total_price}
                                 </span>
                               </div>
                             </div>
