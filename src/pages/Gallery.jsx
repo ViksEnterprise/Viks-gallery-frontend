@@ -4,15 +4,15 @@ import { Subscribe } from "../component/Subscription";
 import { Footer } from "../component/FooterNav";
 import { NavBar } from "../component/NavBar";
 import {
-  FaArrowDown,
-  FaArrowUp,
   FaChevronDown,
+  FaChevronUp,
   FaSearch,
 } from "react-icons/fa";
 import { BsHeart, BsTriangleFill } from "react-icons/bs";
 import { BiCart, BiSearch, BiTable, BiPound } from "react-icons/bi";
 import { useNavigate } from "react-router-dom";
 import axios, { axiosPrivate } from "../service/axios";
+import { FiFilter } from "react-icons/fi";
 
 export const Gallery = () => {
   const navigate = useNavigate();
@@ -22,6 +22,12 @@ export const Gallery = () => {
   const [listOfArtwork, setListOfArtwork] = useState([]);
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
+  const [filterValue, setFilterValue] = useState("all");
+  const [openFilter, setOpenFilter] = useState(false);
+
+  const sort = ["all", "paintings", "sculpture", "beads"];
+
+  console.log(listOfArtwork);
 
   const handleChange = (e) => {
     const { value } = e.target;
@@ -33,8 +39,17 @@ export const Gallery = () => {
     navigate("/myCart");
   };
 
-  const getArtwork = async (value) => {
-    const url = `artwork/${value ? `?search=${value}` : ""}`;
+  const getArtwork = async (value, type) => {
+    const params = new URLSearchParams();
+
+    if (value) params.append("search", value);
+    if (type && type !== "all") params.append("artType", type);
+
+    // Build the final URL
+    const url = params.toString()
+      ? `artwork/?${params.toString()}`
+      : "artwork/";
+
     setLoading(true);
     try {
       const response = await axios.get(url);
@@ -42,14 +57,14 @@ export const Gallery = () => {
         setListOfArtwork(response.data?.data);
       }
     } catch (err) {
-      return
+      return;
     } finally {
       setLoading(false);
     }
   };
 
   const getTotalNoOfFav = async () => {
-    const url = "favourite/total-fav";
+    const url = "favorite/total-fav";
 
     try {
       const res = await axiosPrivate.get(url);
@@ -57,7 +72,7 @@ export const Gallery = () => {
         setNoOfItemsInFavourite(res.data?.total_items_added);
       }
     } catch (err) {
-      return
+      return;
     }
   };
 
@@ -70,7 +85,7 @@ export const Gallery = () => {
         setNoOfItemsInCart(res.data?.total_product);
       }
     } catch (err) {
-      return
+      return;
     }
   };
 
@@ -89,9 +104,23 @@ export const Gallery = () => {
   }
 
   const debounceSearch = useCallback(
-    debounce((value) => getArtwork(value), 200),
+    debounce((value) => getArtwork(value, filterValue), 200),
     []
   );
+
+  const filter = () => {
+    setOpenFilter(!openFilter);
+  };
+
+  const filterArtwork = (id) => {
+    setFilterValue(id);
+
+    if (filterValue) {
+      setOpenFilter(false);
+    }
+
+    getArtwork(search, id);
+  };
 
   useEffect(() => {
     const favIcon = document.getElementById("fav");
@@ -109,10 +138,6 @@ export const Gallery = () => {
       favIcon.addEventListener("mouseout", handleMouseOut);
     }
 
-    getArtwork();
-
-    getTotalNoOfFav();
-
     return () => {
       if (favIcon) {
         favIcon.removeEventListener("mouseover", handleMouseOver);
@@ -122,7 +147,7 @@ export const Gallery = () => {
   }, []);
 
   useEffect(() => {
-    getArtwork();
+    getArtwork(search, filterValue);
 
     getTotalNoOfFav();
 
@@ -134,8 +159,8 @@ export const Gallery = () => {
       <NavBar />
       <hr />
       <div className="h-fit w-full py-3 md:px-10 px-4">
-        <div className="flex md:justify-between gap-3 md:flex-row flex-col w-full items-center">
-          <div className="h-11 flex items-center border-gray-400 border-solid border-[1px] rounded-[7px] gap-2 px-2 overflow-hidden xl:w-1/4 lg:w-[40%] md:w-[45%] w-full">
+        <div className="grid sm:grid-cols-2 grid-col md:justify-between gap-3 w-full items-center">
+          <div className="h-11 flex items-center border-gray-400 border-solid border-[1px] rounded-[7px] gap-2 px-2 overflow-hidden w-full">
             <FaSearch className="text-[14px] text-gray-400 font-normal" />
             <input
               className="h-full border-none outline-[transparent]"
@@ -146,7 +171,7 @@ export const Gallery = () => {
               onChange={handleChange}
             />
           </div>
-          <div className="flex items-center gap-[6px] xl:w-1/4 lg:w-[40%] md:w-[45%] w-full">
+          <div className="flex items-center gap-[6px] w-full">
             <div
               className={
                 hoverFav
@@ -182,17 +207,44 @@ export const Gallery = () => {
                 {noOfItemsInCart}
               </div>
             </div>
-            <div className="h-11 flex items-center border-gray-400 border-solid border-[1px] rounded-[7px] gap-2 px-2 overflow-hidden w-full">
-              <div className="flex items-center gap-1">
-                <FaArrowUp className="text-[14px] text-gray-400 font-normal" />
-                <FaArrowDown className="text-[14px] text-gray-400 font-normal" />
-              </div>
-              <div className="flex items-center w-full justify-between text-gray-400">
-                <div className="h-full flex items-center text-center justify-center">
-                  Sort
+            <div className="w-full relative">
+              <div
+                className="h-11 flex items-center border-gray-400 border-solid border-[1px] rounded-[7px] gap-2 px-2 overflow-hidden w-full"
+                onClick={filter}
+              >
+                <div className="flex items-center gap-1">
+                  <FiFilter className="text-[14px] text-gray-400 font-normal cursor-pointer" />
                 </div>
-                <FaChevronDown className="text-[14px] text-gray-400 font-normal" />
+                <div className="flex items-center w-full justify-between text-gray-400 cursor-pointer">
+                  <div className="h-full flex items-center text-center justify-center text-black text-sm capitalize">
+                    {filterValue}
+                  </div>
+                  {openFilter ? (
+                    <FaChevronUp className="text-[14px] text-gray-400 font-normal" />
+                  ) : (
+                    <FaChevronDown className="text-[14px] text-gray-400 font-normal" />
+                  )}
+                </div>
               </div>
+              {openFilter ? (
+                <div className="absolute top-12 shadow-md shadow-gray-100 w-[90%] rounded-lg bg-white border-gray-400 border-solid border-[1px] h-[fit] z-[999] flex flex-col items-start justify-start end-0 overflow-hidden">
+                  {sort.map((item, i) => (
+                    <span
+                      className={
+                        filterValue == item
+                          ? "p-2 px-3 w-full bg-slate-200 cursor-pointer capitalize"
+                          : "p-2 px-3 w-full cursor-pointer capitalize"
+                      }
+                      key={i}
+                      onClick={() => filterArtwork(item)}
+                    >
+                      {item}
+                    </span>
+                  ))}
+                </div>
+              ) : (
+                ""
+              )}
             </div>
           </div>
         </div>
@@ -202,7 +254,7 @@ export const Gallery = () => {
         <div className="w-full flex items-center justify-center h-72 relative p-3">
           <span className="h-16 w-16 rounded-full bg-white before:bg-transparent before:border-t-blue-700 before:border-solid before:border-[4px] before:content-[''] before:h-16 before:w-16 before:rounded-full before:flex before:animate-spin inset-5"></span>
         </div>
-      ) : !search && listOfArtwork.length > 0 ? (
+      ) : listOfArtwork && listOfArtwork.length > 0 ? (
         <CardComp
           normalDiv={false}
           swipe={false}
@@ -217,15 +269,18 @@ export const Gallery = () => {
               </div>
               <div className="text-base font-[500] text-black uppercase w-full flex justify-between">
                 <h6>{sale.artwork_title}</h6>
-                <span className="flex items-center gap-[2px]"><BiPound />{sale.price}</span>
+                <span className="flex items-center gap-[2px]">
+                  <BiPound />
+                  {sale.price}
+                </span>
               </div>
               <div className="flex gap-2 items-center m-0 p-0">
                 <span>{sale.artworkDescription?.medium}</span>
               </div>
             </div>
           )}
-          style="flex items-center justify-start flex-wrap w-full lg:gap-3 gap-5"
-          subStyle="w-full md:w-[48.5%] lg:w-[32.3%] flex-0 h-fit overflow-hidden"
+          style="grid lg:grid-cols-3 sm:grid-cols-2 grid-col w-full lg:gap-3 gap-5"
+          subStyle="w-full flex-0 h-fit overflow-hidden"
         />
       ) : (
         <div className="text-lg font-[500] capitalize p-10 flex flex-col justify-center w-full items-center">

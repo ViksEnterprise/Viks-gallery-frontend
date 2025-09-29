@@ -5,7 +5,7 @@ import { Footer } from "../component/FooterNav";
 import { Testimonial } from "../component/Reviews";
 import { CardComp } from "../component/CardModal";
 import { Model } from "../component/Model/Modal";
-import { BiDollar, BiHeart, BiMinus, BiPlus } from "react-icons/bi";
+import { BiPound, BiHeart, BiMinus, BiPlus } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import axios, { axiosPrivate } from "../service/axios";
 import { Error404 } from "../views/NotFound";
@@ -39,7 +39,7 @@ export const Single = () => {
         window.location.href = "/artwork";
       }
     } catch (err) {
-      return
+      return;
     } finally {
       setLoading(false);
     }
@@ -73,7 +73,7 @@ export const Single = () => {
           setToggleModal(true);
         }
       }
-      return
+      return;
     }
   };
 
@@ -85,7 +85,7 @@ export const Single = () => {
         setFavId("");
       }
     } catch (err) {
-      return
+      return;
     }
   };
 
@@ -97,7 +97,7 @@ export const Single = () => {
         setFavId(response.data);
       }
     } catch (err) {
-      return
+      return;
     }
   };
 
@@ -109,7 +109,7 @@ export const Single = () => {
         setCount(response.data?.quantity_of_product);
       }
     } catch (err) {
-      return
+      return;
     }
   };
 
@@ -153,7 +153,7 @@ export const Single = () => {
         setCount(response.data?.data?.quantity_of_product);
       }
     } catch (err) {
-      return
+      return;
     } finally {
       setLoad(false);
     }
@@ -185,7 +185,7 @@ export const Single = () => {
           setToggleModal(true);
         }
       }
-      return
+      return;
     } finally {
       setLoader(false);
     }
@@ -199,7 +199,7 @@ export const Single = () => {
         setCount(0);
       }
     } catch (err) {
-      return
+      return;
     }
   };
 
@@ -283,14 +283,14 @@ export const Single = () => {
                   />
                 </div>
               </div>
-              <div className="w-full h-[22em] rounded-[6px] overflow-hidden">
+              <div className="w-full h-[30em] rounded-[6px] overflow-hidden">
                 <img
                   className="h-[inherit] w-full"
                   src={singleArtImage || singleArtwork?.full_artwork_image}
                 />
               </div>
             </div>
-            <div className="flex flex-col gap-5 justify-start items-center py-5 px-3 bg-tes-col shadow-md shadow-slate-400 rounded-[6px] md:w-2/5 w-full">
+            <div className="flex flex-col gap-5 justify-start items-center py-5 px-3 bg-tes-col shadow-md shadow-slate-400 rounded-[6px] md:w-2/5 w-full h-fit">
               <div className="flex flex-col gap-3 items-start w-full">
                 <div className="flex flex-col gap-1 items-start w-full">
                   <div className="flex justify-between w-full items-center text-lg capitalize font-[500]">
@@ -318,15 +318,7 @@ export const Single = () => {
                   <span>
                     Size:{" "}
                     <span>
-                      {singleArtwork.artworkDimension?.width}
-                      {""}
-                      {singleArtwork.artworkDimension?.width &&
-                        `W`} &times; {singleArtwork.artworkDimension?.height}
-                      {""}
-                      {singleArtwork.artworkDimension?.height &&
-                        `H`} &times; {singleArtwork.artworkDimension?.depth}
-                      {""}
-                      {singleArtwork.artworkDimension?.depth && "D"} cm
+                      {singleArtwork.artworkDimension?.size}
                     </span>
                   </span>
                   <span>{singleArtwork.artworkDimension?.packaging}</span>
@@ -334,7 +326,7 @@ export const Single = () => {
               </div>
               <div className="text-[#0A078E] text-start md:text-2xl text-xl flex items-start font-[600] w-full p-0">
                 <span className="flex items-center gap-[-2px] p-0">
-                  <BiDollar />
+                  <BiPound />
                   {singleArtwork.price}
                 </span>
               </div>
@@ -414,82 +406,87 @@ export const Single = () => {
             titleStyle="uppercase text-lg font-[500] text-start w-full"
             normalDiv={true}
             renderItem={
-              <div className="flex md:flex-row flex-col md:justify-between gap-3">
-                <div className="md:w-[45%] w-full border-gray-400 border-solid border-[1px] px-2 py-3 flex flex-col gap-3 rounded-[4px]">
+              <div className="grid gap-4">
+                <div className="w-full border-gray-400 border-solid border-[1px] px-2 py-3 flex flex-col gap-3 rounded-[4px]">
                   <div className="uppercase text-base font-[500] text-start w-full">
-                    <h5>About the artwork</h5>
+                    <h5>Description</h5>
                   </div>
                   <hr className="w-full border-gray-300 border-solid border-[0.5px]" />
                   <div className="w-full flex flex-col gap-5 items-start">
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Original created:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDescription?.created_on}
-                      </span>
-                    </div>
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Material:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDescription?.material_used}
-                      </span>
-                    </div>
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Styles:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDescription?.styles}
-                      </span>
-                    </div>
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Medium:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDescription?.medium}
-                      </span>
+                    <div className="flex items-center font-[400] gap-1 text-xs">
+                      {singleArtwork.artworkDimension?.artwork_description}
                     </div>
                   </div>
                 </div>
-                <div className="md:w-[45%] w-full border-gray-400 border-solid border-[1px] px-2 py-3 flex flex-col gap-3 rounded-[4px]">
-                  <div className="uppercase text-base font-[500] text-start w-full">
-                    <h5>Details and dimension</h5>
+                <div className="flex md:flex-row flex-col md:justify-between gap-3">
+                  <div className="md:w-[45%] w-full border-gray-400 border-solid border-[1px] px-2 py-3 flex flex-col gap-3 rounded-[4px]">
+                    <div className="uppercase text-base font-[500] text-start w-full">
+                      <h5>About the artwork</h5>
+                    </div>
+                    <hr className="w-full border-gray-300 border-solid border-[0.5px]" />
+                    <div className="w-full flex flex-col gap-5 items-start">
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Original created:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDescription?.created_on}
+                        </span>
+                      </div>
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Material:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDescription?.material_used}
+                        </span>
+                      </div>
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Styles:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDescription?.styles}
+                        </span>
+                      </div>
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Medium:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDescription?.medium}
+                        </span>
+                      </div>
+                    </div>
                   </div>
-                  <hr className="w-full border-gray-300 border-solid border-[0.5px]" />
-                  <div className="w-full flex flex-col gap-5 items-start">
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Painting:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDimension?.painting_type}
-                      </span>
+                  <div className="md:w-[45%] w-full border-gray-400 border-solid border-[1px] px-2 py-3 flex flex-col gap-3 rounded-[4px]">
+                    <div className="uppercase text-base font-[500] text-start w-full">
+                      <h5>Details and dimension</h5>
                     </div>
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Size:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDimension?.width}
-                        {""}
-                        {singleArtwork.artworkDimension?.width &&
-                          `W`} &times; {singleArtwork.artworkDimension?.height}
-                        {""}
-                        {singleArtwork.artworkDimension?.height &&
-                          `H`} &times; {singleArtwork.artworkDimension?.depth}
-                        {""}
-                        {singleArtwork.artworkDimension?.depth && "Dcm"}
-                      </span>
-                    </div>
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Frame:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDimension?.frame}
-                      </span>
-                    </div>
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Ready to hang:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDimension?.ready_to_hang}
-                      </span>
-                    </div>
-                    <div className="flex items-center font-[500] gap-1 text-xs">
-                      <span className="uppercase">Packaging:</span>
-                      <span className="font-[400] capitalize">
-                        {singleArtwork.artworkDimension?.packaging}
-                      </span>
+                    <hr className="w-full border-gray-300 border-solid border-[0.5px]" />
+                    <div className="w-full flex flex-col gap-5 items-start">
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Painting:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDimension?.painting_type}
+                        </span>
+                      </div>
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Size:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDimension?.size}
+                        </span>
+                      </div>
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Frame:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDimension?.frame}
+                        </span>
+                      </div>
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Ready to hang:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDimension?.ready_to_hang}
+                        </span>
+                      </div>
+                      <div className="flex items-center font-[500] gap-1 text-xs">
+                        <span className="uppercase">Packaging:</span>
+                        <span className="font-[400] capitalize">
+                          {singleArtwork.artworkDimension?.packaging}
+                        </span>
+                      </div>
                     </div>
                   </div>
                 </div>
