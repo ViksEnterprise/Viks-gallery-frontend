@@ -414,7 +414,7 @@ export const Single = () => {
                   <hr className="w-full border-gray-300 border-solid border-[0.5px]" />
                   <div className="w-full flex flex-col gap-5 items-start">
                     <div className="flex items-center font-[400] gap-1 text-xs">
-                      {singleArtwork.artworkDimension?.artwork_description}
+                      {singleArtwork.artwork_description}
                     </div>
                   </div>
                 </div>
