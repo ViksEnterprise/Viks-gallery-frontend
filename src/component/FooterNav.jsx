@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { FaEnvelope, FaFacebook, FaInstagram, FaPhoneVolume, FaPinterest, FaTiktok, FaXTwitter } from "react-icons/fa6";
 import Logo from "../assets/VIKS Gallery transparent.png"
+import HideContent from "./Hidden";
 
 export const Footer = () => {
     const [year, setYear] = useState(null);
@@ -28,7 +29,11 @@ export const Footer = () => {
               <div className="flex flex-col gap-6 items-start">
                 <div className="flex flex-col gap-3 items-start">
                   <div className="h-full flex items-start w-36 justify-start">
-                    <img className="h-36 w-36" src={Logo} alt="Viks gallery logo" />
+                    <img
+                      className="h-36 w-36"
+                      src={Logo}
+                      alt="Viks gallery logo"
+                    />
                   </div>
                   <span className="lg:text-base text-sm font-normal">
                     Find art that speaks to your heart
@@ -40,14 +45,14 @@ export const Footer = () => {
                     className="flex gap-2 items-center text-decoration-none"
                   >
                     <FaEnvelope />
-                    <span>viksgallery@gmail.com</span>
+                    <span>viksgallery001@gmail.com</span>
                   </a>
                   <a
-                    href="tel:080994567235"
+                    href="tel:+447823972770"
                     className="flex gap-2 items-center text-decoration-none"
                   >
                     <FaPhoneVolume />
-                    <span>080994567235</span>
+                    <span>+44 7823 972770</span>
                   </a>
                 </div>
                 <div className="w-full">
@@ -80,25 +85,27 @@ export const Footer = () => {
                   </ul>
                 </div>
               </div>
-              <div className="flex flex-col gap-3 items-start">
-                <ul className="lg:text-base md:text-sm text-xs font-normal flex gap-2 uppercase">
-                  <li>
-                    <a className="no-underline" href="#">
-                      Privacy policy
-                    </a>
-                  </li>
-                  <li>
-                    <a className="no-underline" href="#">
-                      Cookie policy
-                    </a>
-                  </li>
-                  <li>
-                    <a className="no-underline" href="#">
-                      Term of use
-                    </a>
-                  </li>
-                </ul>
-              </div>
+              <HideContent>
+                <div className="flex flex-col gap-3 items-start">
+                  <ul className="lg:text-base md:text-sm text-xs font-normal flex gap-2 uppercase">
+                    <li>
+                      <a className="no-underline" href="#">
+                        Privacy policy
+                      </a>
+                    </li>
+                    <li>
+                      <a className="no-underline" href="#">
+                        Cookie policy
+                      </a>
+                    </li>
+                    <li>
+                      <a className="no-underline" href="#">
+                        Term of use
+                      </a>
+                    </li>
+                  </ul>
+                </div>
+              </HideContent>
             </div>
             <div className="w-full text-center lg:text-base text-sm">
               <p>{year} Viks Gallery - All Rights Reserved</p>

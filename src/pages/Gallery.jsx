@@ -261,7 +261,7 @@ export const Gallery = () => {
           items={listOfArtwork}
           renderItem={(sale) => (
             <div
-              className="flex items-start justify-start flex-col gap-[4px] w-full h-fit cursor-pointer"
+              className="flex items-start justify-start flex-col gap-[5px] w-full h-fit cursor-pointer"
               onClick={() => details(sale?.artworkId)}
             >
               <div className="w-full h-80">
@@ -279,7 +279,7 @@ export const Gallery = () => {
               </div>
             </div>
           )}
-          style="grid lg:grid-cols-3 sm:grid-cols-2 grid-col w-full lg:gap-3 gap-5"
+          style="grid lg:grid-cols-3 sm:grid-cols-2 grid-col w-full lg:gap-5 gap-5"
           subStyle="w-full flex-0 h-fit overflow-hidden"
         />
       ) : (

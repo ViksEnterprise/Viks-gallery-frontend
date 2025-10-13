@@ -10,6 +10,7 @@ import { useParams } from "react-router-dom";
 import axios, { axiosPrivate } from "../service/axios";
 import { Error404 } from "../views/NotFound";
 import { BsFillHeartFill } from "react-icons/bs";
+import HideContent from "../component/Hidden";
 
 export const Single = () => {
   const { artworkId } = useParams();
@@ -316,10 +317,7 @@ export const Single = () => {
                     {singleArtwork.artworkDescription?.medium}
                   </span>
                   <span>
-                    Size:{" "}
-                    <span>
-                      {singleArtwork.artworkDimension?.size}
-                    </span>
+                    Size: <span>{singleArtwork.artworkDimension?.size}</span>
                   </span>
                   <span>{singleArtwork.artworkDimension?.packaging}</span>
                 </div>
@@ -387,12 +385,14 @@ export const Single = () => {
                     )}
                   </button>
                 )}
-                <button
-                  type="button"
-                  className="h-12 flex items-center rounded-[8px] text-base font-[500] border-[1px] border-blue-800 border-solid w-full justify-center"
-                >
-                  Make an offer
-                </button>
+                <HideContent>
+                  <button
+                    type="button"
+                    className="h-12 flex items-center rounded-[8px] text-base font-[500] border-[1px] border-blue-800 border-solid w-full justify-center"
+                  >
+                    Make an offer
+                  </button>
+                </HideContent>
               </div>
               <div className="flex flex-col gap-3 w-full items-start text-sm">
                 <span>Shipping included</span>
@@ -550,12 +550,14 @@ export const Single = () => {
                 <h4>Need more help?</h4>
               </div>
               <div className="w-full flex md:flex-row flex-col md:gap-5 gap-3 items-center justify-center">
-                <button
-                  type="button"
-                  className="h-12 text-white rounded-[6px] flex items-center bg-blue-800 lg:w-1/4 md:w-[38%] w-full justify-center test-base font-[500]"
-                >
-                  Chat with an art advisory
-                </button>
+                <HideContent>
+                  <button
+                    type="button"
+                    className="h-12 text-white rounded-[6px] flex items-center bg-blue-800 lg:w-1/4 md:w-[38%] w-full justify-center test-base font-[500]"
+                  >
+                    Chat with an art advisory
+                  </button>
+                </HideContent>
                 <a
                   href="/contact"
                   className="h-12 text-decoration-none rounded-[6px] flex items-center border-blue-800 border lg:w-1/4 md:w-[38%] w-full justify-center test-base font-[500]"

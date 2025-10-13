@@ -9,6 +9,7 @@ import work from "../assets/home/VIKS 25.jpg";
 import { Link } from "react-router-dom";
 import { ArtiseHandels, WCVGText, Teams, AboutMsg } from "../libs/AboutDetails";
 import { NavBar } from "../component/NavBar";
+import HideContent from "../component/Hidden";
 
 export const About = () => {
   const [wCVG, setWCVG] = useState("");
@@ -247,42 +248,44 @@ export const About = () => {
         subStyle="w-full flex-initial h-fit overflow-hidden"
       />
       <hr />
-      <CardComp
-        title="Meet our amazing team"
-        titleStyle="text-xl md:text-2xl lg:text-3xl capitalize font-[500]"
-        items={Teams}
-        swipe={false}
-        normalDiv={false}
-        renderItem={(team) => (
-          <div className="flex items-start justify-start flex-col gap-2 w-full h-fit">
-            <div className="w-full lg:h-80 h-72">
-              <img className="w-full h-full" src={team.img} alt={team.name} />
-            </div>
-            <div className="lg:text-xl text-base font-normal flex flex-col gap-3 capitalize">
-              <h6>{team.name}</h6>
-              <p>{team.role}</p>
-              <div>
-                <ul className="flex items-center gap-6">
-                  {team.handels.map((icon, i) => (
-                    <li className={icon.style} key={i}>
-                      <Link
-                        className="no-underline"
-                        to={icon.link}
-                        target="_blank"
-                      >
-                        <icon.icon />
-                      </Link>
-                    </li>
-                  ))}
-                </ul>
+      <HideContent>
+        <CardComp
+          title="Meet our amazing team"
+          titleStyle="text-xl md:text-2xl lg:text-3xl capitalize font-[500]"
+          items={Teams}
+          swipe={false}
+          normalDiv={false}
+          renderItem={(team) => (
+            <div className="flex items-start justify-start flex-col gap-2 w-full h-fit">
+              <div className="w-full lg:h-80 h-72">
+                <img className="w-full h-full" src={team.img} alt={team.name} />
+              </div>
+              <div className="lg:text-xl text-base font-normal flex flex-col gap-3 capitalize">
+                <h6>{team.name}</h6>
+                <p>{team.role}</p>
+                <div>
+                  <ul className="flex items-center gap-6">
+                    {team.handels.map((icon, i) => (
+                      <li className={icon.style} key={i}>
+                        <Link
+                          className="no-underline"
+                          to={icon.link}
+                          target="_blank"
+                        >
+                          <icon.icon />
+                        </Link>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
               </div>
             </div>
-          </div>
-        )}
-        style="flex items-center justify-start md:justify-center flex-wrap w-full lg:gap-3 gap-5"
-        subStyle="w-full md:w-3p flex-initial h-fit overflow-hidden"
-      />
-      <hr />
+          )}
+          style="flex items-center justify-start md:justify-center flex-wrap w-full lg:gap-3 gap-5"
+          subStyle="w-full md:w-3p flex-initial h-fit overflow-hidden"
+        />
+        <hr />
+      </HideContent>
       <Subscribe />
       <Footer />
     </div>
