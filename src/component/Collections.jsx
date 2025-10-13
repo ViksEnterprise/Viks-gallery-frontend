@@ -58,7 +58,7 @@ export const Seller = () => {
               </div>
             </div>
           )}
-          style="grid lg:grid-cols-3 sm:grid-cols-2 grid-col items-center justify-start w-full lg:gap-3 gap-5"
+          style="grid lg:grid-cols-3 sm:grid-cols-2 grid-col w-full lg:gap-3 gap-5"
           subStyle="w-full flex-0 h-fit overflow-hidden"
         />
       ) : (
