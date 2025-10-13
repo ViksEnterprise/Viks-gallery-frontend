@@ -12,6 +12,7 @@ import axios, { axiosPrivate } from "../service/axios";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import { Model } from "../component/Model/Modal";
 import { FaPen } from "react-icons/fa";
+import HideContent from "../component/Hidden";
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -577,15 +578,17 @@ export const Checkout = () => {
                       </div>
                     </div>
 
-                    <div className="w-full flex items-end justify-end">
-                      <button
-                        type="button"
-                        className="flex items-center w-fit text-sm gap-1 font-semibold"
-                        onClick={editAddress}
-                      >
-                        <FaPen className="size-3" /> Edit
-                      </button>
-                    </div>
+                    <HideContent>
+                      <div className="w-full flex items-end justify-end">
+                        <button
+                          type="button"
+                          className="flex items-center w-fit text-sm gap-1 font-semibold"
+                          onClick={editAddress}
+                        >
+                          <FaPen className="size-3" /> Edit
+                        </button>
+                      </div>
+                    </HideContent>
                   </div>
                 ) : (
                   <form
