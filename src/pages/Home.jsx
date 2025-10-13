@@ -112,7 +112,7 @@ export const Home = () => {
           <div className="flex-0 w-full lg:w-[45%] md:w-1/2 lg:h-80 sm:h-full h-92 rounded-lg">
             <img className="h-full w-full rounded-lg" src={aboutImg} alt="" />
           </div>
-          <div className="flex-0 w-full lg:w-2/5 ">
+          <div className="flex-0 w-full lg:w-2/4 ">
             <div className="lg:p-4 md:p-2 flex flex-col gap-5">
               <div>
                 <h4 className="text-3xl text-center md:text-start text-abt-blue font-semibold uppercase">
