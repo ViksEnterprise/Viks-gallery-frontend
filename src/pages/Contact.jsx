@@ -35,17 +35,17 @@ export const Contact = () => {
               <div className="flex flex-col items-start gap-3">
                 <a
                   className="flex items-center gap-1 text-sm text-decoration-none"
-                  href="mailto:viksgallery@gmail.com"
+                  href="mailto:viksgallery001@gmail.com"
                 >
                   <FiMail className="text-2xl fill-black stroke-white" />
-                  viksgallery@gmail.com
+                  viksgallery001@gmail.com
                 </a>
                 <a
                   className="flex items-center gap-1 text-sm text-decoration-none"
-                  href="tel:080994567235"
+                  href="tel:+447823972770"
                 >
                   <BiPhoneCall className="text-2xl fill-black stroke-white" />
-                  080994567235
+                  +44 7823 972770
                 </a>
               </div>
             </div>
