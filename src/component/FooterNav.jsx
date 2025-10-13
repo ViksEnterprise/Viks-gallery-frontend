@@ -41,7 +41,7 @@ export const Footer = () => {
                 </div>
                 <div className="flex gap-3 flex-col items-start lg:text-base text-sm">
                   <a
-                    href="mailto:viksgallery@gmail.com"
+                    href="mailto:viksgallery001@gmail.com"
                     className="flex gap-2 items-center text-decoration-none"
                   >
                     <FaEnvelope />
