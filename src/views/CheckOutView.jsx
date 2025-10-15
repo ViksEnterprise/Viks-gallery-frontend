@@ -100,7 +100,7 @@ export const Checkout = () => {
 
     if (name == "state") {
       const select = states.find((s) => s.name === value);
-      getCity(select?.isoCode);
+      getCity(selectedCountry, select?.isoCode);
     }
 
     setFormData({ ...formData, [name]: value });
