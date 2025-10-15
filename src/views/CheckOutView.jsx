@@ -360,7 +360,7 @@ export const Checkout = () => {
   };
 
   const getCity = async (con, id) => {
-    const payload = { countrycode: con || selectedCountry, statecode: id };
+    const payload = { countrycode: con ? con : selectedCountry, statecode: id };
     const url = `https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode`;
     try {
       const response = await axios.get(url, {
@@ -604,7 +604,7 @@ export const Checkout = () => {
                               placeholder="First name"
                               type="text"
                               name="first_name"
-                              onChange={(e) => handleChange({ e })}
+                              onChange={(e) => handleChange(e)}
                               value={formData.first_name}
                             />
                             <p className="text-xs font-semibold text-red-500 m-0">
