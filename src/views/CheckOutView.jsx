@@ -360,7 +360,7 @@ export const Checkout = () => {
   };
 
   const getCity = async (con, id) => {
-    const payload = { countrycode: con ? con : selectedCountry, statecode: id };
+    const payload = { countrycode: selectedCountry ? selectedCountry : con, statecode: id };
     const url = `https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode`;
     try {
       const response = await axios.get(url, {
