@@ -17,6 +17,9 @@ import { HasCredentials } from "./component/Middlewares/LoginCredentials/Credent
 import { HasEmailCredentials } from "./component/Middlewares/EmailCredentials/Credentials";
 import { PaymentSuccess } from "./views/PaymentSuccess";
 import { PaymentCancel } from "./views/PaymentCancel";
+import { DashBoardCollection } from "./views/dashboard/Collections";
+import { DashBoardOrder } from "./views/dashboard/Orders";
+import { Shipment } from "./views/dashboard/Shipments";
 
 function App() {
   return (
@@ -35,6 +38,17 @@ function App() {
         <Route element={<HasCredentials />}>
           <Route path="/cart/checkout" element={<Checkout />}></Route>
         </Route>
+
+        {/* Has admin access and right */}
+        <Route
+          path="/dashboard/collections"
+          element={<DashBoardCollection />}
+        ></Route>
+        <Route path="/dashboard/orders" element={<DashBoardOrder />}></Route>
+        <Route
+          path="/dashboard/shipments"
+          element={<Shipment />}
+        ></Route>
 
         {/* Authentications Route */}
 

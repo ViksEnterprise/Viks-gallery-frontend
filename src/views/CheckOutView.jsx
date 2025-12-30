@@ -723,7 +723,7 @@ export const Checkout = () => {
                               name="phone_number"
                               value={formData.phone_number}
                               onChange={handlePhoneChange}
-                              defaultCountry={`${selectedCountry}`}
+                              defaultCountry={`GB`}
                             />
                             <p className="text-xs font-semibold text-red-500 m-0">
                               {error.phone_number}
@@ -736,7 +736,7 @@ export const Checkout = () => {
                               name="alternative_phone_number"
                               value={formData.alternative_phone_number}
                               onChange={handleAlternatePhoneChange}
-                              defaultCountry={`${selectedCountry}`}
+                              defaultCountry={`GB`}
                             />
                             <p className="text-xs font-semibold text-red-500 m-0">
                               {error.alternative_phone_number}
