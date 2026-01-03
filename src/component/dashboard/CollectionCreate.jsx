@@ -3,10 +3,13 @@ import { PRODUCT_TYPES, COLLECTION_FIELDS } from "../../libs/collectionFields";
 import { FORM_STEPS } from "../../libs/collectionFields";
 import { InputRenderer } from "../InputRenderer";
 import { SelectDropDown } from "../SelectDropDown";
+import { CgArrowLeft } from "react-icons/cg";
 
 export const CollectionCreate = ({
-  mode = "create", // create | edit
+  mode = "create",
+  open = false,
   initialData = {},
+  close = () => close(),
   onSubmit,
 }) => {
   const [type, setType] = useState(initialData.product_type || "artwork");
@@ -24,7 +27,6 @@ export const CollectionCreate = ({
         "title",
         "price",
         "quantity",
-        "description",
         "ship_from",
         "delivery_day",
         "delivery_cost",
@@ -97,11 +99,20 @@ export const CollectionCreate = ({
     }
   }, [type]);
 
+  if (!open) {
+    return;
+  }
+
   return (
-    <div className="space-y-4">
-      <h2 className="text-lg font-semibold">
-        {mode === "create" ? "Create Product" : "Edit Product"}
-      </h2>
+    <div className="space-y-4 flex flex-col">
+      <div className="flex gap-2 items-center">
+        <div className="p-3 py-1 h-6 flex bg-white rounded-lg items-center justify-center cursor-pointer" onClick={close}>
+          <CgArrowLeft size={20} />
+        </div>
+        <h2 className="text-2xl font-semibold">
+          {mode === "create" ? "Create Collection" : "Edit Collection"}
+        </h2>
+      </div>
 
       {/* Step Indicator */}
       <div className="flex gap-2 text-sm">

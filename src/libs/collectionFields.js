@@ -14,8 +14,8 @@ const baseProductFields = [
       "Upload different images of the same product (angles, close-ups, details). These images will appear as thumbnails on the product page.",
   },
   { name: "title", label: "Title", type: "text", required: true },
-  { name: "price", label: "Price", type: "number", required: true },
-  { name: "quantity", label: "Quantity", type: "number" },
+  { name: "price", label: "Product price", type: "number", required: true },
+  { name: "quantity", label: "Quantity of product", type: "number" },
 ];
 
 const shippingFields = [
@@ -37,7 +37,10 @@ const artworkFields = [
     name: "ready_to_hang",
     label: "Ready to Hang",
     type: "select",
-    options: ["yes", "no"],
+    options: [
+      { value: "yes", label: "Yes" },
+      { value: "no", label: "No" },
+    ],
   },
   { name: "description", label: "Description", type: "textarea" },
 ];
@@ -52,7 +55,10 @@ const sculptureFields = [
     name: "indoor_outdoor",
     label: "Indoor / Outdoor",
     type: "select",
-    options: ["indoor", "outdoor"],
+    options: [
+      { value: "indoor", label: "Indoor" },
+      { value: "outdoor", label: "Outdoor" },
+    ],
   },
   { name: "handmade", label: "Handmade", type: "checkbox" },
   { name: "description", label: "Description", type: "textarea" },
@@ -77,13 +83,7 @@ export const FORM_STEPS = [
   {
     key: "basic",
     title: "Basic Information",
-    fields: [
-      "main_image",
-      "gallery",
-      "title",
-      "price",
-      "quantity",
-    ],
+    fields: ["main_image", "gallery", "title", "price", "quantity"],
   },
   {
     key: "details",

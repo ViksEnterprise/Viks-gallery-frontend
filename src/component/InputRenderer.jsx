@@ -16,12 +16,15 @@ export const InputRenderer = ({ field, value, onChange }) => {
 
   if (field.type === "select") {
     return (
+    <div className="grid gap-1 items-start">
+      <label className="text-sm font-medium">{field.label}</label>
       <SelectDropDown
         value={value}
         onChange={(val) => onChange(field.name, val)}
         options={field.options || []}
         placeholder={`Select ${field.label}`}
       />
+    </div>
     );
   }
 
@@ -59,12 +62,15 @@ export const InputRenderer = ({ field, value, onChange }) => {
   }
 
   return (
-    <input
-      type={field.type}
-      placeholder={field.label}
-      value={value || ""}
-      onChange={(e) => onChange(field.name, e.target.value)}
-      className="border border-gray-400 rounded-lg w-full resize-none h-11 outline-none p-2 placeholder:text-gray-500 text-black"
-    />
+    <div className="grid gap-1 items-start">
+      <label className="text-sm font-medium">{field.label}</label>
+      <input
+        type={field.type}
+        placeholder={field.label}
+        value={value || ""}
+        onChange={(e) => onChange(field.name, e.target.value)}
+        className="border border-gray-400 rounded-lg w-full resize-none h-11 outline-none p-2 placeholder:text-gray-500 text-black"
+      />
+    </div>
   );
 };
