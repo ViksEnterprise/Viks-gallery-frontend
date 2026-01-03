@@ -80,7 +80,7 @@ export const SideNav = () => {
               <li key={i}>
                 <a
                   href={link.to}
-                  className="capitalize text-lg hover:text-[#0A078E] flex gap-3 items-center"
+                  className="capitalize text-lg hover:bg-black/20 p-2 hover:rounded-lg flex gap-3 items-center"
                 >
                   <link.icon />
                   {link.link}
