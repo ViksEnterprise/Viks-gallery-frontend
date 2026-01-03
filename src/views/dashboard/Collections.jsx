@@ -132,7 +132,7 @@ export const DashBoardCollection = () => {
             <div className="w-fit grid space-y-2">
               <h3 className="text-2xl font-medium">Collections Management</h3>
               <span className="text-gray-400 text-sm">
-                Manage artworks, sculpture and beeds collection
+                Manage artworks, sculpture and beads collection
               </span>
             </div>
             <button
