@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { Statistic } from "../../component/dashboard/Statistic";
 import { AdminLayout } from "../../layout/AdminLayout";
 import { Table } from "../../component/dashboard/Table";
+import { ShipmentUpdateForm } from "../../component/dashboard/ShipmentUpdate";
 
 export const Shipment = () => {
   const [headerData, setHeaderData] = useState([]);
@@ -25,6 +26,7 @@ export const Shipment = () => {
         <Statistic subHeaders={header} subData={headerData} />
         <Table headers={tableHeader} data={[]} />
       </div>
+      <ShipmentUpdateForm />
     </AdminLayout>
   );
 };

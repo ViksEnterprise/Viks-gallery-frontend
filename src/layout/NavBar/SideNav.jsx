@@ -49,7 +49,7 @@ export const SideNav = () => {
       {/* Sidebar */}
       <aside
         className={`
-          fixed top-0 left-0 h-full bg-white z-[1000]
+          fixed top-0 left-0 h-full bg-blue-700 text-white z-[1000]
           transition-all duration-300 shadow-lg
           ${mobile ? (open ? "w-72" : "w-0 overflow-hidden") : "w-72"}
         `}
@@ -57,7 +57,7 @@ export const SideNav = () => {
         <div className="flex flex-col h-full p-4 gap-6">
           {/* Logo */}
           <div className="flex items-center justify-between">
-            <img src={Logo} alt="Viks Gallery" className="h-12" />
+            <img src={Logo} alt="Viks Gallery" className="h-12 bg-white rounded-lg" />
             {data && (
               <div className="flex items-center gap-3">
                 <div className="h-9 w-9 rounded-full overflow-hidden border">
@@ -94,7 +94,7 @@ export const SideNav = () => {
             <div className="relative">
               <div className="w-full">
                 <button
-                  className="text-white h-11 w-full flex items-center text-center bg-blue-700 rounded-[7px] text-lg capitalize justify-center"
+                  className="bg-white h-11 w-full flex items-center text-center text-blue-700 rounded-[7px] text-lg capitalize justify-center"
                   onClick={logOut}
                 >
                   Logout

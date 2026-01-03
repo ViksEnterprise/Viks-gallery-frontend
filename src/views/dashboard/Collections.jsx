@@ -134,7 +134,7 @@ export const DashBoardCollection = () => {
               </button>
             ))}
           </div>
-          <div className="h-11 flex items-center border-gray-300 border-solid border-[1px] rounded-[7px] gap-2 px-2 overflow-hidden w-96">
+          <div className="h-11 flex items-center border-gray-300 border-solid border-[1px] rounded-[7px] gap-2 px-2 overflow-hidden w-96 bg-white">
             <FaSearch className="text-[14px] text-gray-400 font-normal" />
             <input
               className="h-full border-none outline-[transparent]"
