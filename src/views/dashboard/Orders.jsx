@@ -23,6 +23,14 @@ export const DashBoardOrder = () => {
   return (
     <AdminLayout>
       <div className="grid items-start gap-4">
+        <div className="w-full flex items-center justify-between">
+          <div className="w-fit grid space-y-2">
+            <h3 className="text-2xl font-medium">Orders Management</h3>
+            <span className="text-gray-400 text-sm">
+              Manage and keep track of orders
+            </span>
+          </div>
+        </div>
         <Statistic subHeaders={header} subData={headerData} />
         <Table headers={tableHeader} data={[]} />
       </div>

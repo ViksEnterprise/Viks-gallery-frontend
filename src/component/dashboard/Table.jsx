@@ -1,6 +1,6 @@
 import React from "react";
 
-export const Table = ({ headers, data, loading, bar }) => {
+export const Table = ({ headers, data, loading, bar, children }) => {
   if (loading) {
     return (
       <div className="flex items-center justify-center z-10">
@@ -51,7 +51,7 @@ export const Table = ({ headers, data, loading, bar }) => {
                     className="px-6 py-4 text-sm text-[#121717] capitalize"
                   >
                     {/* Slot equivalent */}
-                    {header.render ? header.render(row) : row[header.key]}
+                    {children ? children({ row, column: header }) : row[header.key]}
                   </td>
                 ))}
               </tr>
