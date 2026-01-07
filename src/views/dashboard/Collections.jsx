@@ -8,38 +8,41 @@ import { BiEdit, BiPlus, BiTrash } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import axios from "../../service/axios";
 import { span } from "motion/react-client";
+import { CollectionDetail } from "../../component/dashboard/CollectionDetail";
 
 export const DashBoardCollection = () => {
   const [statHeader, setStatHeader] = useState([]);
   const [headerData, setHeaderData] = useState([]);
+  const [statVal, setStatVal] = useState([])
   const [type, setType] = useState("artwork");
   const [search, setSearch] = useState("");
   const [tableHeading, setTableHeading] = useState([]);
-  const [openCreate, setOpenCreate] = useState(false);
+  const [active, setActive] = useState('table');
+  const [id, setID] = useState('')
   const btnType = ["artwork", "sculpture", "beads"];
   const header = [
     {
       type: "artwork",
       value: [
-        { key: "total_artwork", name: "Total artwork" },
-        { key: "sold_artwork", name: "Sold artwork" },
-        { key: "remaining_artwork", name: "Remaining artwork" },
+        { key: "total", name: "Total artwork" },
+        { key: "sold", name: "Sold artwork" },
+        { key: "remaining", name: "Remaining artwork" },
       ],
     },
     {
       type: "sculpture",
       value: [
-        { key: "total_sculpture", name: "Total sculpture" },
-        { key: "sold_sculpture", name: "Sold sculpture" },
-        { key: "remaining_sculpture", name: "Remaining sculpture" },
+        { key: "total", name: "Total sculpture" },
+        { key: "sold", name: "Sold sculpture" },
+        { key: "remaining", name: "Remaining sculpture" },
       ],
     },
     {
       type: "beads",
       value: [
-        { key: "total_beads", name: "Total beads" },
-        { key: "sold_beads", name: "Sold beads" },
-        { key: "remaining_beads", name: "Remaining beads" },
+        { key: "total", name: "Total beads" },
+        { key: "sold", name: "Sold beads" },
+        { key: "remaining", name: "Remaining beads" },
       ],
     },
   ];
@@ -89,11 +92,16 @@ export const DashBoardCollection = () => {
   };
 
   const openForm = () => {
-    setOpenCreate(true);
+    setActive("form");
   };
 
+  const openDetail = (id) => {
+    setActive("detail");
+    setID(id)
+  }
+
   const closeForm = () => {
-    setOpenCreate(false);
+    setActive('table');
   };
 
   function debounce(func, timer) {
@@ -147,6 +155,7 @@ export const DashBoardCollection = () => {
       const response = await axios.get(url);
       if (response) {
         setHeaderData(response.data?.data);
+        setStatVal(response.data?.stats);
       }
     } catch (err) {
       console.log(err);
@@ -162,7 +171,7 @@ export const DashBoardCollection = () => {
 
   return (
     <AdminLayout>
-      {!openCreate ? (
+      {active == "table" && (
         <div className="grid items-start gap-5">
           <div className="w-full flex items-center justify-between">
             <div className="w-fit grid space-y-2">
@@ -179,7 +188,7 @@ export const DashBoardCollection = () => {
               Create Collection
             </button>
           </div>
-          <Statistic subHeaders={statHeader} subData={headerData} />
+          <Statistic subHeaders={statHeader} subData={statVal} />
           <div className="flex items-center w-full justify-between">
             <div className="flex items-center gap-3 text-base">
               {btnType.map((val, i) => (
@@ -213,7 +222,8 @@ export const DashBoardCollection = () => {
               if (column.key === "artist_name") {
                 return (
                   <span>
-                    {row.artworkDetails?.artist_name || row.sculptureDetails?.artist_name}
+                    {row.artworkDetails?.artist_name ||
+                      row.sculptureDetails?.artist_name}
                   </span>
                 );
               }
@@ -221,7 +231,10 @@ export const DashBoardCollection = () => {
               if (column.key === "actions") {
                 return (
                   <div className="flex items-center gap-3">
-                    <button className="text-gray-400">
+                    <button
+                      className="text-gray-400"
+                      onClick={() => openDetail(row.id)}
+                    >
                       <BsEye size={18} />
                     </button>
                     <button className="text-blue-700">
@@ -257,12 +270,17 @@ export const DashBoardCollection = () => {
             }}
           </Table>
         </div>
-      ) : (
+      )}
+      {active == "form" && (
         <CollectionCreate
-          open={openCreate}
+          open={active}
           close={closeForm}
           onSubmit={postArtwork}
         />
+      )}
+
+      {active == "detail" && (
+        <CollectionDetail open={active} close={closeForm} id={id} />
       )}
     </AdminLayout>
   );

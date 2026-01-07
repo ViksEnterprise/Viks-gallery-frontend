@@ -1,4 +1,4 @@
-export const Statistic = ({ subHeaders, subData, bar }) => {
+export const Statistic = ({ subHeaders, subData = [], bar }) => {
   return (
     <div className="grid lg:grid-cols-3 gap-2 items-center w-full capitalize">
       {subHeaders.map((val, i) => (
@@ -16,15 +16,12 @@ export const Statistic = ({ subHeaders, subData, bar }) => {
             {val.name}
           </span>
 
-          {subData.map((value, idx) => (
-            <span
-              key={idx}
-              className="font-semibold text-xl"
-              style={{ color: val.subTextC }}
-            >
-              {value[val.key]}
-            </span>
-          ))}
+          <span
+            className="font-semibold text-xl"
+            style={{ color: val.subTextC }}
+          >
+            {subData?.[val.key]}
+          </span>
 
           {bar && (
             <div

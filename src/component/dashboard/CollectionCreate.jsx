@@ -7,7 +7,7 @@ import { CgArrowLeft } from "react-icons/cg";
 
 export const CollectionCreate = ({
   mode = "create",
-  open = false,
+  open = '',
   initialData = {},
   close = () => close(),
   onSubmit,
