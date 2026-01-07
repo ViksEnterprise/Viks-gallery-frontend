@@ -102,3 +102,17 @@ export const FORM_STEPS = [
     ],
   },
 ];
+
+export const NESTED_FIELD_MAP = {
+  artwork: "artwork_details",
+  sculpture: "sculpture_details",
+  beads: "beads_details",
+};
+
+export const SHIPPING_FIELD_NAMES = shippingFields.map((f) => f.name);
+
+export const DETAIL_FIELD_NAMES = {
+  artwork: artworkFields.map((f) => f.name),
+  sculpture: sculptureFields.map((f) => f.name),
+  beads: beadsFields.map((f) => f.name),
+};

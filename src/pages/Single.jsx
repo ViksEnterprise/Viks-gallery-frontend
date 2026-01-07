@@ -34,8 +34,8 @@ export const Single = () => {
     try {
       const response = await axios.get(url);
       if (response) {
-        setSingleArtwork(response.data);
-        setQuantity(response.data?.quantity);
+        setSingleArtwork(response.data.data);
+        setQuantity(response.data?.data.quantity);
       } else {
         window.location.href = "/artwork";
       }
@@ -227,19 +227,17 @@ export const Single = () => {
                       ? "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
                       : "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer"
                   }
-                  onClick={() =>
-                    changeLargeImg(singleArtwork.full_artwork_image)
-                  }
+                  onClick={() => changeLargeImg(singleArtwork.main_image)}
                 >
                   <img
-                    className="h-[inherit] w-full"
-                    src={singleArtwork.full_artwork_image}
+                    className="h-auto w-auto"
+                    src={singleArtwork.main_image}
                   />
                 </div>
                 <div
                   className={
                     singleArtImage == singleArtwork.image_close_up_view ||
-                    !singleArtwork.full_artwork_image
+                    !singleArtwork.full_image
                       ? "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
                       : "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer"
                   }
@@ -256,7 +254,7 @@ export const Single = () => {
                 <div
                   className={
                     singleArtImage == singleArtwork.image_angle_view ||
-                    !singleArtwork.full_artwork_image
+                    !singleArtwork.full_image
                       ? "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
                       : "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer"
                   }
@@ -271,7 +269,7 @@ export const Single = () => {
                 <div
                   className={
                     singleArtImage == singleArtwork.image_room_view ||
-                    !singleArtwork.full_artwork_image
+                    !singleArtwork.full_image
                       ? "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
                       : "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer"
                   }
@@ -287,7 +285,7 @@ export const Single = () => {
               <div className="w-full h-[30em] rounded-[6px] overflow-hidden">
                 <img
                   className="h-[inherit] w-full"
-                  src={singleArtImage || singleArtwork?.full_artwork_image}
+                  src={singleArtImage || singleArtwork?.main_image}
                 />
               </div>
             </div>
@@ -295,7 +293,7 @@ export const Single = () => {
               <div className="flex flex-col gap-3 items-start w-full">
                 <div className="flex flex-col gap-1 items-start w-full">
                   <div className="flex justify-between w-full items-center text-lg capitalize font-[500]">
-                    <h4>{singleArtwork.artwork_title}</h4>
+                    <h4>{singleArtwork.title}</h4>
                     {!favId ? (
                       <BiHeart
                         className="cursor-pointer"
@@ -309,17 +307,29 @@ export const Single = () => {
                     )}
                   </div>
                   <div className="text-sm capitalize text-red-600">
-                    <span>{singleArtwork.artist_name}</span>
+                    <span>
+                      {singleArtwork.artwork_details?.artist_name ||
+                        singleArtwork.sculpture_details.artist_name}
+                    </span>
                   </div>
                 </div>
                 <div className="flex flex-col gap-2 items-start w-full font-[400] text-sm">
-                  <span className="capitalize">
-                    {singleArtwork.artworkDescription?.medium}
-                  </span>
+                  {singleArtwork.artwork_details?.medium && (
+                    <span className="capitalize">
+                      {singleArtwork.artwork_details?.medium}
+                    </span>
+                  )}
                   <span>
-                    Size: <span>{singleArtwork.artworkDimension?.size}</span>
+                    Size:
+                    <span>
+                      {singleArtwork.artwork_details?.size ||
+                        `${singleArtwork.sculpture_details.height_cm}cm * ${singleArtwork.sculpture_details.width_cm}cm * ${singleArtwork.sculpture_details.weight_kg}kg`}
+                    </span>
                   </span>
-                  <span>{singleArtwork.artworkDimension?.packaging}</span>
+                  <span className="capitalize">
+                    {singleArtwork.artwork_details?.packaging ||
+                      `${singleArtwork.sculpture_details.indoor_outdoor} art`} 
+                  </span>
                 </div>
               </div>
               <div className="text-[#0A078E] text-start md:text-2xl text-xl flex items-start font-[600] w-full p-0">
@@ -376,7 +386,7 @@ export const Single = () => {
                   <button
                     type="button"
                     className="h-12 flex items-center rounded-[8px] text-base font-[500] bg-blue-900 text-white w-full justify-center"
-                    onClick={() => addToCart(singleArtwork.artworkId)}
+                    onClick={() => addToCart(singleArtwork.id)}
                   >
                     {loader ? (
                       <span className="border-white border-t-transparent border-b-solid border-[3px] rounded-full h-7 w-7 animate-spin flex"></span>
@@ -414,7 +424,7 @@ export const Single = () => {
                   <hr className="w-full border-gray-300 border-solid border-[0.5px]" />
                   <div className="w-full flex flex-col gap-5 items-start">
                     <div className="flex items-center font-[400] gap-1 text-[0.95em]">
-                      {singleArtwork.artwork_description}
+                      {singleArtwork.description}
                     </div>
                   </div>
                 </div>
@@ -428,25 +438,25 @@ export const Single = () => {
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Original created:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDescription?.created_on}
+                          {singleArtwork.artwork_details?.created_on}
                         </span>
                       </div>
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Material:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDescription?.material_used}
+                          {singleArtwork.artwork_details?.material_used}
                         </span>
                       </div>
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Styles:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDescription?.styles}
+                          {singleArtwork.artwork_details?.styles}
                         </span>
                       </div>
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Medium:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDescription?.medium}
+                          {singleArtwork.artwork_details?.medium}
                         </span>
                       </div>
                     </div>
@@ -460,31 +470,31 @@ export const Single = () => {
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Painting:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDimension?.painting_type}
+                          {singleArtwork.artwork_details?.painting_type}
                         </span>
                       </div>
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Size:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDimension?.size}
+                          {singleArtwork.artwork_details?.size}
                         </span>
                       </div>
-                      <div className="flex items-center font-[500] gap-1 text-xs">
+                      {/* <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Frame:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDimension?.frame}
+                          {singleArtwork.artwork_details?.frame}
                         </span>
-                      </div>
+                      </div> */}
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Ready to hang:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDimension?.ready_to_hang}
+                          {singleArtwork.artwork_details?.ready_to_hang}
                         </span>
                       </div>
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Packaging:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artworkDimension?.packaging}
+                          {singleArtwork?.artwork_details?.packaging}
                         </span>
                       </div>
                     </div>
@@ -507,31 +517,32 @@ export const Single = () => {
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Delivery time:</span>
                   <span className="font-[400] capitalize">
-                    {singleArtwork.artworkReturn?.delivery_day} days
+                    {singleArtwork.shipping.delivery_day} days
                   </span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Delivery cost:</span>
-                  <span className="font-[400] capitalize">
-                    {singleArtwork.artworkReturn?.delivery_cost}
+                  <span className="font-[400] capitalize flex items-center">
+                    <BiPound />
+                    {singleArtwork.shipping.delivery_cost}
                   </span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Returns:</span>
                   <span className="font-[400] capitalize">
-                    {singleArtwork.artworkReturn?.returns} days
+                    {singleArtwork.shipping.returns} days
                   </span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Handling:</span>
                   <span className="font-[400] capitalize">
-                    {singleArtwork.artworkReturn?.handling}
+                    {singleArtwork.shipping.handling}
                   </span>
                 </div>
                 <div className="flex items-center font-[500] gap-1 text-xs">
                   <span className="uppercase">Ship from:</span>
                   <span className="font-[400] capitalize">
-                    {singleArtwork.artworkReturn?.ship_from}
+                    {singleArtwork.shipping.ship_from}
                   </span>
                 </div>
               </div>

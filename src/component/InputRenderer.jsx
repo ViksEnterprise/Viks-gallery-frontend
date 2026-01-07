@@ -10,6 +10,7 @@ export const InputRenderer = ({ field, value, onChange }) => {
         <textarea
           placeholder={field.label || field.placeholder}
           value={value || ""}
+          required
           onChange={(e) => onChange(field.name, e.target.value)}
           className="border border-gray-400 rounded-lg w-full resize-none h-48 outline-none p-2 placeholder:text-gray-500 text-black"
         />
@@ -46,6 +47,7 @@ export const InputRenderer = ({ field, value, onChange }) => {
         label={field.label}
         helperText={field.helperText}
         value={value || []}
+        
         onChange={(data) => onChange(field.name, data)}
       />
     );
@@ -71,6 +73,7 @@ export const InputRenderer = ({ field, value, onChange }) => {
         type={field.type}
         placeholder={!field.placeholder ? field.label : field.placeholder}
         value={value || ""}
+        required
         onChange={(e) => onChange(field.name, e.target.value)}
         className="border border-gray-400 rounded-lg w-full resize-none h-11 outline-none p-2 placeholder:text-gray-500 text-black"
       />

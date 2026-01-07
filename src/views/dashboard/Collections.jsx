@@ -4,7 +4,10 @@ import { AdminLayout } from "../../layout/AdminLayout";
 import { Table } from "../../component/dashboard/Table";
 import { FaSearch } from "react-icons/fa";
 import { CollectionCreate } from "../../component/dashboard/CollectionCreate";
-import { BiPlus } from "react-icons/bi";
+import { BiEdit, BiPlus, BiTrash } from "react-icons/bi";
+import { BsEye } from "react-icons/bs";
+import axios from "../../service/axios";
+import { span } from "motion/react-client";
 
 export const DashBoardCollection = () => {
   const [statHeader, setStatHeader] = useState([]);
@@ -44,12 +47,12 @@ export const DashBoardCollection = () => {
     {
       type: "artwork",
       value: [
-        { key: "artworkId", label: "Artwork ID" },
-        { key: "artwork_title", label: "Artwork name" },
+        { key: "id", label: "Artwork ID" },
+        { key: "title", label: "Artwork name" },
         { key: "price", label: "Price" },
         { key: "artist_name", label: "Artist" },
         { key: "quantity", label: "Quantity" },
-        { key: "product_status", label: "Status" },
+        { key: "status", label: "Status" },
         { key: "actions", label: "Action" },
       ],
     },
@@ -57,11 +60,11 @@ export const DashBoardCollection = () => {
       type: "sculpture",
       value: [
         { key: "id", label: "Sculpture ID" },
-        { key: "name", label: "Name" },
+        { key: "title", label: "Name" },
         { key: "price", label: "Price" },
         { key: "artist_name", label: "Artist" },
         { key: "quantity", label: "Quantity" },
-        { key: "product_status", label: "Status" },
+        { key: "status", label: "Status" },
         { key: "actions", label: "Action" },
       ],
     },
@@ -69,11 +72,11 @@ export const DashBoardCollection = () => {
       type: "beads",
       value: [
         { key: "id", label: "Product ID" },
-        { key: "name", label: "Name" },
+        { key: "title", label: "Name" },
         { key: "price", label: "Price" },
         { key: "designer_name", label: "Designer name" },
         { key: "quantity", label: "Quantity" },
-        { key: "product_status", label: "Status" },
+        { key: "status", label: "Status" },
         { key: "actions", label: "Action" },
       ],
     },
@@ -104,13 +107,14 @@ export const DashBoardCollection = () => {
   }
 
   const debounceSearch = useCallback(
-    // debounce((value) => getArtwork(value), 200),
+    // debounce((value) => getArtwork(value), 180),
     []
   );
 
   const getType = (val) => {
     setType(val);
     getTableHeadingBaseOnType(val);
+    getArtwork(val);
   };
 
   const getTableHeadingBaseOnType = (val) => {
@@ -120,8 +124,40 @@ export const DashBoardCollection = () => {
     setTableHeading(valContent.value);
   };
 
+  const postArtwork = async (data) => {
+    const url = `artwork/upload/`;
+    try {
+      const response = await axios.post(url, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response) {
+        console.log(res);
+      }
+    } catch (err) {
+      return;
+    }
+  };
+
+  const getArtwork = async (val) => {
+    const url = `artwork/admin/list?artType=${val}`;
+    // setLoading(true);
+    try {
+      const response = await axios.get(url);
+      if (response) {
+        setHeaderData(response.data?.data);
+      }
+    } catch (err) {
+      console.log(err);
+    } finally {
+      // setLoading(false);
+    }
+  };
+
   useEffect(() => {
     getTableHeadingBaseOnType(type);
+    getArtwork(type);
   }, []);
 
   return (
@@ -172,10 +208,61 @@ export const DashBoardCollection = () => {
               />
             </div>
           </div>
-          <Table headers={tableHeading} data={[]} />
+          <Table headers={tableHeading} data={headerData}>
+            {({ row, column }) => {
+              if (column.key === "artist_name") {
+                return (
+                  <span>
+                    {row.artworkDetails?.artist_name || row.sculptureDetails?.artist_name}
+                  </span>
+                );
+              }
+
+              if (column.key === "actions") {
+                return (
+                  <div className="flex items-center gap-3">
+                    <button className="text-gray-400">
+                      <BsEye size={18} />
+                    </button>
+                    <button className="text-blue-700">
+                      <BiEdit size={18} />
+                    </button>
+
+                    <button className="text-red-500">
+                      <BiTrash size={18} />
+                    </button>
+                  </div>
+                );
+              }
+
+              if (column.key === "status") {
+                return (
+                  <span
+                    className={
+                      row.status == "almost_out"
+                        ? "bg-red-500 py-1 px-2 w-fit font-normal text-xs text-white rounded-xl"
+                        : row.status == "available"
+                        ? "bg-green-500 py-1 px-2 w-fit font-normal text-xs text-white rounded-xl"
+                        : row.status == "out"
+                        ? "bg-slate-500 py-1 px-2 w-fit font-normal text-xs text-white rounded-xl"
+                        : ""
+                    }
+                  >
+                    {row.status}
+                  </span>
+                );
+              }
+
+              return row[column.key];
+            }}
+          </Table>
         </div>
       ) : (
-        <CollectionCreate open={openCreate} close={closeForm} />
+        <CollectionCreate
+          open={openCreate}
+          close={closeForm}
+          onSubmit={postArtwork}
+        />
       )}
     </AdminLayout>
   );

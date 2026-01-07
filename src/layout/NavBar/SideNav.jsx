@@ -57,13 +57,17 @@ export const SideNav = () => {
         <div className="flex flex-col h-full p-4 gap-6">
           {/* Logo */}
           <div className="flex items-center justify-between">
-            <img src={Logo} alt="Viks Gallery" className="h-12 bg-white rounded-lg" />
+            <img
+              src={Logo}
+              alt="Viks Gallery"
+              className="h-12 bg-white rounded-lg"
+            />
             {data && (
               <div className="flex items-center gap-3">
+                <span className="text-sm font-medium">{data?.name}</span>
                 <div className="h-9 w-9 rounded-full overflow-hidden border">
                   <img src={data?.pic} alt="" />
                 </div>
-                <span className="text-sm font-medium">{data?.name}</span>
               </div>
             )}
             {mobile && (

@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { PRODUCT_TYPES, COLLECTION_FIELDS } from "../../libs/collectionFields";
+import { PRODUCT_TYPES, COLLECTION_FIELDS, DETAIL_FIELD_NAMES, SHIPPING_FIELD_NAMES, NESTED_FIELD_MAP } from "../../libs/collectionFields";
 import { FORM_STEPS } from "../../libs/collectionFields";
 import { InputRenderer } from "../InputRenderer";
 import { SelectDropDown } from "../SelectDropDown";
@@ -15,6 +15,7 @@ export const CollectionCreate = ({
   const [type, setType] = useState(initialData.product_type || "artwork");
   const [formData, setFormData] = useState(initialData || {});
   const [step, setStep] = useState(0);
+  const [formKey, setFormKey] = useState(0);
 
   const allFields = COLLECTION_FIELDS[type];
   const currentStep = FORM_STEPS[step];
@@ -57,7 +58,11 @@ export const CollectionCreate = ({
     return value !== undefined && value !== null && value !== "";
   };
 
-  const canProceed = fieldsForStep.every(isFieldFilled);
+  const requiredFieldsForStep = fieldsForStep.filter((field) => field.required);
+
+  const canProceed =
+    requiredFieldsForStep.length > 0 ||
+    requiredFieldsForStep.every(isFieldFilled);
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
@@ -69,7 +74,12 @@ export const CollectionCreate = ({
     const payload = new FormData();
     payload.append("product_type", type);
 
+    const detailsKey = NESTED_FIELD_MAP[type];
+    const detailsData = {};
+    const shippingData = {};
+
     Object.entries(formData).forEach(([key, value]) => {
+
       if (key === "main_image" && value?.file) {
         payload.append("main_image", value.file);
         return;
@@ -82,20 +92,46 @@ export const CollectionCreate = ({
         return;
       }
 
-      if (typeof value !== "object" && value !== undefined) {
+      if (SHIPPING_FIELD_NAMES.includes(key)) {
+        shippingData[key] = value;
+        return;
+      }
+
+      if (DETAIL_FIELD_NAMES[type]?.includes(key)) {
+        detailsData[key] = value;
+        return;
+      }
+
+      if (typeof value === "boolean") {
+        payload.append(key, value ? "true" : "false");
+        return;
+      }
+
+      if (value !== undefined && typeof value !== "object") {
         payload.append(key, value);
       }
     });
 
-    console.log(payload);
+    // APPEND DETAILS
+    Object.entries(detailsData).forEach(([k, v]) => {
+      payload.append(`${detailsKey}.${k}`, v);
+    });
+
+    // APPEND SHIPPING
+    Object.entries(shippingData).forEach(([k, v]) => {
+      payload.append(`shipping.${k}`, v);
+    });
 
     onSubmit(payload);
   };
+
 
   useEffect(() => {
     if (mode === "create") {
       setFormData({});
       setStep(0);
+
+      setFormKey((prev) => prev + 1);
     }
   }, [type]);
 
@@ -106,7 +142,10 @@ export const CollectionCreate = ({
   return (
     <div className="space-y-4 flex flex-col">
       <div className="flex gap-2 items-center">
-        <div className="p-3 py-1 h-6 flex bg-white rounded-lg items-center justify-center cursor-pointer" onClick={close}>
+        <div
+          className="p-3 py-1 h-6 flex bg-white rounded-lg items-center justify-center cursor-pointer"
+          onClick={close}
+        >
           <CgArrowLeft size={20} />
         </div>
         <h2 className="text-2xl font-semibold">
@@ -147,7 +186,7 @@ export const CollectionCreate = ({
 
       <div className="grid gap-4 bg-white p-6 rounded-xl shadow-md">
         {/* Fields */}
-        <div className="grid grid-cols-2 gap-4">
+        <div key={formKey} className="grid grid-cols-2 gap-4">
           {fieldsForStep.map((field) => {
             const isFullWidth = field.name === "description";
 

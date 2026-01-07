@@ -1,8 +1,14 @@
 import { useState, useEffect } from "react";
 import { SHIPMENT_FIELDS } from "../../libs/shipmentFields";
 import { InputRenderer } from "../InputRenderer";
+import { CgArrowLeft } from "react-icons/cg";
 
-export const ShipmentUpdateForm = ({ orderId }) => {
+export const ShipmentUpdateForm = ({
+  orderId,
+  open = false,
+  close = () => close(),
+  onSubmit,
+}) => {
   const [formData, setFormData] = useState({});
   const [loading, setLoading] = useState(false);
 
@@ -31,9 +37,21 @@ export const ShipmentUpdateForm = ({ orderId }) => {
     }
   };
 
+  if (!open) {
+    return;
+  }
+
   return (
-    <div className="shipment-form">
-      <h2>Update Shipment Status</h2>
+    <div className="flex flex-col space-y-6">
+      <div className="flex gap-2 items-center">
+        <div
+          className="p-3 py-1 h-6 flex bg-white rounded-lg items-center justify-center cursor-pointer"
+          onClick={close}
+        >
+          <CgArrowLeft size={20} />
+        </div>
+        <h2 className="text-2xl font-semibold">Update Shipment Status</h2>
+      </div>
 
       <div className="grid grid-cols-2 gap-4">
         {SHIPMENT_FIELDS.map((field) => {
