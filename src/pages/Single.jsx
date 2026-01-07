@@ -282,9 +282,9 @@ export const Single = () => {
                   />
                 </div>
               </div>
-              <div className="w-full h-[30em] rounded-[6px] overflow-hidden">
+              <div className="w-full object-fit bg-gray-200 flex items-center justify-center h-[30em] rounded-[6px] overflow-hidden">
                 <img
-                  className="h-[inherit] w-full"
+                  className="h-auto w-auto"
                   src={singleArtImage || singleArtwork?.main_image}
                 />
               </div>
@@ -309,7 +309,8 @@ export const Single = () => {
                   <div className="text-sm capitalize text-red-600">
                     <span>
                       {singleArtwork.artwork_details?.artist_name ||
-                        singleArtwork.sculpture_details.artist_name}
+                        singleArtwork.sculpture_details?.artist_name ||
+                        singleArtwork.beads_details?.designer_name}
                     </span>
                   </div>
                 </div>
@@ -319,16 +320,21 @@ export const Single = () => {
                       {singleArtwork.artwork_details?.medium}
                     </span>
                   )}
-                  <span>
+                  <span className="flex items-center gap-1">
                     Size:
                     <span>
-                      {singleArtwork.artwork_details?.size ||
-                        `${singleArtwork.sculpture_details.height_cm}cm * ${singleArtwork.sculpture_details.width_cm}cm * ${singleArtwork.sculpture_details.weight_kg}kg`}
+                      {singleArtwork.beads_details?.length_cm
+                        ? `${singleArtwork.beads_details.length_cm}cm`
+                        : singleArtwork.artwork_details?.size
+                        ? singleArtwork.artwork_details.size
+                        : singleArtwork.sculpture_details
+                        ? `${singleArtwork.sculpture_details.height_cm}cm × ${singleArtwork.sculpture_details.width_cm}cm × ${singleArtwork.sculpture_details.weight_kg}kg`
+                        : ""}
                     </span>
                   </span>
                   <span className="capitalize">
                     {singleArtwork.artwork_details?.packaging ||
-                      `${singleArtwork.sculpture_details.indoor_outdoor} art`} 
+                      `${singleArtwork.sculpture_details?.indoor_outdoor} art`}
                   </span>
                 </div>
               </div>
@@ -436,15 +442,24 @@ export const Single = () => {
                     <hr className="w-full border-gray-300 border-solid border-[0.5px]" />
                     <div className="w-full flex flex-col gap-5 items-start">
                       <div className="flex items-center font-[500] gap-1 text-xs">
-                        <span className="uppercase">Original created:</span>
+                        <span className="uppercase">
+                          {singleArtwork.product_type == "artwork"
+                            ? "Original created:"
+                            : singleArtwork.product_type == "sculpture"
+                            ? "Decoration Style:"
+                            : ""}
+                        </span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artwork_details?.created_on}
+                          {singleArtwork.artwork_details?.created_on ||
+                            singleArtwork.sculpture_details?.indoor_outdoor}
                         </span>
                       </div>
                       <div className="flex items-center font-[500] gap-1 text-xs">
                         <span className="uppercase">Material:</span>
                         <span className="font-[400] capitalize">
-                          {singleArtwork.artwork_details?.material_used}
+                          {singleArtwork.artwork_details?.material_used ||
+                            singleArtwork.sculpture_details?.material ||
+                            singleArtwork.beads_details?.material}
                         </span>
                       </div>
                       <div className="flex items-center font-[500] gap-1 text-xs">

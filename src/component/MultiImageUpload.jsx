@@ -69,13 +69,13 @@ export const MultiImageUpload = ({
 
       {/* Preview */}
       {images.length > 0 && (
-        <div className="grid grid-cols-4 gap-3 pt-2">
+        <div className="grid grid-cols-5 gap-3 pt-2">
           {images.map((img, i) => (
             <div key={i} className="relative group">
               <img
                 src={img.preview}
                 alt={`Product photo ${i + 1}`}
-                className="w-full h-24 object-cover rounded-lg border"
+                className="w-full h-14 object-cover rounded-lg border"
               />
               <button
                 type="button"
