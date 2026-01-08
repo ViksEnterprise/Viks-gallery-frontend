@@ -16,6 +16,7 @@ export const DashBoardCollection = () => {
   const [type, setType] = useState("artwork");
   const [search, setSearch] = useState("");
   const [mode, setMode] = useState("");
+  const [loading, setLoading] = useState(false);
   const [tableHeading, setTableHeading] = useState([]);
   const [collectionResult, setCollectionResult] = useState([]);
   const [active, setActive] = useState("table");
@@ -135,38 +136,6 @@ export const DashBoardCollection = () => {
     setTableHeading(valContent.value);
   };
 
-  const postArtwork = async (data) => {
-    const url = `artwork/upload/`;
-    try {
-      const response = await axios.post(url, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response) {
-        console.log(res);
-      }
-    } catch (err) {
-      return;
-    }
-  };
-
-  const updateArtwork = async (id, data) => {
-    const url = `artwork/${id}/update`;
-    try {
-      const response = await axios.patch(url, data, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      });
-      if (response) {
-        console.log(res);
-      }
-    } catch (err) {
-      return;
-    }
-  };
-
   const getArtwork = async (val) => {
     const url = `artwork/admin/list?artType=${val}`;
 
@@ -180,6 +149,46 @@ export const DashBoardCollection = () => {
       console.log(err);
     } finally {
       // setLoading(false);
+    }
+  };
+
+  const postArtwork = async (data) => {
+    const url = `artwork/upload/`;
+    setLoading(true);
+    try {
+      const response = await axios.post(url, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response) {
+        setActive('table')
+        getArtwork(type)
+      }
+    } catch (err) {
+      return;
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateArtwork = async (id, data) => {
+    const url = `artwork/${id}/update`;
+    setLoading(true);
+    try {
+      const response = await axios.patch(url, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response) {
+        setActive("table");
+        getArtwork(type);
+      }
+    } catch (err) {
+      return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -324,6 +333,7 @@ export const DashBoardCollection = () => {
           mode={mode}
           open={active}
           initialData={collectionResult}
+          loading={loading}
           close={closeForm}
           onSubmit={(payload) => {
             mode === "edit"

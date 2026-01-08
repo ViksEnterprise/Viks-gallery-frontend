@@ -13,6 +13,7 @@ import { CgArrowLeft } from "react-icons/cg";
 
 export const CollectionCreate = ({
   mode = "",
+  loading,
   open = "",
   initialData = {},
   close = () => close(),
@@ -262,9 +263,15 @@ export const CollectionCreate = ({
             <button
               disabled={!canProceed}
               onClick={handleSubmit}
-              className="px-6 py-2 bg-blue-700 text-white rounded-lg disabled:opacity-50"
+              className="px-6 py-2 bg-blue-700 text-white rounded-lg disabled:opacity-50 w-44 flex items-center justify-center"
             >
-              {mode === "create" ? "Save Product" : "Update Product"}
+              {loading ? (
+                <span className="border-white border-t-transparent border-b-solid border-[3px] rounded-full h-7 w-7 animate-spin flex"></span>
+              ) : (
+                <span>
+                  {mode === "create" ? "Save Product" : "Update Product"}
+                </span>
+              )}
             </button>
           )}
         </div>
