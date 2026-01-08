@@ -66,7 +66,7 @@ export const ShoppingCart = () => {
       }
     }
 
-    updateCartSummary(count[id] + 1, item.product.artworkId);
+    updateCartSummary(count[id] + 1, item.product.id);
   };
 
   const decreaseNoOfArtNeeded = (id) => {
@@ -77,7 +77,7 @@ export const ShoppingCart = () => {
     } else {
       setCount((prev) => ({ ...prev, [id]: prev[id] - 1 }));
     }
-    updateCartSummary(count[id] - 1, item.product.artworkId);
+    updateCartSummary(count[id] - 1, item.product.id);
   };
 
   const updateCartSummary = async (val, artworkId) => {
@@ -91,7 +91,7 @@ export const ShoppingCart = () => {
         getCartSummary();
         setCount((prev) => ({
           ...prev,
-          [artworkId]: response.data.data.quantity_of_product,
+          [artworkId]: response.data.total_product,
         }));
       }
     } catch (err) {
@@ -193,17 +193,19 @@ export const ShoppingCart = () => {
                           <div className="flex gap-2 md:flex-row flex-col w-full">
                             <div className="md:w-52 w-full rounded-[3px] md:h-32 h-48 overflow-hidden">
                               <img
-                                src={item.product?.full_artwork_image}
+                                src={item.product?.main_image}
                                 className="w-full h-[inherit]"
                               />
                             </div>
                             <div className="flex flex-col gap-1 w-full">
                               <div className="flex flex-col items-start gap-1">
                                 <span className="font-[500] text-lg">
-                                  {item.product.artwork_title}
+                                  {item.product.title}
                                 </span>
                                 <span className="capitalize text-xs text-[#6B6B6B] font-[500]">
-                                  {item.product.artworkDimension?.painting_type}
+                                  {item.product.artwork_details
+                                    ?.painting_type ||
+                                    item.product.beads_details?.color}
                                 </span>
                               </div>
                               {item.product.price && (
@@ -222,9 +224,7 @@ export const ShoppingCart = () => {
                           <div className="flex items-center justify-between gap-2 w-full">
                             <div
                               className="text-red-500 text-sm font-[500] flex items-center gap-[1px] uppercase cursor-pointer"
-                              onClick={() =>
-                                removeCartItem(item.product.artworkId)
-                              }
+                              onClick={() => removeCartItem(item.product.id)}
                             >
                               <BiTrash />
                               <span className="text-xs">Remove</span>

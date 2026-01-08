@@ -1,13 +1,19 @@
 import { useEffect, useState } from "react";
-import { PRODUCT_TYPES, COLLECTION_FIELDS, DETAIL_FIELD_NAMES, SHIPPING_FIELD_NAMES, NESTED_FIELD_MAP } from "../../libs/collectionFields";
+import {
+  PRODUCT_TYPES,
+  COLLECTION_FIELDS,
+  DETAIL_FIELD_NAMES,
+  SHIPPING_FIELD_NAMES,
+  NESTED_FIELD_MAP,
+} from "../../libs/collectionFields";
 import { FORM_STEPS } from "../../libs/collectionFields";
 import { InputRenderer } from "../InputRenderer";
 import { SelectDropDown } from "../SelectDropDown";
 import { CgArrowLeft } from "react-icons/cg";
 
 export const CollectionCreate = ({
-  mode = "create",
-  open = '',
+  mode = "",
+  open = "",
   initialData = {},
   close = () => close(),
   onSubmit,
@@ -60,8 +66,29 @@ export const CollectionCreate = ({
 
   const requiredFieldsForStep = fieldsForStep.filter((field) => field.required);
 
+  const normalizeInitialData = (data, type) => {
+    const detailsKey = NESTED_FIELD_MAP[type];
+
+    return {
+      ...data,
+      ...(data[detailsKey] || {}),
+      ...(data.shipping || {}),
+      main_image: data.main_image
+        ? { preview: data.main_image, file: null }
+        : null,
+      gallery: Array.isArray(data.gallery)
+        ? data.gallery.map((img) => ({
+            id: img.id,
+            preview: img.image,
+            file: null,
+            isExisting: true,
+          }))
+        : [],
+    };
+  };
+
   const canProceed =
-    requiredFieldsForStep.length > 0 ||
+    requiredFieldsForStep.length === 0 ||
     requiredFieldsForStep.every(isFieldFilled);
 
   const handleChange = (name, value) => {
@@ -72,6 +99,11 @@ export const CollectionCreate = ({
 
   const handleSubmit = () => {
     const payload = new FormData();
+
+    if (mode === "edit") {
+      payload.append("id", initialData.id);
+    }
+
     payload.append("product_type", type);
 
     const detailsKey = NESTED_FIELD_MAP[type];
@@ -79,15 +111,16 @@ export const CollectionCreate = ({
     const shippingData = {};
 
     Object.entries(formData).forEach(([key, value]) => {
-
+      // MAIN IMAGE
       if (key === "main_image" && value?.file) {
         payload.append("main_image", value.file);
         return;
       }
 
+      // GALLERY (multiple images)
       if (key === "gallery" && Array.isArray(value)) {
-        value.forEach((img) => {
-          if (img?.file) payload.append("gallery", img.file);
+        value.forEach((img, index) => {
+          if (img?.file) payload.append(`gallery`, img.file);
         });
         return;
       }
@@ -112,28 +145,33 @@ export const CollectionCreate = ({
       }
     });
 
-    // APPEND DETAILS
+    // Nested fields (artwork_details, sculpture_details, beads_details)
     Object.entries(detailsData).forEach(([k, v]) => {
-      payload.append(`${detailsKey}.${k}`, v);
+      payload.append(`${detailsKey}[${k}]`, v);
     });
 
-    // APPEND SHIPPING
+    // Shipping fields
     Object.entries(shippingData).forEach(([k, v]) => {
-      payload.append(`shipping.${k}`, v);
+      payload.append(`shipping[${k}]`, v);
     });
 
     onSubmit(payload);
   };
 
-
   useEffect(() => {
+    if (mode === "edit" && initialData?.id) {
+      setType(initialData.product_type);
+      setFormData(normalizeInitialData(initialData, initialData.product_type));
+      setStep(0);
+      setFormKey((prev) => prev + 1);
+    }
+
     if (mode === "create") {
       setFormData({});
       setStep(0);
-
       setFormKey((prev) => prev + 1);
     }
-  }, [type]);
+  }, [mode, initialData]);
 
   if (!open) {
     return;

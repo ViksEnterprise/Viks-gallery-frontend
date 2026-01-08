@@ -4,21 +4,22 @@ import { AdminLayout } from "../../layout/AdminLayout";
 import { Table } from "../../component/dashboard/Table";
 import { FaSearch } from "react-icons/fa";
 import { CollectionCreate } from "../../component/dashboard/CollectionCreate";
-import { BiEdit, BiPlus, BiTrash } from "react-icons/bi";
+import { BiEdit, BiPlus, BiPound, BiTrash } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
 import axios from "../../service/axios";
-import { span } from "motion/react-client";
 import { CollectionDetail } from "../../component/dashboard/CollectionDetail";
 
 export const DashBoardCollection = () => {
   const [statHeader, setStatHeader] = useState([]);
   const [headerData, setHeaderData] = useState([]);
-  const [statVal, setStatVal] = useState([])
+  const [statVal, setStatVal] = useState([]);
   const [type, setType] = useState("artwork");
   const [search, setSearch] = useState("");
+  const [mode, setMode] = useState("");
   const [tableHeading, setTableHeading] = useState([]);
-  const [active, setActive] = useState('table');
-  const [id, setID] = useState('')
+  const [collectionResult, setCollectionResult] = useState([]);
+  const [active, setActive] = useState("table");
+  const [id, setID] = useState("");
   const btnType = ["artwork", "sculpture", "beads"];
   const header = [
     {
@@ -97,11 +98,13 @@ export const DashBoardCollection = () => {
 
   const openDetail = (id) => {
     setActive("detail");
-    setID(id)
-  }
+    setMode("create");
+    setID(id);
+  };
 
   const closeForm = () => {
-    setActive('table');
+    setActive("table");
+    setMode("create");
   };
 
   function debounce(func, timer) {
@@ -148,9 +151,25 @@ export const DashBoardCollection = () => {
     }
   };
 
+  const updateArtwork = async (id, data) => {
+    const url = `artwork/${id}/update`;
+    try {
+      const response = await axios.patch(url, data, {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      });
+      if (response) {
+        console.log(res);
+      }
+    } catch (err) {
+      return;
+    }
+  };
+
   const getArtwork = async (val) => {
     const url = `artwork/admin/list?artType=${val}`;
-    // setLoading(true);
+
     try {
       const response = await axios.get(url);
       if (response) {
@@ -161,6 +180,20 @@ export const DashBoardCollection = () => {
       console.log(err);
     } finally {
       // setLoading(false);
+    }
+  };
+
+  const editCollection = async (id) => {
+    const url = `artwork/${id}`;
+    setMode("edit");
+    setActive("form");
+    try {
+      const response = await axios.get(url);
+      if (response) {
+        setCollectionResult(response.data.data);
+      }
+    } catch (err) {
+      return;
     }
   };
 
@@ -228,6 +261,18 @@ export const DashBoardCollection = () => {
                 );
               }
 
+              if (column.key === "price") {
+                return (
+                  <span className="flex items-center">
+                    <BiPound /> {row.price}
+                  </span>
+                );
+              }
+
+              if (column.key === "designer_name") {
+                return <span>{row.beadsDetails?.designer_name}</span>;
+              }
+
               if (column.key === "actions") {
                 return (
                   <div className="flex items-center gap-3">
@@ -237,7 +282,10 @@ export const DashBoardCollection = () => {
                     >
                       <BsEye size={18} />
                     </button>
-                    <button className="text-blue-700">
+                    <button
+                      className="text-blue-700"
+                      onClick={() => editCollection(row.id)}
+                    >
                       <BiEdit size={18} />
                     </button>
 
@@ -273,9 +321,15 @@ export const DashBoardCollection = () => {
       )}
       {active == "form" && (
         <CollectionCreate
+          mode={mode}
           open={active}
+          initialData={collectionResult}
           close={closeForm}
-          onSubmit={postArtwork}
+          onSubmit={(payload) => {
+            mode === "edit"
+              ? updateArtwork(collectionResult.id, payload)
+              : postArtwork(payload);
+          }}
         />
       )}
 

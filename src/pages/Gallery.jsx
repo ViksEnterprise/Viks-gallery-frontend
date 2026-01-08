@@ -262,20 +262,20 @@ export const Gallery = () => {
           renderItem={(sale) => (
             <div
               className="flex items-start justify-start flex-col gap-[5px] w-full h-fit cursor-pointer"
-              onClick={() => details(sale?.artworkId)}
+              onClick={() => details(sale?.id)}
             >
               <div className="w-full h-80">
-                <img className="w-full h-full" src={sale.full_artwork_image} />
+                <img className="w-full h-full" src={sale.main_image} />
               </div>
               <div className="text-base font-[500] text-black uppercase w-full flex justify-between">
-                <h6>{sale.artwork_title}</h6>
+                <h6>{sale.title}</h6>
                 <span className="flex items-center gap-[2px]">
                   <BiPound />
                   {sale.price}
                 </span>
               </div>
               <div className="flex gap-2 items-center m-0 p-0">
-                <span>{sale.artworkDescription?.medium}</span>
+                <span>{sale.artworkDetails?.medium}</span>
               </div>
             </div>
           )}

@@ -15,7 +15,6 @@ export const CollectionDetail = ({ id, open = "", close = () => close() }) => {
       if (response) {
         setSingleArtwork(response.data.data);
         setGallery(response.data.data.gallery);
-        setQuantity(response.data?.data.quantity);
       }
     } catch (err) {
       return;
@@ -55,18 +54,18 @@ export const CollectionDetail = ({ id, open = "", close = () => close() }) => {
             <CgArrowLeft size={18} onClick={close} />
           </div>
           <div className="w-fit grid gap-1 items-start">
-            <h3 className="text-2xl font-medium capitalize">
-              {singleArtwork?.title}
+            <h3 className="text-xl font-medium uppercase">
+              Collection Details
             </h3>
-            <span className="text-gray-500 text-sm">{singleArtwork?.id}</span>
+            <span className="text-gray-500 text-sm">Collection ID: {singleArtwork?.id}</span>
           </div>
         </div>
         <div className="flex gap-2">
-          <button className="h-11 w-fit bg-blue-700 text-white text-base flex items-center gap-2 justify-center p-3 rounded-lg">
+          <button className="h-9 w-fit bg-blue-700 text-white text-base flex items-center gap-2 justify-center p-3 rounded-lg">
             <BiEdit size={16} />
             Edit
           </button>
-          <button className="h-11 w-fit border border-red-700 text-red-700 text-white text-base flex items-center gap-2 justify-center p-3 rounded-lg">
+          <button className="h-9 w-fit border border-red-700 text-red-700 text-base flex items-center gap-2 justify-center p-3 rounded-lg">
             <BiTrash size={16} />
             Delete
           </button>

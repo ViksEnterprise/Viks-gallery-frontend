@@ -201,12 +201,12 @@ export const Checkout = () => {
       try {
         const response = axiosPrivate.post(url, payload);
         if (response) {
-          getAddress();
           setModalMsg({
             message: "Address saved successfully",
             icon: "success",
           });
           setToggleModal(true);
+          getAddress();
         }
       } catch (err) {
         return;
@@ -510,14 +510,14 @@ export const Checkout = () => {
                         <div className="flex gap-2 flex-col w-full">
                           <div className="w-full rounded-[5px] h-28 overflow-hidden">
                             <img
-                              src={item.product?.full_artwork_image}
+                              src={item.product?.main_image}
                               className="w-full h-[inherit]"
                             />
                           </div>
                           <div className="flex flex-col gap-1 w-full">
                             <div className="flex flex-row justify-between items-center gap-1">
                               <span className="font-[500] text-xs">
-                                {item.product.artwork_title}
+                                {item.product.title}
                               </span>
                             </div>
                           </div>

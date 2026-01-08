@@ -154,6 +154,7 @@ export const Single = () => {
       });
       if (response) {
         setCount(response.data?.data?.quantity_of_product);
+        checkIfItemIsInCart()
       }
     } catch (err) {
       return;
