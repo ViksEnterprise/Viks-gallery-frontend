@@ -162,8 +162,9 @@ export const DashBoardCollection = () => {
         },
       });
       if (response) {
-        setActive('table')
-        getArtwork(type)
+        setActive("table");
+        setMode("create");
+        getArtwork(type);
       }
     } catch (err) {
       return;
@@ -183,6 +184,7 @@ export const DashBoardCollection = () => {
       });
       if (response) {
         setActive("table");
+        setMode("create");
         getArtwork(type);
       }
     } catch (err) {

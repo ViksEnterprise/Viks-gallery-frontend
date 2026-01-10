@@ -120,7 +120,7 @@ export const CollectionCreate = ({
 
       // GALLERY (multiple images)
       if (key === "gallery" && Array.isArray(value)) {
-        value.forEach((img, index) => {
+        value.forEach((img) => {
           if (img?.file) payload.append(`gallery`, img.file);
         });
         return;
@@ -141,19 +141,19 @@ export const CollectionCreate = ({
         return;
       }
 
-      if (value !== undefined && typeof value !== "object") {
+      if (value !== undefined && value !== "" && typeof value !== "object") {
         payload.append(key, value);
       }
     });
 
     // Nested fields (artwork_details, sculpture_details, beads_details)
     Object.entries(detailsData).forEach(([k, v]) => {
-      payload.append(`${detailsKey}[${k}]`, v);
+      payload.append(`${detailsKey}.${k}`, v);
     });
 
     // Shipping fields
     Object.entries(shippingData).forEach(([k, v]) => {
-      payload.append(`shipping[${k}]`, v);
+      payload.append(`shipping.${k}`, v);
     });
 
     onSubmit(payload);
@@ -261,7 +261,7 @@ export const CollectionCreate = ({
             </button>
           ) : (
             <button
-              disabled={!canProceed}
+              disabled={loading}
               onClick={handleSubmit}
               className="px-6 py-2 bg-blue-700 text-white rounded-lg disabled:opacity-50 w-44 flex items-center justify-center"
             >

@@ -6,35 +6,18 @@ import { CgArrowLeft } from "react-icons/cg";
 export const ShipmentUpdateForm = ({
   orderId,
   open = false,
+  loading = false,
   close = () => close(),
   onSubmit,
 }) => {
   const [formData, setFormData] = useState({});
-  const [loading, setLoading] = useState(false);
 
   const handleChange = (name, value) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const handleSubmit = async () => {
-    setLoading(true);
-
-    try {
-      await fetch(`/api/orders/${orderId}/shipment/`, {
-        method: "PATCH",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(formData),
-      });
-
-      alert("Shipment updated successfully");
-    } catch (err) {
-      console.error(err);
-      alert("Failed to update shipment");
-    } finally {
-      setLoading(false);
-    }
+    onSubmit(formData, orderId);
   };
 
   if (!open) {
@@ -71,8 +54,16 @@ export const ShipmentUpdateForm = ({
         })}
       </div>
 
-      <button onClick={handleSubmit} disabled={loading} className="btn-primary">
-        {loading ? "Updating..." : "Update Shipment"}
+      <button
+        onClick={handleSubmit}
+        disabled={loading}
+        className="bg-blue-700 text-white h-10 w-48 rounded-lg flex items-center justify-center"
+      >
+        {loading ? (
+          <span className="border-white border-t-transparent border-b-solid border-[3px] rounded-full h-7 w-7 animate-spin flex"></span>
+        ) : (
+          "Update Shipment"
+        )}
       </button>
     </div>
   );

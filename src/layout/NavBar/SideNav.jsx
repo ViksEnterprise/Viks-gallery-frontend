@@ -17,6 +17,7 @@ export const SideNav = () => {
   const logOut = () => {
     sessionStorage.clear();
     setData(null);
+    window.location.href = '/login'
   };
 
   useEffect(() => {

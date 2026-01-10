@@ -53,6 +53,7 @@ export const LoginAccount = () => {
         const response = await axios.post(url, formData);
         if (response) {
           sessionStorage.setItem("MVtoken", response.data.access_token);
+          sessionStorage.setItem("staff", response.data.is_staff);
           sessionStorage.setItem(
             "userInfo",
             JSON.stringify({
@@ -60,12 +61,17 @@ export const LoginAccount = () => {
               pic: `${response.data.profile_pic}`,
             })
           );
-          setModalMsg({
-            message: "login successfully",
-            direction: "/",
-            icon: "success",
-          });
-          setToggleModal(true);
+          let staff = response.data.is_staff;
+          if (!staff) {
+            setModalMsg({
+              message: "login successfully",
+              direction: "/",
+              icon: "success",
+            });
+            setToggleModal(true);
+          } else {
+            window.location.href = "/dashboard/collections";
+          }
         }
       } catch (err) {
         if (err) {

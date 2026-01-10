@@ -201,12 +201,12 @@ export const Checkout = () => {
       try {
         const response = axiosPrivate.post(url, payload);
         if (response) {
+          getAddress();
           setModalMsg({
             message: "Address saved successfully",
             icon: "success",
           });
           setToggleModal(true);
-          getAddress();
         }
       } catch (err) {
         return;
@@ -275,7 +275,6 @@ export const Checkout = () => {
       const response = await axiosPrivate.get(url);
       if (response) {
         setAddress(response.data);
-        // setOrderDisable(false);
 
         if (response.data.length > 0) {
           const addr = response.data[0];

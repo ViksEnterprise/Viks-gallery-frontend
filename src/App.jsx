@@ -37,18 +37,13 @@ function App() {
         {/* Has user access and right */}
         <Route element={<HasCredentials />}>
           <Route path="/cart/checkout" element={<Checkout />}></Route>
+          <Route
+            path="/dashboard/collections"
+            element={<DashBoardCollection />}
+          ></Route>
+          <Route path="/dashboard/orders" element={<DashBoardOrder />}></Route>
+          <Route path="/dashboard/shipments" element={<Shipment />}></Route>
         </Route>
-
-        {/* Has admin access and right */}
-        <Route
-          path="/dashboard/collections"
-          element={<DashBoardCollection />}
-        ></Route>
-        <Route path="/dashboard/orders" element={<DashBoardOrder />}></Route>
-        <Route
-          path="/dashboard/shipments"
-          element={<Shipment />}
-        ></Route>
 
         {/* Authentications Route */}
 

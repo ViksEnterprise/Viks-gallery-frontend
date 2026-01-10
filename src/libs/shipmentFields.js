@@ -6,7 +6,7 @@ export const SHIPMENT_FIELDS = [
     placeholder: "e.g DHL, FedEx, UPS, GIG, etc",
   },
   {
-    name: "tracking_number",
+    name: "tracking_id",
     label: "Tracking Number",
     type: "text",
   },
