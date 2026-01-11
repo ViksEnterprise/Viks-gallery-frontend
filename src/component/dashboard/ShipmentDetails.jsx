@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../../service/axios";
+import { axiosPrivate } from "../../service/axios";
 import {  BiPound, } from "react-icons/bi";
 import { CgArrowLeft } from "react-icons/cg";
 import { ShipmentUpdateForm } from "./ShipmentUpdate";
@@ -11,7 +11,7 @@ export const ShipmentDetail = ({ id, open = "", close = () => close() }) => {
   const getShipmentDetails = async () => {
     const url = `payments/${id}/shipment-detatil`;
     try {
-      const response = await axios.get(url);
+      const response = await axiosPrivate.get(url);
       if (response) {
         setSingleShipment(response.data.data);
       }

@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-import axios from "../../service/axios";
 import { BiEdit, BiPound, BiTrash } from "react-icons/bi";
 import { CgArrowLeft } from "react-icons/cg";
+import { axiosPrivate } from "../../service/axios";
 
 export const CollectionDetail = ({ id, open = "", close = () => close() }) => {
   const [singleArtwork, setSingleArtwork] = useState([]);
@@ -11,7 +11,7 @@ export const CollectionDetail = ({ id, open = "", close = () => close() }) => {
   const getArtworkDetails = async () => {
     const url = `artwork/${id}`;
     try {
-      const response = await axios.get(url);
+      const response = await axiosPrivate.get(url);
       if (response) {
         setSingleArtwork(response.data.data);
         setGallery(response.data.data.gallery);

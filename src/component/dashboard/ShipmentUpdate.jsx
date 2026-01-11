@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { SHIPMENT_FIELDS } from "../../libs/shipmentFields";
 import { InputRenderer } from "../InputRenderer";
 import { CgArrowLeft } from "react-icons/cg";

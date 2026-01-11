@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import axios from "../../service/axios";
+import { axiosPrivate } from "../../service/axios";
 import { BiPound, } from "react-icons/bi";
 import { CgArrowLeft } from "react-icons/cg";
 
@@ -9,7 +9,7 @@ export const OrderDetail = ({ id, open = "", close = () => close() }) => {
   const getOrderDetails = async () => {
     const url = `order/${id}/detail`;
     try {
-      const response = await axios.get(url);
+      const response = await axiosPrivate.get(url);
       if (response) {
         setSingleOrder(response.data.data);
       }
