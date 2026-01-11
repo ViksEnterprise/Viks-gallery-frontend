@@ -9,10 +9,15 @@ import { BiPound, BiHeart, BiMinus, BiPlus } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import axios, { axiosPrivate } from "../service/axios";
 import { Error404 } from "../views/NotFound";
-import { BsFillHeartFill } from "react-icons/bs";
+import { BsArrowDown, BsArrowUp, BsFillHeartFill } from "react-icons/bs";
 import HideContent from "../component/Hidden";
 import { Swiper, SwiperSlide } from "swiper/react";
-// import "swiper/css";
+import { Pagination, Navigation } from "swiper/modules";
+
+import "swiper/css";
+import "swiper/css/pagination";
+import "swiper/css/navigation";
+import { CgClose } from "react-icons/cg";
 
 export const Single = () => {
   const { artworkId } = useParams();
@@ -24,13 +29,16 @@ export const Single = () => {
     message: "",
     icon: "",
   });
-   const swiperRef = useRef(null);
+  const staff = sessionStorage.getItem("staff") === "false";
+  const swiperRef = useRef(null);
   const [toggleModal, setToggleModal] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [count, setCount] = useState(0);
   const [loading, setLoading] = useState(true);
   const [loader, setLoader] = useState(false);
+  const [mobile, setMobile] = useState(false);
   const [load, setLoad] = useState(false);
+  const [showGalleryImage, setShowGalleryImage] = useState();
 
   const getArtworkDetails = async () => {
     const url = `artwork/${artworkId}`;
@@ -39,6 +47,7 @@ export const Single = () => {
       const response = await axios.get(url);
       if (response) {
         setSingleArtwork(response.data.data);
+        setSingleArtImage(response.data.data?.main_image);
         setGallery(response.data.data.gallery);
         setQuantity(response.data?.data.quantity);
       } else {
@@ -167,34 +176,42 @@ export const Single = () => {
   };
 
   const addToCart = async (id) => {
-    const url = `cart/add-to-cart`;
-    setLoader(true);
-    try {
-      const response = await axiosPrivate.post(url, {
-        cart_product: id,
-        quantity_of_product: count + 1,
-      });
-      if (response) {
-        setModalMsg({
-          message: "Product added to your cart",
-          icon: "success",
+    if (staff) {
+      const url = `cart/add-to-cart`;
+      setLoader(true);
+      try {
+        const response = await axiosPrivate.post(url, {
+          cart_product: id,
+          quantity_of_product: count + 1,
         });
-        setToggleModal(true);
-        checkIfItemIsInCart();
-      }
-    } catch (err) {
-      if (err) {
-        if (err.status == 401) {
+        if (response) {
           setModalMsg({
-            message: "Login Required",
-            icon: "error",
+            message: "Product added to your cart",
+            icon: "success",
           });
           setToggleModal(true);
+          checkIfItemIsInCart();
         }
+      } catch (err) {
+        if (err) {
+          if (err.status == 401) {
+            setModalMsg({
+              message: "Login Required",
+              icon: "error",
+            });
+            setToggleModal(true);
+          }
+        }
+        return;
+      } finally {
+        setLoader(false);
       }
-      return;
-    } finally {
-      setLoader(false);
+    } else {
+      setModalMsg({
+        message: "Sorry this action can't be perform by staffs",
+        icon: "error",
+      });
+      setToggleModal(true);
     }
   };
 
@@ -208,6 +225,14 @@ export const Single = () => {
     } catch (err) {
       return;
     }
+  };
+
+  const openImageGalleryView = (id) => {
+    setShowGalleryImage(id);
+  };
+
+  const closeImageGalleryView = () => {
+    setShowGalleryImage();
   };
 
   useEffect(() => {
@@ -228,6 +253,16 @@ export const Single = () => {
       ]);
     }
   }, [singleArtwork]);
+
+  useEffect(() => {
+    const responsiveNavBar = () => {
+      window.innerWidth >= 1024 ? setMobile(false) : setMobile(true);
+    };
+
+    responsiveNavBar();
+    window.addEventListener("resize", responsiveNavBar);
+  }, [mobile]);
+
   return (
     <>
       {loading ? (
@@ -238,39 +273,99 @@ export const Single = () => {
         <>
           <NavBar />
           <div className="flex md:flex-row flex-col gap-3 md:justify-between w-full md:p-9 p-3">
-            <div className="md:w-[58%] w-full flex md:flex-row flex-col-reverse gap-2">
-              <div className="md:w-[20%] w-full flex md:flex-col flex-row gap-3 overflow-hidden h-fit">
-                <Swiper
-                  direction="vertical"
-                  spaceBetween={10}
-                  slidesPerView={1}
-                  allowTouchMove={false}
-                  loop={false}
-                  onSwiper={(swiper) => (swiperRef.current = swiper)}
-                  className="overflow-hidden"
-                >
-                  {gallery.map((gal, i) => (
-                    <SwiperSlide
-                      className={
-                        singleArtImage == gal.image
-                          ? "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
-                          : "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer"
-                      }
-                      key={i}
-                      onClick={() => changeLargeImg(gal.image)}
+            {!mobile ? (
+              <div className="md:w-[58%] w-full flex md:flex-row flex-col-reverse gap-2">
+                <div className="md:w-[20%] w-full flex md:flex-col flex-row gap-3 h-fit relative">
+                  <button className="swiper-button-prev-custom absolute -top-5 left-1/2 -translate-x-1/2 z-10 bg-slate-200 shadow-md rounded-full p-2">
+                    <BsArrowUp />
+                  </button>
+                  <Swiper
+                    direction="vertical"
+                    spaceBetween={10}
+                    slidesPerView={4}
+                    slidesPerGroup={1}
+                    autoHeight={false}
+                    loop={false}
+                    modules={[Navigation]}
+                    navigation={{
+                      prevEl: ".swiper-button-prev-custom",
+                      nextEl: ".swiper-button-next-custom",
+                    }}
+                    onSlideChange={(swiper) => {
+                      document
+                        .querySelector(".swiper-button-prev-custom")
+                        ?.classList.toggle("opacity-40", swiper.isBeginning);
+
+                      document
+                        .querySelector(".swiper-button-next-custom")
+                        ?.classList.toggle("opacity-40", swiper.isEnd);
+                    }}
+                    onSwiper={(swiper) => (swiperRef.current = swiper)}
+                    className="md:overflow-hidden h-[20em]"
+                  >
+                    {gallery.map((gal, i) => (
+                      <SwiperSlide
+                        className={
+                          singleArtImage === gal.image
+                            ? "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
+                            : "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer"
+                        }
+                        key={i}
+                        onClick={() => changeLargeImg(gal.image)}
+                      >
+                        <img className="h-[inherit] w-full" src={gal.image} />
+                      </SwiperSlide>
+                    ))}
+                  </Swiper>
+                  <button className="swiper-button-next-custom absolute -bottom-5 left-1/2 -translate-x-1/2 z-10 bg-slate-200 shadow-md rounded-full p-2">
+                    <BsArrowDown />
+                  </button>
+                </div>
+                <div className="w-full object-fit bg-gray-200 flex items-center justify-center md:h-[30em] h-52 rounded-[6px] overflow-hidden">
+                  <img className="h-auto w-auto" src={singleArtImage} />
+                </div>
+              </div>
+            ) : (
+              <div className="w-full flex md:flex-row flex-col-reverse gap-2">
+                <div className="w-full flex flex-col gap-2 overflow-hidden h-fit">
+                  <div className="w-full flex md:flex-col flex-row gap-3 overflow-hidden h-fit">
+                    <Swiper
+                      direction="horizontal"
+                      spaceBetween={10}
+                      slidesPerView={1}
+                      allowTouchMove={false}
+                      loop={false}
+                      pagination={{
+                        el: ".swiper-pagination-custom",
+                        clickable: true,
+                      }}
+                      modules={[Pagination]}
+                      onSwiper={(swiper) => (swiperRef.current = swiper)}
+                      className="md:overflow-hidden h-full"
                     >
-                      <img className="h-full w-full" src={gal.image} />
-                    </SwiperSlide>
-                  ))}
-                </Swiper>
+                      {gallery.map((gal, i) => (
+                        <SwiperSlide
+                          className="w-full h-fit rounded-lg overflow-hidden cursor-pointer relative before:bg-black/10 before:absolute before:end-0 before:w-full before:h-full"
+                          key={i}
+                          onClick={() => openImageGalleryView(gal.image)}
+                        >
+                          <img className="h-60 w-full" src={gal.image} />
+                        </SwiperSlide>
+                      ))}
+                    </Swiper>
+                  </div>
+                  <button className="swiper-pagination-custom"></button>
+                </div>
+                {showGalleryImage && (
+                  <div className="fixed w-full object-fit bg-black/95 py-5 text-white flex flex-col gap-5 items-center justify-start h-full top-0 start-0 z-20 p-3 rounded-[6px] overflow-hidden">
+                    <div className="flex w-full items-end justify-end">
+                      <CgClose size={25} onClick={closeImageGalleryView} />
+                    </div>
+                    <img className="h-auto w-auto" src={showGalleryImage} />
+                  </div>
+                )}
               </div>
-              <div className="w-full object-fit bg-gray-200 flex items-center justify-center h-[30em] rounded-[6px] overflow-hidden">
-                <img
-                  className="h-auto w-auto"
-                  src={singleArtImage || singleArtwork?.main_image}
-                />
-              </div>
-            </div>
+            )}
             <div className="flex flex-col gap-5 justify-start items-center py-5 px-3 bg-tes-col shadow-md shadow-slate-400 rounded-[6px] md:w-2/5 w-full h-fit">
               <div className="flex flex-col gap-3 items-start w-full">
                 <div className="flex flex-col gap-1 items-start w-full">

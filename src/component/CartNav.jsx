@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import Logo from "../assets/VIKS Gallery transparent.webp"
+import Logo from "../assets/VIKS Gallery transparent.webp";
 import { checkTokenStatus } from "../utils/tokenDecoil";
 import { BiChevronDown } from "react-icons/bi";
 
@@ -67,7 +67,7 @@ export const CartNav = () => {
               alt="Viks gallery logo"
             />
           </a>
-          {data.length !== 0 && staff ? (
+          {data.length !== 0 ? (
             <div className="flex items-center gap-2 w-fit relative justify-center">
               <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
                 <img src={data.pic} alt="" />
@@ -86,10 +86,16 @@ export const CartNav = () => {
                   <div
                     className={
                       scroll
-                        ? "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-3em] top-[2.5em] z-[999] bg-white"
-                        : "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-2em] top-[2.5em] z-[999] bg-white"
+                        ? "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-3em] top-[2.5em] z-[999] bg-white flex flex-col gap-2"
+                        : "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-2em] top-[2.5em] z-[999] bg-white flex flex-col gap-2"
                     }
                   >
+                    {!staff && (
+                      <div className="flex items-center gap-2 font-medium">
+                        <BiHome />
+                        <a href="dashboard/collections">Dashboard</a>
+                      </div>
+                    )}
                     <button
                       onClick={() => logOut()}
                       className="h-12 w-full rounded-[8px] border-solid border-red-500 border-[2px]"

@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { BUTTON, NAVLINKS } from "../libs/Navbar";
 import { FaTimes } from "react-icons/fa";
 import { checkTokenStatus } from "../utils/tokenDecoil";
-import { BiChevronDown } from "react-icons/bi";
+import { BiChevronDown, BiHome } from "react-icons/bi";
 import Logo from "../assets/VIKS Gallery transparent.webp";
 
 export const NavBar = () => {
@@ -129,7 +129,7 @@ export const NavBar = () => {
                 ))}
               </ul>
               <div>
-                {data.length !== 0 && staff ? (
+                {data.length !== 0 ? (
                   <div className="flex items-center gap-2 w-full relative justify-center">
                     <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
                       <img src={data.pic} alt="" />
@@ -148,13 +148,19 @@ export const NavBar = () => {
                         <div
                           className={
                             scroll
-                              ? "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-3em] top-[2.5em] z-[999] bg-white"
-                              : "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-2em] top-[2.5em] z-[999] bg-white"
+                              ? "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-3em] top-[2.5em] z-[999] bg-white flex flex-col gap-2"
+                              : "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-2em] top-[2.5em] z-[999] bg-white flex flex-col gap-2"
                           }
                         >
+                          {!staff && (
+                            <div className="flex items-center gap-2 font-medium">
+                              <BiHome />
+                              <a href="dashboard/collections">Dashboard</a>
+                            </div>
+                          )}
                           <button
                             onClick={() => logOut()}
-                            className="h-12 w-full rounded-[8px] border-solid border-red-500 border-[2px]"
+                            className="h-10 w-full rounded-[8px] border-solid border-red-500 border-[2px]"
                             type="button"
                           >
                             Logout
@@ -213,7 +219,7 @@ export const NavBar = () => {
                   ))}
                 </ul>
                 <div className="w-full">
-                  {data.length !== 0 && staff ? (
+                  {data.length !== 0 ? (
                     <div className="flex items-center justify-between relative w-full">
                       <div className="flex items-center gap-2 relative">
                         <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
@@ -231,9 +237,15 @@ export const NavBar = () => {
                           <BiChevronDown className="text-[2em]" />
                         </div>
                         {activeToggle ? (
-                          <div className="h-fit p-2 w-full rounded-[7px] border-solid border-slate-300 border-[1px] absolute top-[3em] start-0 end-0 bg-white">
+                          <div className="h-fit p-2 w-full rounded-[7px] border-solid border-slate-300 border-[1px] absolute top-[3em] start-0 end-0 bg-white flex flex-col gap-2">
+                            {!staff && (
+                              <div className="flex items-center gap-2 font-medium">
+                                <BiHome />
+                                <a href="dashboard/collections">Dashboard</a>
+                              </div>
+                            )}
                             <button
-                              className="h-12 w-full rounded-[8px] border-solid border-red-700 border-[1px]"
+                              className="h-10 w-full rounded-[8px] border-solid border-red-700 border-[1px]"
                               type="button"
                               onClick={() => logOut()}
                             >

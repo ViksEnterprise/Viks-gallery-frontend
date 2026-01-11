@@ -59,11 +59,13 @@ export const SideNav = () => {
         <div className="flex flex-col h-full p-4 gap-6">
           {/* Logo */}
           <div className="flex items-center justify-between">
-            <img
-              src={Logo}
-              alt="Viks Gallery"
-              className="h-12 bg-white rounded-lg"
-            />
+            <a href="/">
+              <img
+                src={Logo}
+                alt="Viks Gallery"
+                className="h-12 bg-white rounded-lg"
+              />
+            </a>
             {data && (
               <div className="flex items-center gap-3">
                 <span className="text-sm font-medium">{data?.name}</span>
