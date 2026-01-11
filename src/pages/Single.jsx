@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { NavBar } from "../component/NavBar";
 import { Subscribe } from "../component/Subscription";
 import { Footer } from "../component/FooterNav";
@@ -11,6 +11,8 @@ import axios, { axiosPrivate } from "../service/axios";
 import { Error404 } from "../views/NotFound";
 import { BsFillHeartFill } from "react-icons/bs";
 import HideContent from "../component/Hidden";
+import { Swiper, SwiperSlide } from "swiper/react";
+// import "swiper/css";
 
 export const Single = () => {
   const { artworkId } = useParams();
@@ -22,6 +24,7 @@ export const Single = () => {
     message: "",
     icon: "",
   });
+   const swiperRef = useRef(null);
   const [toggleModal, setToggleModal] = useState(false);
   const [quantity, setQuantity] = useState(0);
   const [count, setCount] = useState(0);
@@ -154,7 +157,7 @@ export const Single = () => {
       });
       if (response) {
         setCount(response.data?.data?.quantity_of_product);
-        checkIfItemIsInCart()
+        checkIfItemIsInCart();
       }
     } catch (err) {
       return;
@@ -236,19 +239,30 @@ export const Single = () => {
           <NavBar />
           <div className="flex md:flex-row flex-col gap-3 md:justify-between w-full md:p-9 p-3">
             <div className="md:w-[58%] w-full flex md:flex-row flex-col-reverse gap-2">
-              <div className="md:w-[20%] w-full flex md:flex-col flex-row gap-3">
-                {gallery.map((gal) => (
-                  <div
-                    className={
-                      singleArtImage == gal.image
-                        ? "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
-                        : "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer"
-                    }
-                    onClick={() => changeLargeImg(gal.image)}
-                  >
-                    <img className="h-auto w-auto" src={gal.image} />
-                  </div>
-                ))}
+              <div className="md:w-[20%] w-full flex md:flex-col flex-row gap-3 overflow-hidden h-fit">
+                <Swiper
+                  direction="vertical"
+                  spaceBetween={10}
+                  slidesPerView={1}
+                  allowTouchMove={false}
+                  loop={false}
+                  onSwiper={(swiper) => (swiperRef.current = swiper)}
+                  className="overflow-hidden"
+                >
+                  {gallery.map((gal, i) => (
+                    <SwiperSlide
+                      className={
+                        singleArtImage == gal.image
+                          ? "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer border-blue-800 border-solid border-2 shadow-md shadow-slate-300"
+                          : "w-full h-20 rounded-[4px] overflow-hidden cursor-pointer"
+                      }
+                      key={i}
+                      onClick={() => changeLargeImg(gal.image)}
+                    >
+                      <img className="h-full w-full" src={gal.image} />
+                    </SwiperSlide>
+                  ))}
+                </Swiper>
               </div>
               <div className="w-full object-fit bg-gray-200 flex items-center justify-center h-[30em] rounded-[6px] overflow-hidden">
                 <img

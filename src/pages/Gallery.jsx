@@ -27,8 +27,6 @@ export const Gallery = () => {
 
   const sort = ["all", "paintings", "sculpture", "beads"];
 
-  console.log(listOfArtwork);
-
   const handleChange = (e) => {
     const { value } = e.target;
     setSearch(value);

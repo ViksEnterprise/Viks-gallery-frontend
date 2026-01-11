@@ -3,7 +3,7 @@ import { BUTTON, NAVLINKS } from "../libs/Navbar";
 import { FaTimes } from "react-icons/fa";
 import { checkTokenStatus } from "../utils/tokenDecoil";
 import { BiChevronDown } from "react-icons/bi";
-import Logo from "../assets/VIKS Gallery transparent.webp"
+import Logo from "../assets/VIKS Gallery transparent.webp";
 
 export const NavBar = () => {
   const [scroll, setScroll] = useState(false);
@@ -13,6 +13,7 @@ export const NavBar = () => {
     const user = JSON.parse(sessionStorage.getItem("userInfo"));
     return user ? user : [];
   });
+  const staff = sessionStorage.getItem("staff") === "false";
   const [activeToggle, setActiveToggle] = useState(false);
 
   const activateScrollBarView = () => {
@@ -105,11 +106,12 @@ export const NavBar = () => {
               : "w-full py-3 md:px-12 px-3 h-20 flex items-center justify-between bg-white"
           }
         >
-          <a
-            className="text-decoration-none pointer-cursor w-16"
-            href="/"
-          >
-            <img className="h-16 w-[inherit]" src={Logo} alt="Viks gallery logo" />
+          <a className="text-decoration-none pointer-cursor w-16" href="/">
+            <img
+              className="h-16 w-[inherit]"
+              src={Logo}
+              alt="Viks gallery logo"
+            />
           </a>
           {!mobile && (
             <nav className="flex items-center justify-between xl:w-[50%] w-[62%]">
@@ -127,7 +129,7 @@ export const NavBar = () => {
                 ))}
               </ul>
               <div>
-                {data.length !== 0 ? (
+                {data.length !== 0 && staff ? (
                   <div className="flex items-center gap-2 w-full relative justify-center">
                     <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
                       <img src={data.pic} alt="" />
@@ -211,14 +213,11 @@ export const NavBar = () => {
                   ))}
                 </ul>
                 <div className="w-full">
-                  {data.length !== 0 ? (
+                  {data.length !== 0 && staff ? (
                     <div className="flex items-center justify-between relative w-full">
                       <div className="flex items-center gap-2 relative">
                         <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
-                          <img
-                            src={data.pic}
-                            alt=""
-                          />
+                          <img src={data.pic} alt="" />
                         </div>
                         <div>
                           <span>{data.name}</span>

@@ -23,6 +23,7 @@ export const CollectionCreate = ({
   const [formData, setFormData] = useState(initialData || {});
   const [step, setStep] = useState(0);
   const [formKey, setFormKey] = useState(0);
+  const [deletedGalleryIds, setDeletedGalleryIds] = useState([]);
 
   const allFields = COLLECTION_FIELDS[type];
   const currentStep = FORM_STEPS[step];
@@ -92,9 +93,14 @@ export const CollectionCreate = ({
     requiredFieldsForStep.length === 0 ||
     requiredFieldsForStep.every(isFieldFilled);
 
-  const handleChange = (name, value) => {
+  const handleChange = (name, value, removedImage = null) => {
     setFormData((prev) => ({ ...prev, [name]: value }));
+
+    if (name === "gallery" && removedImage?.id && removedImage.isExisting) {
+      setDeletedGalleryIds((prev) => [...prev, removedImage.id]);
+    }
   };
+
 
   const isLastStep = step === FORM_STEPS.length - 1;
 
@@ -149,6 +155,10 @@ export const CollectionCreate = ({
     // Nested fields (artwork_details, sculpture_details, beads_details)
     Object.entries(detailsData).forEach(([k, v]) => {
       payload.append(`${detailsKey}.${k}`, v);
+    });
+
+    deletedGalleryIds.forEach((id) => {
+      payload.append("delete_gallery_ids", id);
     });
 
     // Shipping fields

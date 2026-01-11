@@ -3,6 +3,10 @@ import { MultiImageUpload } from "./MultiImageUpload";
 import { SelectDropDown } from "./SelectDropDown";
 
 export const InputRenderer = ({ field, value, onChange }) => {
+  const handleValueChange = (val, removedImage = null) => {
+    onChange(field.name, val, removedImage);
+  };
+
   if (field.type === "textarea") {
     return (
       <div className="grid gap-1 items-start">
@@ -47,8 +51,7 @@ export const InputRenderer = ({ field, value, onChange }) => {
         label={field.label}
         helperText={field.helperText}
         value={value || []}
-        
-        onChange={(data) => onChange(field.name, data)}
+        onChange={handleValueChange}
       />
     );
   }

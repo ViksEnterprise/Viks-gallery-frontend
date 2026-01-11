@@ -28,9 +28,10 @@ export const MultiImageUpload = ({
   };
 
   const removeImage = (index) => {
+    const removed = images[index]; 
     const updated = images.filter((_, i) => i !== index);
     setImages(updated);
-    onChange(updated);
+    onChange(updated, removed);;
   };
 
   return (

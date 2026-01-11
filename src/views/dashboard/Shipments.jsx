@@ -4,7 +4,8 @@ import { AdminLayout } from "../../layout/AdminLayout";
 import { Table } from "../../component/dashboard/Table";
 import { ShipmentUpdateForm } from "../../component/dashboard/ShipmentUpdate";
 import { ShipmentDetail } from "../../component/dashboard/ShipmentDetails";
-import axios, { axiosPrivate } from "../../service/axios";
+import { axiosPrivate } from "../../service/axios";
+import { Pagination } from "../../component/Pagination";
 
 export const Shipment = () => {
   const [headerData, setHeaderData] = useState([]);
@@ -12,6 +13,8 @@ export const Shipment = () => {
   const [id, setID] = useState("");
   const [headerStat, setHeaderStat] = useState("");
   const [loading, setLoading] = useState(false);
+  const [paginate, setPaginate] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
   const header = [
     { key: "total_deliveries", name: "Total deliveries" },
     { key: "successful_deliveries", name: "Successful deliveries" },
@@ -27,14 +30,21 @@ export const Shipment = () => {
     { key: "actions", label: "Action" },
   ];
 
-  const getShipment = async () => {
-    const url = `payments/admin/shipments`;
+  const changePage = (page) => {
+    if (page < 1 || page > pagination.last_page) return;
+    setCurrentPage(page);
+    getShipment(page);
+  };
+
+  const getShipment = async (page) => {
+    const url = `payments/admin/shipments?page=${page}&page_size=14`;
 
     try {
-      const response = await axios.get(url);
+      const response = await axiosPrivate.get(url);
       if (response) {
         setHeaderData(response.data?.data);
         setHeaderStat(response.data?.stats);
+        setPaginate(response.data?.meta);
       }
     } catch (err) {
       console.log(err);
@@ -99,7 +109,8 @@ export const Shipment = () => {
   };
 
   useEffect(() => {
-    getShipment();
+    setActive("table");
+    getShipment(currentPage);
   }, []);
 
   return (
@@ -186,6 +197,7 @@ export const Shipment = () => {
               return row[column.key];
             }}
           </Table>
+          <Pagination meta={paginate} onPageChange={changePage} />
         </div>
       )}
       {active == "form" && (

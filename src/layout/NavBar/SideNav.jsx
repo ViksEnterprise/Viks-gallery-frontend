@@ -17,7 +17,7 @@ export const SideNav = () => {
   const logOut = () => {
     sessionStorage.clear();
     setData(null);
-    window.location.href = '/login'
+    window.location.href = "/login";
   };
 
   useEffect(() => {
@@ -32,6 +32,7 @@ export const SideNav = () => {
     if (token && checkTokenStatus(token)) {
       sessionStorage.clear();
       setData(null);
+      window.location.href = "/login";
     }
 
     return () => window.removeEventListener("resize", responsive);
@@ -95,18 +96,20 @@ export const SideNav = () => {
           </ul>
 
           {/* User Section */}
-          <div className="mt-auto">
-            <div className="relative">
-              <div className="w-full">
-                <button
-                  className="bg-white h-11 w-full flex items-center text-center text-blue-700 rounded-[7px] text-lg capitalize justify-center"
-                  onClick={logOut}
-                >
-                  Logout
-                </button>
+          {data && (
+            <div className="mt-auto">
+              <div className="relative">
+                <div className="w-full">
+                  <button
+                    className="bg-white h-11 w-full flex items-center text-center text-blue-700 rounded-[7px] text-lg capitalize justify-center"
+                    onClick={logOut}
+                  >
+                    Logout
+                  </button>
+                </div>
               </div>
             </div>
-          </div>
+          )}
         </div>
       </aside>
 

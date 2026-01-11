@@ -2,15 +2,18 @@ import { useEffect, useState } from "react";
 import { Statistic } from "../../component/dashboard/Statistic";
 import { AdminLayout } from "../../layout/AdminLayout";
 import { Table } from "../../component/dashboard/Table";
-import axios from "../../service/axios";
-import { BiPound, BiTrash } from "react-icons/bi";
+import { BiPound } from "react-icons/bi";
 import { OrderDetail } from "../../component/dashboard/OrderDetails";
+import { axiosPrivate } from "../../service/axios";
+import { Pagination } from "../../component/Pagination";
 
 export const DashBoardOrder = () => {
   const [headerData, setHeaderData] = useState([]);
   const [orderResult, setOrderResult] = useState([]);
   const [active, setActive] = useState("table");
   const [id, setID] = useState("");
+  const [paginate, setPaginate] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
   const header = [
     { key: "total_orders", name: "Total orders" },
     { key: "paid_orders", name: "Paid orders" },
@@ -33,27 +36,32 @@ export const DashBoardOrder = () => {
 
   const closeForm = () => {
     setActive("table");
-    setMode("create");
   };
 
-  const getOrder = async () => {
-    const url = `order/admin/list`;
+  const changePage = (page) => {
+    if (page < 1 || page > pagination.last_page) return;
+    setCurrentPage(page);
+    getOrder(page);
+  };
+
+  const getOrder = async (page) => {
+    const url = `order/admin/list?page=${page}&page_size=14`;
 
     try {
-      const response = await axios.get(url);
+      const response = await axiosPrivate.get(url);
       if (response) {
         setOrderResult(response.data?.data);
         setHeaderData(response.data?.stats);
+        setPaginate(response.data?.meta);
       }
     } catch (err) {
       console.log(err);
-    } finally {
-      // setLoading(false);
     }
   };
 
   useEffect(() => {
-    getOrder();
+    setActive("table");
+    getOrder(currentPage);
   }, []);
 
   return (
@@ -121,6 +129,7 @@ export const DashBoardOrder = () => {
               return row[column.key];
             }}
           </Table>
+          <Pagination meta={paginate} onPageChange={changePage} />
         </div>
       )}
       {active == "detail" && (

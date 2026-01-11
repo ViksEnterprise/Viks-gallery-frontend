@@ -9,6 +9,7 @@ export const CartNav = () => {
     const user = JSON.parse(sessionStorage.getItem("userInfo"));
     return user ? user : [];
   });
+  const staff = sessionStorage.getItem("staff") === "false";
   const [activeToggle, setActiveToggle] = useState(false);
 
   const activateScrollBarView = () => {
@@ -59,13 +60,14 @@ export const CartNav = () => {
               : "w-full py-3 md:px-12 px-3 h-20 flex items-center justify-between bg-white"
           }
         >
-          <a
-            className="text-decoration-none pointer-cursor w-16"
-            href="/"
-          >
-            <img className="h-16 w-[inherit]" src={Logo} alt="Viks gallery logo" />
+          <a className="text-decoration-none pointer-cursor w-16" href="/">
+            <img
+              className="h-16 w-[inherit]"
+              src={Logo}
+              alt="Viks gallery logo"
+            />
           </a>
-          {data.length !== 0 ? (
+          {data.length !== 0 && staff ? (
             <div className="flex items-center gap-2 w-fit relative justify-center">
               <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
                 <img src={data.pic} alt="" />

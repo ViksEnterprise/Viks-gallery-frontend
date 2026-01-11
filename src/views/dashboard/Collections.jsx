@@ -6,8 +6,9 @@ import { FaSearch } from "react-icons/fa";
 import { CollectionCreate } from "../../component/dashboard/CollectionCreate";
 import { BiEdit, BiPlus, BiPound, BiTrash } from "react-icons/bi";
 import { BsEye } from "react-icons/bs";
-import axios from "../../service/axios";
+import { axiosPrivate } from "../../service/axios";
 import { CollectionDetail } from "../../component/dashboard/CollectionDetail";
+import { Pagination } from "../../component/Pagination";
 
 export const DashBoardCollection = () => {
   const [statHeader, setStatHeader] = useState([]);
@@ -18,6 +19,8 @@ export const DashBoardCollection = () => {
   const [mode, setMode] = useState("");
   const [loading, setLoading] = useState(false);
   const [tableHeading, setTableHeading] = useState([]);
+  const [paginate, setPaginate] = useState({});
+  const [currentPage, setCurrentPage] = useState(1);
   const [collectionResult, setCollectionResult] = useState([]);
   const [active, setActive] = useState("table");
   const [id, setID] = useState("");
@@ -93,6 +96,12 @@ export const DashBoardCollection = () => {
     debounceSearch(value);
   };
 
+  const changePage = (page) => {
+    if (page < 1 || page > pagination.last_page) return;
+    setCurrentPage(page);
+    getArtwork(type, page)
+  };
+
   const openForm = () => {
     setActive("form");
   };
@@ -119,7 +128,7 @@ export const DashBoardCollection = () => {
   }
 
   const debounceSearch = useCallback(
-    // debounce((value) => getArtwork(value), 180),
+    debounce((value) => getArtwork(type, currentPage, value), 180),
     []
   );
 
@@ -136,14 +145,15 @@ export const DashBoardCollection = () => {
     setTableHeading(valContent.value);
   };
 
-  const getArtwork = async (val) => {
-    const url = `artwork/admin/list?artType=${val}`;
+  const getArtwork = async (val, page, search) => {
+    const url = `artwork/admin/list?artType=${val}&page=${page}&page_size=14${search && `&search=${search}`}`;
 
     try {
-      const response = await axios.get(url);
+      const response = await axiosPrivate.get(url);
       if (response) {
-        setHeaderData(response.data?.data);
-        setStatVal(response.data?.stats);
+        setHeaderData(response.data?.results.data);
+        setStatVal(response.data?.results.stats);
+        setPaginate(response.data?.results.meta);
       }
     } catch (err) {
       console.log(err);
@@ -156,7 +166,7 @@ export const DashBoardCollection = () => {
     const url = `artwork/upload/`;
     setLoading(true);
     try {
-      const response = await axios.post(url, data, {
+      const response = await axiosPrivate.post(url, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -177,7 +187,7 @@ export const DashBoardCollection = () => {
     const url = `artwork/${id}/update`;
     setLoading(true);
     try {
-      const response = await axios.patch(url, data, {
+      const response = await axiosPrivate.patch(url, data, {
         headers: {
           "Content-Type": "multipart/form-data",
         },
@@ -199,9 +209,9 @@ export const DashBoardCollection = () => {
     setMode("edit");
     setActive("form");
     try {
-      const response = await axios.get(url);
+      const response = await axiosPrivate.get(url);
       if (response) {
-        setCollectionResult(response.data.data);
+        setCollectionResult(response.data?.data);
       }
     } catch (err) {
       return;
@@ -209,8 +219,10 @@ export const DashBoardCollection = () => {
   };
 
   useEffect(() => {
+    setActive("table");
+    setMode("create");
     getTableHeadingBaseOnType(type);
-    getArtwork(type);
+    getArtwork(type, currentPage, search);
   }, []);
 
   return (
@@ -289,13 +301,13 @@ export const DashBoardCollection = () => {
                   <div className="flex items-center gap-3">
                     <button
                       className="text-gray-400"
-                      onClick={() => openDetail(row.id)}
+                      onClick={() => openDetail(row?.id)}
                     >
                       <BsEye size={18} />
                     </button>
                     <button
                       className="text-blue-700"
-                      onClick={() => editCollection(row.id)}
+                      onClick={() => editCollection(row?.id)}
                     >
                       <BiEdit size={18} />
                     </button>
@@ -328,6 +340,7 @@ export const DashBoardCollection = () => {
               return row[column.key];
             }}
           </Table>
+          <Pagination meta={paginate} onPageChange={changePage} />
         </div>
       )}
       {active == "form" && (
@@ -339,7 +352,7 @@ export const DashBoardCollection = () => {
           close={closeForm}
           onSubmit={(payload) => {
             mode === "edit"
-              ? updateArtwork(collectionResult.id, payload)
+              ? updateArtwork(collectionResult?.id, payload)
               : postArtwork(payload);
           }}
         />
