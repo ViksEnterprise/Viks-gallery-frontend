@@ -8,11 +8,14 @@ import { CartNav } from "../component/CartNav";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { CardComp } from "../component/CardModal";
-import axios, { axiosPrivate } from "../service/axios";
+import { axiosPrivate } from "../service/axios";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import { Model } from "../component/Model/Modal";
 import { FaPen } from "react-icons/fa";
 import HideContent from "../component/Hidden";
+import con from "../js/json/countries.json";
+import stateData from "../js/json/states.json";
+import ctyData from "../js/json/cities.json";
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -93,14 +96,14 @@ export const Checkout = () => {
     const { name, value } = e.target;
 
     if (name == "country") {
-      const select = countries.find((c) => c.name === value);
-      setSelectedCountry(select?.isoCode);
-      getState(select?.isoCode);
+      const select = countries.find((c) => c.value == value);
+      setSelectedCountry(select?.key);
+      getState(select?.key);
     }
 
     if (name == "state") {
       const select = states.find((s) => s.name === value);
-      getCity(selectedCountry, select?.isoCode);
+      getCity(selectedCountry, select?.iso2);
     }
 
     setFormData({ ...formData, [name]: value });
@@ -299,7 +302,6 @@ export const Checkout = () => {
                   : ""
               ) || "",
           }));
-          console.log(formData);
         }
       }
     } catch (err) {
@@ -321,63 +323,17 @@ export const Checkout = () => {
   };
 
   const getCountry = async () => {
-    const url = `https://country-state-city-search-rest-api.p.rapidapi.com/allcountries`;
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
-          "X-RapidAPI-Host":
-            "country-state-city-search-rest-api.p.rapidapi.com",
-        },
-      });
-      if (response) {
-        setCountries(response.data);
-      }
-    } catch (err) {
-      return;
-    }
+    setCountries(con.map((c) => ({ key: c.iso2, value: c.name })));
   };
 
   const getState = async (id) => {
-    const payload = { countrycode: id };
-    const url = `https://country-state-city-search-rest-api.p.rapidapi.com/states-by-countrycode`;
-    try {
-      const response = await axios.get(url, {
-        params: payload,
-        headers: {
-          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
-          "X-RapidAPI-Host":
-            "country-state-city-search-rest-api.p.rapidapi.com",
-        },
-      });
-      if (response) {
-        setStates(response.data);
-      }
-    } catch (err) {
-      return;
-    }
+    setStates(stateData.filter((s) => s.country_code === id));
   };
 
   const getCity = async (con, id) => {
-    const payload = { countrycode: selectedCountry ? selectedCountry : con, statecode: id };
-    const url = `https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode`;
-    try {
-      const response = await axios.get(url, {
-        params: payload,
-        headers: {
-          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
-          "X-RapidAPI-Host":
-            "country-state-city-search-rest-api.p.rapidapi.com",
-        },
-      });
-      if (response) {
-        setCities(response.data);
-
-        console.log(formData.country);
-      }
-    } catch (err) {
-      return;
-    }
+    setCities(
+      ctyData.filter((ct) => ct.country_code === con && ct.state_code === id)
+    );
   };
 
   const getPaymentLink = async () => {
@@ -649,8 +605,8 @@ export const Checkout = () => {
                                 Select your country
                               </option>
                               {countries.map((country, index) => (
-                                <option key={index} value={country.name}>
-                                  {country.name}
+                                <option key={index} value={country.value}>
+                                  {country.value}
                                 </option>
                               ))}
                             </select>

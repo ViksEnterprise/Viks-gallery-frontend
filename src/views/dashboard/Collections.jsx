@@ -9,6 +9,7 @@ import { BsEye } from "react-icons/bs";
 import { axiosPrivate } from "../../service/axios";
 import { CollectionDetail } from "../../component/dashboard/CollectionDetail";
 import { Pagination } from "../../component/Pagination";
+import { Delete } from "../../component/Delete";
 
 export const DashBoardCollection = () => {
   const [statHeader, setStatHeader] = useState([]);
@@ -24,6 +25,7 @@ export const DashBoardCollection = () => {
   const [collectionResult, setCollectionResult] = useState([]);
   const [active, setActive] = useState("table");
   const [id, setID] = useState("");
+  const [del, setDel] = useState(false);
   const btnType = ["artwork", "sculpture", "beads"];
   const header = [
     {
@@ -99,7 +101,7 @@ export const DashBoardCollection = () => {
   const changePage = (page) => {
     if (page < 1 || page > pagination.last_page) return;
     setCurrentPage(page);
-    getArtwork(type, page)
+    getArtwork(type, page);
   };
 
   const openForm = () => {
@@ -115,6 +117,7 @@ export const DashBoardCollection = () => {
   const closeForm = () => {
     setActive("table");
     setMode("create");
+    setDel(false);
   };
 
   function debounce(func, timer) {
@@ -135,7 +138,7 @@ export const DashBoardCollection = () => {
   const getType = (val) => {
     setType(val);
     getTableHeadingBaseOnType(val);
-    getArtwork(val);
+    getArtwork(val, currentPage, search);
   };
 
   const getTableHeadingBaseOnType = (val) => {
@@ -146,7 +149,9 @@ export const DashBoardCollection = () => {
   };
 
   const getArtwork = async (val, page, search) => {
-    const url = `artwork/admin/list?artType=${val}&page=${page}&page_size=14${search && `&search=${search}`}`;
+    const url = `artwork/admin/list?artType=${val}&page=${page}&page_size=14${
+      search && `&search=${search}`
+    }`;
 
     try {
       const response = await axiosPrivate.get(url);
@@ -215,6 +220,28 @@ export const DashBoardCollection = () => {
       }
     } catch (err) {
       return;
+    }
+  };
+
+  const openDelete = (id) => {
+    setID(id);
+    setDel(true);
+    setActive("table");
+  };
+
+  const deleteItem = async (id) => {
+    const url = `artwork/${id}/delete`;
+    setLoading(true);
+    try {
+      const response = await axiosPrivate.delete(url);
+      if (response) {
+        setDel(false);
+        getArtwork(type, currentPage, search);
+      }
+    } catch (err) {
+      return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -301,18 +328,21 @@ export const DashBoardCollection = () => {
                   <div className="flex items-center gap-3">
                     <button
                       className="text-gray-400"
-                      onClick={() => openDetail(row?.id)}
+                      onClick={() => openDetail(row.id)}
                     >
                       <BsEye size={18} />
                     </button>
                     <button
                       className="text-blue-700"
-                      onClick={() => editCollection(row?.id)}
+                      onClick={() => editCollection(row.id)}
                     >
                       <BiEdit size={18} />
                     </button>
 
-                    <button className="text-red-500">
+                    <button
+                      className="text-red-500"
+                      onClick={() => openDelete(row.id)}
+                    >
                       <BiTrash size={18} />
                     </button>
                   </div>
@@ -360,6 +390,17 @@ export const DashBoardCollection = () => {
 
       {active == "detail" && (
         <CollectionDetail open={active} close={closeForm} id={id} />
+      )}
+
+      {del && (
+        <Delete
+          title={type}
+          id={id}
+          close={closeForm}
+          onSubmit={deleteItem}
+          open={del}
+          loading={loading}
+        />
       )}
     </AdminLayout>
   );

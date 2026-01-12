@@ -6,11 +6,13 @@ import { ShipmentUpdateForm } from "../../component/dashboard/ShipmentUpdate";
 import { ShipmentDetail } from "../../component/dashboard/ShipmentDetails";
 import { axiosPrivate } from "../../service/axios";
 import { Pagination } from "../../component/Pagination";
+import { Delete } from "../../component/Delete";
 
 export const Shipment = () => {
   const [headerData, setHeaderData] = useState([]);
   const [active, setActive] = useState("table");
   const [id, setID] = useState("");
+  const [del, setDel] = useState(false);
   const [headerStat, setHeaderStat] = useState("");
   const [loading, setLoading] = useState(false);
   const [paginate, setPaginate] = useState({});
@@ -106,6 +108,29 @@ export const Shipment = () => {
 
   const closeForm = () => {
     setActive("table");
+    setDel(false);
+  };
+
+  const openDelete = (id) => {
+    setID(id);
+    setDel(true);
+    setActive("table");
+  };
+
+  const deleteItem = async (id) => {
+    const url = `payments/${id}/delete/shipment`;
+    setLoading(true);
+    try {
+      const response = await axiosPrivate.delete(url);
+      if (response) {
+        setDel(false);
+        getShipment(currentPage);
+      }
+    } catch (err) {
+      return;
+    } finally {
+      setLoading(false);
+    }
   };
 
   useEffect(() => {
@@ -148,7 +173,10 @@ export const Shipment = () => {
                       </button>
                     ) : null}
                     {row.status == "delivered" && (
-                      <button className="border border-red-500 text-red-500 rounded-lg px-3 py-2 h-9">
+                      <button
+                        className="border border-red-500 text-red-500 rounded-lg px-3 py-2 h-9"
+                        onClick={() => openDelete(row.shipment_id)}
+                      >
                         Delete
                       </button>
                     )}
@@ -211,6 +239,16 @@ export const Shipment = () => {
       )}
       {active == "detail" && (
         <ShipmentDetail id={id} open={active} close={closeForm} />
+      )}
+      {del && (
+        <Delete
+          title="Shipment"
+          id={id}
+          close={closeForm}
+          onSubmit={deleteItem}
+          open={del}
+          loading={loading}
+        />
       )}
     </AdminLayout>
   );

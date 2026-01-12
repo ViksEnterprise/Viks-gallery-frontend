@@ -6,13 +6,16 @@ import { BiPound } from "react-icons/bi";
 import { OrderDetail } from "../../component/dashboard/OrderDetails";
 import { axiosPrivate } from "../../service/axios";
 import { Pagination } from "../../component/Pagination";
+import { Delete } from "../../component/Delete";
 
 export const DashBoardOrder = () => {
   const [headerData, setHeaderData] = useState([]);
   const [orderResult, setOrderResult] = useState([]);
   const [active, setActive] = useState("table");
   const [id, setID] = useState("");
+  const [del, setDel] = useState(false);
   const [paginate, setPaginate] = useState({});
+  const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const header = [
     { key: "total_orders", name: "Total orders" },
@@ -36,6 +39,7 @@ export const DashBoardOrder = () => {
 
   const closeForm = () => {
     setActive("table");
+    setDel(false);
   };
 
   const changePage = (page) => {
@@ -56,6 +60,28 @@ export const DashBoardOrder = () => {
       }
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const openDelete = (id) => {
+    setID(id);
+    setDel(true);
+    setActive("table");
+  };
+
+  const deleteItem = async (id) => {
+    const url = `order/${id}/delete`;
+    setLoading(true);
+    try {
+      const response = await axiosPrivate.delete(url);
+      if (response) {
+        setDel(false);
+        getOrder(currentPage);
+      }
+    } catch (err) {
+      return;
+    } finally {
+      setLoading(false);
     }
   };
 
@@ -100,7 +126,10 @@ export const DashBoardOrder = () => {
                     </button>
 
                     {row.status == "delivered" && (
-                      <button className="text-red-500 border border-red-400 rounded-lg px-3 py-1">
+                      <button
+                        className="text-red-500 border border-red-400 rounded-lg px-3 py-1"
+                        onClick={() => openDelete(row.id)}
+                      >
                         Delete
                       </button>
                     )}
@@ -134,6 +163,16 @@ export const DashBoardOrder = () => {
       )}
       {active == "detail" && (
         <OrderDetail open={active} close={closeForm} id={id} />
+      )}
+      {del && (
+        <Delete
+          title="Order"
+          id={id}
+          close={closeForm}
+          onSubmit={deleteItem}
+          open={del}
+          loading={loading}
+        />
       )}
     </AdminLayout>
   );
