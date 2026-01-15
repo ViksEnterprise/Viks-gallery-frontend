@@ -332,7 +332,7 @@ export const Checkout = () => {
 
   const getCity = async (con, id) => {
     setCities(
-      ctyData.filter((ct) => ct.country_code === con && ct.state_code === id)
+      ctyData.filter((ct) => ct.c_c === con && ct.s_c === id)
     );
   };
 
