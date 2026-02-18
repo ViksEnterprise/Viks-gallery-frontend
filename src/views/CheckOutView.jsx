@@ -15,7 +15,7 @@ import { FaPen } from "react-icons/fa";
 import HideContent from "../component/Hidden";
 import con from "../js/json/countries.json";
 import stateData from "../js/json/states.json";
-import ctyData from "../js/json/cities.json";
+import ctyData from "../js/json/con_sta_city.json";
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -277,7 +277,7 @@ export const Checkout = () => {
     try {
       const response = await axiosPrivate.get(url);
       if (response) {
-        setAddress(response.data);
+        setAddress([response.data]);
 
         if (response.data.length > 0) {
           const addr = response.data[0];
