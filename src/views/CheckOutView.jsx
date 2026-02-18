@@ -103,7 +103,7 @@ export const Checkout = () => {
 
     if (name == "state") {
       const select = states.find((s) => s.name === value);
-      getCity(selectedCountry, select?.iso2);
+      getCity(selectedCountry, select?.name);
     }
 
     setFormData({ ...formData, [name]: value });
@@ -196,7 +196,7 @@ export const Checkout = () => {
       const url = "payments/payment-address";
 
       const payload = Object.fromEntries(
-        Object.entries(formData).filter(([key, value]) => value !== "")
+        Object.entries(formData).filter(([key, value]) => value !== ""),
       );
 
       setLoader(true);
@@ -299,7 +299,7 @@ export const Checkout = () => {
               String(
                 addr.alternative_phone_number !== null
                   ? "+" + addr.alternative_phone_number
-                  : ""
+                  : "",
               ) || "",
           }));
         }
@@ -323,17 +323,17 @@ export const Checkout = () => {
   };
 
   const getCountry = async () => {
-    setCountries(con.map((c) => ({ key: c.iso2, value: c.name })));
+    setCountries(con.map((c) => ({ key: c.name, value: c.name })));
   };
 
   const getState = async (id) => {
-    setStates(stateData.filter((s) => s.country_code === id));
+    setStates(stateData.filter((s) => s.country_name === id));
   };
 
   const getCity = async (con, id) => {
-    setCities(
-      ctyData.filter((ct) => ct.c_c === con && ct.s_c === id)
-    );
+    console.log(ctyData.filter((ct) => ct.c_c === con && ct.s_c === id));
+    setCities(ctyData.filter((ct) => ct.c_c === con && ct.s_n === id));
+    console.log(con, id);
   };
 
   const getPaymentLink = async () => {
