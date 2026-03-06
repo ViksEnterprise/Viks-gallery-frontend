@@ -99,7 +99,7 @@ export const DashBoardCollection = () => {
   };
 
   const changePage = (page) => {
-    if (page < 1 || page > pagination.last_page) return;
+    if (page < 1 || page > paginate.last_page) return;
     setCurrentPage(page);
     getArtwork(type, page);
   };

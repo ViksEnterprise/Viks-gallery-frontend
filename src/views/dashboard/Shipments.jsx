@@ -11,7 +11,7 @@ import { Delete } from "../../component/Delete";
 export const Shipment = () => {
   const [headerData, setHeaderData] = useState([]);
   const [active, setActive] = useState("table");
-  const [id, setID] = useState("");
+  const [Id, setID] = useState("");
   const [del, setDel] = useState(false);
   const [headerStat, setHeaderStat] = useState("");
   const [loading, setLoading] = useState(false);
@@ -33,7 +33,7 @@ export const Shipment = () => {
   ];
 
   const changePage = (page) => {
-    if (page < 1 || page > pagination.last_page) return;
+    if (page < 1 || page > paginate.last_page) return;
     setCurrentPage(page);
     getShipment(page);
   };
@@ -54,10 +54,11 @@ export const Shipment = () => {
   };
 
   const performAction = async (id) => {
-    const state = headerData.find((i) => i.shipment_id === id);
+    const state = headerData.find((i) => i.order.order_id === id);
     if (state.status == "processing") {
       setActive("form");
     }
+    setID(id);
 
     if (state.status == "in-transit") {
       const url = `payments/${id}/admin/shipments/update`;
@@ -83,6 +84,7 @@ export const Shipment = () => {
       ...data,
       status: "in-transit",
     };
+    console.log(id, data);
     try {
       const response = await axiosPrivate.patch(url, payload, {
         headers: {
@@ -158,14 +160,14 @@ export const Shipment = () => {
                   <div className="flex items-center gap-3">
                     <button
                       className="border border-gray-400 rounded-lg px-3 py-2 h-9"
-                      onClick={() => openDetail(row.shipment_id)}
+                      onClick={() => openDetail(row?.shipment_id)}
                     >
                       View
                     </button>
                     {row.status == "processing" ||
                     row.status == "in-transit" ? (
                       <button
-                        onClick={() => performAction(row.shipment_id)}
+                        onClick={() => performAction(row?.order.order_id)}
                         className="bg-blue-700 text-white rounded-lg px-3 py-2 w-[10em] h-9"
                       >
                         {row.status == "processing" && "Ready to ship"}
@@ -175,7 +177,7 @@ export const Shipment = () => {
                     {row.status == "delivered" && (
                       <button
                         className="border border-red-500 text-red-500 rounded-lg px-3 py-2 h-9"
-                        onClick={() => openDelete(row.shipment_id)}
+                        onClick={() => openDelete(row?.shipment_id)}
                       >
                         Delete
                       </button>
@@ -209,12 +211,12 @@ export const Shipment = () => {
                       row.status == "processing"
                         ? "bg-yellow-500 py-1 px-2 w-fit font-normal text-xs text-white rounded-xl"
                         : row.status == "in-transit"
-                        ? "bg-orange-500 py-1 px-1 w-24 flex items-center justify-center font-normal text-xs text-white rounded-xl"
-                        : row.status == "delivered"
-                        ? "bg-green-500 py-1 px-2 w-fit font-normal text-xs text-white rounded-xl"
-                        : row.status == "refunded"
-                        ? "bg-slate-500 py-1 px-2 w-fit font-normal text-xs text-white rounded-xl"
-                        : "w-96"
+                          ? "bg-orange-500 py-1 px-1 w-24 flex items-center justify-center font-normal text-xs text-white rounded-xl"
+                          : row.status == "delivered"
+                            ? "bg-green-500 py-1 px-2 w-fit font-normal text-xs text-white rounded-xl"
+                            : row.status == "refunded"
+                              ? "bg-slate-500 py-1 px-2 w-fit font-normal text-xs text-white rounded-xl"
+                              : "w-96"
                     }
                   >
                     {row.status}
@@ -234,16 +236,16 @@ export const Shipment = () => {
           close={closeForm}
           loading={loading}
           onSubmit={postShipment}
-          orderId={id}
+          orderId={Id}
         />
       )}
       {active == "detail" && (
-        <ShipmentDetail id={id} open={active} close={closeForm} />
+        <ShipmentDetail id={Id} open={active} close={closeForm} />
       )}
       {del && (
         <Delete
           title="Shipment"
-          id={id}
+          id={Id}
           close={closeForm}
           onSubmit={deleteItem}
           open={del}

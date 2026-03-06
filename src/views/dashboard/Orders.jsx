@@ -43,7 +43,7 @@ export const DashBoardOrder = () => {
   };
 
   const changePage = (page) => {
-    if (page < 1 || page > pagination.last_page) return;
+    // if (page < 1 || page > paginate.last_page) return;
     setCurrentPage(page);
     getOrder(page);
   };
@@ -54,9 +54,9 @@ export const DashBoardOrder = () => {
     try {
       const response = await axiosPrivate.get(url);
       if (response) {
-        setOrderResult(response.data?.data);
-        setHeaderData(response.data?.stats);
-        setPaginate(response.data?.meta);
+        setOrderResult(response.data?.results.data);
+        setHeaderData(response.data?.results.stats);
+        setPaginate(response.data?.results.meta);
       }
     } catch (err) {
       console.log(err);

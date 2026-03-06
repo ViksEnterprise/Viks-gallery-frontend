@@ -86,7 +86,7 @@ export const Checkout = () => {
     const newType = {
       card_details: selectedKey === "card_details",
       paypal: selectedKey === "paypal",
-      payment_address_id: address?.[0]?.payment_address_ID || "",
+      payment_address_id: address[0]?.payment_address_ID || "",
     };
     setType(newType);
     payment_Type(newType);
@@ -277,10 +277,9 @@ export const Checkout = () => {
     try {
       const response = await axiosPrivate.get(url);
       if (response) {
-        setAddress([response.data]);
-
         if (response.data.length > 0) {
           const addr = response.data[0];
+          setAddress([addr]);
           setGetCartAdd(addr);
 
           setFormData((prev) => ({
@@ -303,6 +302,7 @@ export const Checkout = () => {
               ) || "",
           }));
         }
+        console.log(address);
       }
     } catch (err) {
       return;
@@ -331,9 +331,7 @@ export const Checkout = () => {
   };
 
   const getCity = async (con, id) => {
-    console.log(ctyData.filter((ct) => ct.c_c === con && ct.s_c === id));
     setCities(ctyData.filter((ct) => ct.c_c === con && ct.s_n === id));
-    console.log(con, id);
   };
 
   const getPaymentLink = async () => {
@@ -519,15 +517,15 @@ export const Checkout = () => {
                 )}
               </div>
               <div className="flex flex-col items-start w-full">
-                {address.length !== 0 && !edit ? (
+                {address.length > 0 && !edit ? (
                   <div className="flex flex-col lg:gap-2 gap-3 items-start w-full">
                     <div className="flex gap-2 flex-col w-full">
                       <div className="flex flex-col gap-1 w-full">
                         <div className="flex flex-row justify-between items-center gap-1">
                           <span className="font-[500] text-xs">
-                            {address?.[0].address}, {address?.[0].city},{" "}
-                            {address?.[0].state} {address?.[0].state && "state"}
-                            , {address?.[0].country}
+                            {address[0]?.address}, {address[0]?.city},{" "}
+                            {address[0]?.state} {address[0]?.state && "state"},{" "}
+                            {address[0]?.country}
                           </span>
                         </div>
                       </div>
