@@ -30,7 +30,6 @@ export const DashBoardUsers = () => {
     { key: "role", label: "Role" },
     { key: "status", label: "Status" },
     { key: "last_login", label: "Last login" },
-    { key: "state", label: "State" },
     { key: "actions", label: "Action" },
   ];
 
