@@ -135,11 +135,20 @@ export const DashBoardUsers = () => {
               if (column.key === "user") {
                 return (
                   <div className="flex gap-2 items-center">
-                    <img
-                      className="h-8 w-8 border rounded-full"
-                      src={row.profile_pic}
-                      alt="user image"
-                    />
+                    <div className="w-fit h-fit rounded-full relative">
+                      <img
+                        className="h-8 w-8 border rounded-full"
+                        src={row.profile_pic}
+                        alt="user image"
+                      />
+                      <div className="block absolute top-[1px] h-fit w-fit end-0">
+                        {row.is_active ? (
+                          <div className="h-2 w-2 rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D]"></div>
+                        ) : (
+                          <div className="h-2 w-2 rounded-full bg-gradient-to-r from-[#6A7282] to-[#4A5565]"></div>
+                        )}
+                      </div>
+                    </div>
                     <span>{row.full_name}</span>
                   </div>
                 );
@@ -147,9 +156,22 @@ export const DashBoardUsers = () => {
               if (column.key === "email") {
                 return <span className="lowercase">{row.email}</span>;
               }
+              if (column.key === "status") {
+                return (
+                  <span
+                    className={
+                      row.is_active
+                        ? "rounded-xl p-2 py-1 text-xs bg-gradient-to-r from-[#00C950] to-[#00BC7D] text-white"
+                        : "rounded-xl p-2 py-1 text-xs bg-gradient-to-r from-[#6A7282] to-[#4A5565]"
+                    }
+                  >
+                    {row.is_active ? "Active" : "Inactive"}
+                  </span>
+                );
+              }
               if (column.key === "last_login") {
                 return (
-                  <span className="flex items-center lowercase">
+                  <span className="flex items-center normalcase">
                     {formatDate(row.last_login)} by {formatTime(row.last_login)}
                   </span>
                 );
