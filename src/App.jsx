@@ -21,6 +21,7 @@ import { DashBoardCollection } from "./views/dashboard/Collections";
 import { DashBoardOrder } from "./views/dashboard/Orders";
 import { Shipment } from "./views/dashboard/Shipments";
 import { HasAdminCredentials } from "./component/Middlewares/LoginCredentials/AdminCredentials";
+import { DashBoardUsers } from "./views/dashboard/Users";
 
 function App() {
   return (
@@ -48,6 +49,7 @@ function App() {
           ></Route>
           <Route path="/dashboard/orders" element={<DashBoardOrder />}></Route>
           <Route path="/dashboard/shipments" element={<Shipment />}></Route>
+          <Route path="/dashboard/users" element={<DashBoardUsers />}></Route>
         </Route>
 
         {/* Authentications Route */}

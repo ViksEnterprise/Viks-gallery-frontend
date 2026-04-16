@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { SIDENAVLINKS } from "../../libs/Navbar";
 import { FaTimes } from "react-icons/fa";
-import { BiChevronDown } from "react-icons/bi";
+// import { BiChevronDown } from "react-icons/bi";
 import { checkTokenStatus } from "../../utils/tokenDecoil";
 import Logo from "../../assets/VIKS Gallery transparent.webp";
 

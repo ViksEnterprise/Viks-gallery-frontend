@@ -1,5 +1,6 @@
 import { BiBox } from "react-icons/bi";
 import { BsTruck } from "react-icons/bs";
+import { FaUsers } from "react-icons/fa6";
 import { MdOutlineCollections } from "react-icons/md";
 
 const NAVLINKS = [
@@ -19,6 +20,7 @@ const SIDENAVLINKS = [
   },
   { link: "orders", to: "/dashboard/orders", icon: BiBox },
   { link: "shipments", to: "/dashboard/shipments", icon: BsTruck },
+  { link: "Users", to: "/dashboard/users", icon: FaUsers },
 ];
 
 const BUTTON = "login";
