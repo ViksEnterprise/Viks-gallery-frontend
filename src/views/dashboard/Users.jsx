@@ -3,26 +3,30 @@ import { Statistic } from "../../component/dashboard/Statistic";
 import { AdminLayout } from "../../layout/AdminLayout";
 import { Table } from "../../component/dashboard/Table";
 import { BiEdit, BiPlus, BiPound, BiTrash } from "react-icons/bi";
-import { OrderDetail } from "../../component/dashboard/OrderDetails";
 import { axiosPrivate } from "../../service/axios";
 import { Pagination } from "../../component/Pagination";
 import { Delete } from "../../component/Delete";
 import { BsEye } from "react-icons/bs";
 import { formatDate, formatTime } from "../../utils/dateTimeFormat";
+import { UserDetail } from "../../component/dashboard/UserDetails";
 
 export const DashBoardUsers = () => {
   const [headerData, setHeaderData] = useState([]);
-  const [orderResult, setOrderResult] = useState([]);
+  const [online, setOnline] = useState(false);
+  const [isOnline, setIsOnline] = useState(false);
+  const [UserResult, setUserResult] = useState([]);
   const [active, setActive] = useState("table");
   const [id, setID] = useState("");
   const [del, setDel] = useState(false);
   const [paginate, setPaginate] = useState({});
   const [loading, setLoading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+
   const header = [
     { key: "total_users", name: "Total users" },
     { key: "active_users", name: "Active users" },
     { key: "inactive_users", name: "Inactive Users" },
+    { key: "online_users", name: "Now Online" },
   ];
   const tableHeader = [
     { key: "user", label: "User" },
@@ -50,22 +54,29 @@ export const DashBoardUsers = () => {
   const changePage = (page) => {
     // if (page < 1 || page > paginate.last_page) return;
     setCurrentPage(page);
-    getOrder(page);
+    getUser(page);
   };
 
-  const getOrder = async (page) => {
+  const getUser = async (page) => {
     const url = `admin-user-list?page=${page}&page_size=14`;
 
     try {
       const response = await axiosPrivate.get(url);
       if (response) {
-        setOrderResult(response.data?.results.data);
+        setUserResult(response.data?.results.data);
         setHeaderData(response.data?.results.stats);
         setPaginate(response.data?.results.meta);
       }
     } catch (err) {
       console.log(err);
     }
+  };
+
+  const isUserOnline = (last_activity) => {
+    const now = new Date().getTime();
+    const lastActive = new Date(last_activity).getTime();
+
+    return now - lastActive <= 300000;
   };
 
   const editCollection = async (id) => {
@@ -89,13 +100,13 @@ export const DashBoardUsers = () => {
   };
 
   const deleteItem = async (id) => {
-    const url = `order/${id}/delete`;
+    const url = `User/${id}/delete`;
     setLoading(true);
     try {
       const response = await axiosPrivate.delete(url);
       if (response) {
         setDel(false);
-        getOrder(currentPage);
+        getUser(currentPage);
       }
     } catch (err) {
       return;
@@ -106,11 +117,14 @@ export const DashBoardUsers = () => {
 
   useEffect(() => {
     setActive("table");
-    getOrder(currentPage);
+    getUser(currentPage);
   }, []);
 
   return (
-    <AdminLayout>
+    <AdminLayout
+      stats={setHeaderData}
+      online={setOnline}
+    >
       {active == "table" && (
         <div className="grid items-start gap-4">
           <div className="w-full flex items-center justify-between">
@@ -129,19 +143,19 @@ export const DashBoardUsers = () => {
             </button>
           </div>
           <Statistic subHeaders={header} subData={headerData} />
-          <Table headers={tableHeader} data={orderResult}>
+          <Table headers={tableHeader} data={UserResult}>
             {({ row, column }) => {
               if (column.key === "user") {
                 return (
                   <div className="flex gap-2 items-center">
                     <div className="w-fit h-fit rounded-full relative">
                       <img
-                        className="h-8 w-8 border rounded-full"
+                        className="h-8 w-8 rounded-full"
                         src={row.profile_pic}
                         alt="user image"
                       />
                       <div className="block absolute top-[1px] h-fit w-fit end-0">
-                        {row.is_active ? (
+                        {isUserOnline(row.last_activity) ? (
                           <div className="h-2 w-2 rounded-full bg-gradient-to-r from-[#00C950] to-[#00BC7D]"></div>
                         ) : (
                           <div className="h-2 w-2 rounded-full bg-gradient-to-r from-[#6A7282] to-[#4A5565]"></div>
@@ -154,6 +168,14 @@ export const DashBoardUsers = () => {
               }
               if (column.key === "email") {
                 return <span className="lowercase">{row.email}</span>;
+              }
+              if (column.key === "role") {
+                return (
+                  <span className="normalcase">
+                    {(row.is_admin && row.is_staff) ||
+                      (row.is_admin && !row.is_staff) ? 'admin' : !row.is_admin && row.is_staff ? 'staff' : 'customer'}
+                  </span>
+                );
               }
               if (column.key === "status") {
                 return (
@@ -226,11 +248,11 @@ export const DashBoardUsers = () => {
         </div>
       )}
       {active == "detail" && (
-        <OrderDetail open={active} close={closeForm} id={id} />
+        <UserDetail open={active} close={closeForm} id={id} />
       )}
       {del && (
         <Delete
-          title="Order"
+          title="User"
           id={id}
           close={closeForm}
           onSubmit={deleteItem}

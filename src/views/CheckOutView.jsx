@@ -12,7 +12,6 @@ import { axiosPrivate } from "../service/axios";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import { Model } from "../component/Model/Modal";
 import { FaPen } from "react-icons/fa";
-import HideContent from "../component/Hidden";
 import con from "../js/json/countries.json";
 import stateData from "../js/json/states.json";
 import ctyData from "../js/json/con_sta_city.json";
@@ -202,21 +201,37 @@ export const Checkout = () => {
       setLoader(true);
 
       try {
-        const response = axiosPrivate.post(url, payload);
-        if (response) {
-          getAddress();
-          setModalMsg({
-            message: "Address saved successfully",
-            icon: "success",
-          });
-          setToggleModal(true);
+        if(edit){
+          const response = axiosPrivate.patch(
+            `${url}/${address[0]?.payment_address_ID}`,
+            payload,
+          );
+          if (response) {
+            setModalMsg({
+              message: "Address updated successfully",
+              icon: "success",
+            });
+            setToggleModal(true);
+            getAddress();
+            setEdit(false);
+          }
+        } else {
+          const response = axiosPrivate.post(url, payload);
+          if (response) {
+            getAddress();
+            setEdit(false);
+            setModalMsg({
+              message: "Address saved successfully",
+              icon: "success",
+            });
+            setToggleModal(true);
+          }
         }
       } catch (err) {
         return;
       } finally {
         setLoader(false);
       }
-      return;
     }
 
     if (Object.keys(err).length > 0) {
@@ -292,17 +307,16 @@ export const Checkout = () => {
             city: addr.city || "",
             zip_code: addr.zip_code || "",
             phone_number:
-              String(addr.phone_number !== null && "+" + addr.phone_number) ||
+              String(addr.phone_number !== null &&  addr.phone_number) ||
               "",
             alternative_phone_number:
               String(
                 addr.alternative_phone_number !== null
-                  ? "+" + addr.alternative_phone_number
+                  ? addr.alternative_phone_number
                   : "",
               ) || "",
           }));
         }
-        console.log(address);
       }
     } catch (err) {
       return;
@@ -390,18 +404,28 @@ export const Checkout = () => {
   useEffect(() => {
     if (hasFetchedLocation || !getCartAdd || countries.length === 0) return;
 
-    const countryCode = countries.find((c) => c.name === getCartAdd.country);
-    if (!countryCode?.isoCode) return;
+    const countryName = getCartAdd.country;
+    const stateName = getCartAdd.state;
 
-    // Fetch states first
-    getState(countryCode.isoCode).then(() => {
-      const stateObj = states.find((s) => s.name === getCartAdd.state);
-      if (stateObj?.isoCode) {
-        getCity(countryCode.isoCode, stateObj.isoCode);
-      }
-      setHasFetchedLocation(true);
-    });
-  }, [getCartAdd, countries, states, hasFetchedLocation]);
+    if (!countryName || !stateName) return;
+
+    const country = con.find((c) => c.name === countryName);
+    if (!country) return;
+
+    setSelectedCountry(country.name);
+
+    const filteredStates = stateData.filter(
+      (s) => s.country_name === country.name
+    );
+    setStates(filteredStates);
+
+    const filteredCities = ctyData.filter(
+      (ct) => ct.c_c === country.name && ct.s_n === stateName
+    );
+    setCities(filteredCities);
+
+    setHasFetchedLocation(true);
+  }, [getCartAdd, countries, hasFetchedLocation]);
 
   useEffect(() => {
     if (!loading) {
@@ -486,7 +510,7 @@ export const Checkout = () => {
                   <div className="flex items-center gap-1 flex-wrap">
                     {cart.map((item, i) => (
                       <span className="font-[500] text-xs" key={i}>
-                        {item.product.artwork_title},
+                        {item.product.title},
                       </span>
                     ))}
                   </div>
@@ -530,18 +554,15 @@ export const Checkout = () => {
                         </div>
                       </div>
                     </div>
-
-                    <HideContent>
-                      <div className="w-full flex items-end justify-end">
-                        <button
-                          type="button"
-                          className="flex items-center w-fit text-sm gap-1 font-semibold"
-                          onClick={editAddress}
-                        >
-                          <FaPen className="size-3" /> Edit
-                        </button>
-                      </div>
-                    </HideContent>
+                    <div className="w-full flex items-end justify-end">
+                      <button
+                        type="button"
+                        className="flex items-center w-fit text-sm gap-1 font-semibold"
+                        onClick={editAddress}
+                      >
+                        <FaPen className="size-3" /> Edit
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <form

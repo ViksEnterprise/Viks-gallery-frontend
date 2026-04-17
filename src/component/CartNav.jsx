@@ -27,7 +27,7 @@ export const CartNav = () => {
   };
 
   useEffect(() => {
-    const clearLogoutUser = () => {
+    const clearLogoutUser = setInterval(() => {
       const token = sessionStorage.getItem("MVtoken");
 
       if (token) {
@@ -36,11 +36,14 @@ export const CartNav = () => {
         if (exp) {
           sessionStorage.clear();
           setData([]);
+          window.reload();
         }
       }
-    };
+    }, 60000);
 
-    clearLogoutUser();
+    return () => {
+      clearInterval(clearLogoutUser);
+    };
 
     window.addEventListener("scroll", activateScrollBarView);
   }, []);

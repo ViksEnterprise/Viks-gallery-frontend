@@ -129,21 +129,21 @@ export const Single = () => {
   };
 
   const increaseNoOfArtNeeded = () => {
-    if (quantity >= 25) {
-      if (count !== 10) {
+    if (quantity > 1) {
+      if (count !== 2) {
         setCount((prev) => prev + 1);
       } else {
         return;
       }
     }
 
-    if (quantity < 25) {
-      if (count !== 5) {
-        setCount((prev) => prev + 1);
-      } else {
-        return;
-      }
-    }
+    // if (quantity < 25) {
+    //   if (count !== 5) {
+    //     setCount((prev) => prev + 1);
+    //   } else {
+    //     return;
+    //   }
+    // }
     updateCart(count + 1);
   };
 

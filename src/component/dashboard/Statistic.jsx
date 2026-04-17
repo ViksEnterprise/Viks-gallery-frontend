@@ -1,6 +1,8 @@
 export const Statistic = ({ subHeaders, subData = [], bar }) => {
   return (
-    <div className="grid lg:grid-cols-3 gap-2 items-center w-full capitalize">
+    <div
+      className={subHeaders.length == 3 ? 'grid lg:grid-cols-3 gap-2 items-center w-full capitalize' : 'grid lg:grid-cols-4 gap-2 items-center w-full capitalize'}
+    >
       {subHeaders.map((val, i) => (
         <div
           key={i}

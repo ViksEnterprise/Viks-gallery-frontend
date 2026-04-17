@@ -4,6 +4,7 @@ import { FaTimes } from "react-icons/fa";
 import { checkTokenStatus } from "../utils/tokenDecoil";
 import { BiChevronDown, BiHome } from "react-icons/bi";
 import Logo from "../assets/VIKS Gallery transparent.webp";
+import { axiosPrivate } from "../service/axios";
 
 export const NavBar = () => {
   const [scroll, setScroll] = useState(false);
@@ -54,7 +55,7 @@ export const NavBar = () => {
 
         links.addEventListener("click", function (e) {
           navLink.forEach((link) =>
-            link.classList.remove("text-[#0A078E] font-[500]")
+            link.classList.remove("text-[#0A078E] font-[500]"),
           );
 
           links.classList.add("font-[500]");
@@ -75,7 +76,15 @@ export const NavBar = () => {
   }, [mobile]);
 
   useEffect(() => {
-    const clearLogoutUser = () => {
+    const checkIfUserIsActive = setInterval(async () => {
+      try {
+        const res = await axiosPrivate.post("admin-get-active-user", {});
+      } catch (err) {
+        throw err;
+      }
+    }, 60000);
+
+    const clearLogoutUser = setInterval(() => {
       const token = sessionStorage.getItem("MVtoken");
 
       if (token) {
@@ -84,11 +93,15 @@ export const NavBar = () => {
         if (exp) {
           sessionStorage.clear();
           setData([]);
+          window.reload();
         }
       }
-    };
+    }, 60000);
 
-    clearLogoutUser();
+    return () => {
+      clearInterval(clearLogoutUser);
+      clearInterval(checkIfUserIsActive);
+    };
   }, []);
   return (
     <>
