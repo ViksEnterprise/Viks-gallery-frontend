@@ -108,6 +108,21 @@ export const DashBoardOrder = () => {
               if (column.key === "user") {
                 return <span>{row.user?.full_name}</span>;
               }
+              if (column.key === "item_name") {
+                return (
+                  <span className="flex items-center">
+                    <img className="h-7 w-7 rounded-lg me-1" src={row.items[0].item.item?.main_image} alt={row.items[0]?.item?.item?.title} />
+                    {row.items.map((item) => item.item.title).join(", ")}
+                  </span>
+                );
+              }
+              if (column.key === "item_quantity") {
+                return (
+                  <span className="flex items-center">
+                    {row.items.map((item) => item.item_quantity).reduce((a, b) => a + b, 0)}
+                  </span>
+                );
+              }
               if (column.key === "total_amount") {
                 return (
                   <span className="flex items-center">
@@ -120,7 +135,7 @@ export const DashBoardOrder = () => {
                   <div className="flex items-center gap-3">
                     <button
                       className="border border-gray-400 rounded-lg px-3 py-1"
-                      onClick={() => openDetail(row.id)}
+                      onClick={() => openDetail(row.order_id)}
                     >
                       View
                     </button>
@@ -128,7 +143,7 @@ export const DashBoardOrder = () => {
                     {row.status == "delivered" && (
                       <button
                         className="text-red-500 border border-red-400 rounded-lg px-3 py-1"
-                        onClick={() => openDelete(row.id)}
+                        onClick={() => openDelete(row.order_id)}
                       >
                         Delete
                       </button>
