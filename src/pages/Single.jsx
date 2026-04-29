@@ -5,7 +5,7 @@ import { Footer } from "../component/FooterNav";
 import { Testimonial } from "../component/Reviews";
 import { CardComp } from "../component/CardModal";
 import { Model } from "../component/Model/Modal";
-import { BiPound, BiHeart, BiMinus, BiPlus } from "react-icons/bi";
+import { BiPound, BiHeart, BiMinus, BiPlus, BiCart } from "react-icons/bi";
 import { useParams } from "react-router-dom";
 import axios, { axiosPrivate } from "../service/axios";
 import { Error404 } from "../views/NotFound";
@@ -13,14 +13,17 @@ import { BsArrowDown, BsArrowUp, BsFillHeartFill } from "react-icons/bs";
 import HideContent from "../component/Hidden";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Pagination, Navigation } from "swiper/modules";
+import { useNavigate } from "react-router-dom";
 
 import "swiper/css";
 import "swiper/css/pagination";
 import "swiper/css/navigation";
 import { CgClose } from "react-icons/cg";
+import { DiTravis } from "react-icons/di";
 
 export const Single = () => {
-  const { artworkId } = useParams();
+  const navigate = useNavigate();
+  const artworkId = localStorage.getItem("artworkId");
   const [singleArtwork, setSingleArtwork] = useState([]);
   const [gallery, setGallery] = useState([]);
   const [singleArtImage, setSingleArtImage] = useState();
@@ -30,6 +33,7 @@ export const Single = () => {
     icon: "",
   });
   const staff = sessionStorage.getItem("staff") === "false";
+  const [noOfItemsInCart, setNoOfItemsInCart] = useState(0);
   const swiperRef = useRef(null);
   const [toggleModal, setToggleModal] = useState(false);
   const [quantity, setQuantity] = useState(0);
@@ -38,6 +42,7 @@ export const Single = () => {
   const [loader, setLoader] = useState(false);
   const [mobile, setMobile] = useState(false);
   const [load, setLoad] = useState(false);
+  const [added, setAdded] = useState(false);
   const [showGalleryImage, setShowGalleryImage] = useState();
 
   const getArtworkDetails = async () => {
@@ -62,6 +67,10 @@ export const Single = () => {
 
   const changeLargeImg = (id) => {
     setSingleArtImage(id);
+  };
+
+  const routeToCart = () => {
+    navigate("/myCart");
   };
 
   const button = () => {
@@ -128,22 +137,44 @@ export const Single = () => {
     }
   };
 
+  const getTotalNoOfItemsInCart = async () => {
+    const url = "cart/cart-summary";
+
+    try {
+      const res = await axiosPrivate.get(url);
+      if (res) {
+        setNoOfItemsInCart(res.data?.total_product);
+      }
+    } catch (err) {
+      return;
+    }
+  };
+
+  const checkArt = () => {
+    if (singleArtwork?.quantity == 1) {
+      setAdded(true);
+    }
+  };
+
   const increaseNoOfArtNeeded = () => {
-    if (quantity > 1) {
-      if (count !== 2) {
+    if (singleArtwork.product_type === "artwork") {
+      if (quantity > 1) {
+        if (count !== 2) {
+          setCount((prev) => prev + 1);
+        } else {
+          return;
+        }
+      }
+    } else if (quantity >= 25) {
+      if (count !== 10) {
         setCount((prev) => prev + 1);
-      } else {
-        return;
+      }
+    } else {
+      if (count !== 5) {
+        setCount((prev) => prev + 1);
       }
     }
 
-    // if (quantity < 25) {
-    //   if (count !== 5) {
-    //     setCount((prev) => prev + 1);
-    //   } else {
-    //     return;
-    //   }
-    // }
     updateCart(count + 1);
   };
 
@@ -191,6 +222,7 @@ export const Single = () => {
           });
           setToggleModal(true);
           checkIfItemIsInCart();
+          checkArt();
         }
       } catch (err) {
         if (err) {
@@ -239,6 +271,8 @@ export const Single = () => {
     checkIfItemIsInCart();
     getArtworkDetails();
     getFavId();
+    checkArt();
+    getTotalNoOfItemsInCart();
   }, []);
 
   useEffect(() => {
@@ -272,6 +306,27 @@ export const Single = () => {
       ) : singleArtwork.length !== 0 ? (
         <>
           <NavBar />
+          <hr />
+          <div className="h-fit w-full py-3 md:px-10 px-4">
+            <div className="flex items-center justify-end gap-[6px] w-full">
+              <div
+                className="relative w-10 items-center justify-center flex h-fit cursor-pointer"
+                onClick={routeToCart}
+              >
+                <BiCart className="w-16 h-8 text-gray-400" />
+                <div
+                  className={
+                    noOfItemsInCart == 0
+                      ? "hidden"
+                      : "absolute top-0 end-[0.2em] bg-blue-600 text-white w-fit p-1 flex items-center justify-center text-xs font-semibold h-4 rounded-full"
+                  }
+                >
+                  {noOfItemsInCart}
+                </div>
+              </div>
+            </div>
+          </div>
+          <hr />
           <div className="flex md:flex-row flex-col gap-3 md:justify-between w-full md:p-9 p-3">
             {!mobile ? (
               <div className="md:w-[58%] w-full flex md:flex-row flex-col-reverse gap-2">
@@ -403,18 +458,18 @@ export const Single = () => {
                       {singleArtwork.beads_details?.length_cm
                         ? `${singleArtwork.beads_details.length_cm}cm`
                         : singleArtwork.artwork_details?.size
-                        ? singleArtwork.artwork_details.size
-                        : singleArtwork.sculpture_details
-                        ? `${singleArtwork.sculpture_details.height_cm}cm × ${singleArtwork.sculpture_details.width_cm}cm × ${singleArtwork.sculpture_details.weight_kg}kg`
-                        : ""}
+                          ? singleArtwork.artwork_details.size
+                          : singleArtwork.sculpture_details
+                            ? `${singleArtwork.sculpture_details.height_cm}cm × ${singleArtwork.sculpture_details.width_cm}cm × ${singleArtwork.sculpture_details.weight_kg}kg`
+                            : ""}
                     </span>
                   </span>
                   <span className="capitalize">
                     {singleArtwork.artwork_details?.packaging
                       ? singleArtwork.artwork_details?.packaging
                       : singleArtwork.sculpture_details?.indoor_outdoor
-                      ? `${singleArtwork.sculpture_details?.indoor_outdoor} art`
-                      : ""}
+                        ? `${singleArtwork.sculpture_details?.indoor_outdoor} art`
+                        : ""}
                   </span>
                 </div>
               </div>
@@ -425,7 +480,11 @@ export const Single = () => {
                 </span>
               </div>
               <div className="flex flex-col gap-3 items-start w-full">
-                {count !== 0 ? (
+                {added ? (
+                  <span className="h-12 flex items-center rounded-[8px] text-base font-[500] bg-blue-400 text-white w-full justify-center">
+                    Added, view in cart
+                  </span>
+                ) : count !== 0 && !added ? (
                   <div className="flex items-center justify-between gap-1 w-full">
                     <button
                       className={
@@ -551,11 +610,11 @@ export const Single = () => {
                           {singleArtwork.artwork_details?.styles
                             ? singleArtwork.artwork_details.styles
                             : singleArtwork.sculpture_details?.handmade !==
-                              undefined
-                            ? singleArtwork.sculpture_details.handmade
-                              ? "Handmade"
-                              : "Not handmade"
-                            : ""}
+                                undefined
+                              ? singleArtwork.sculpture_details.handmade
+                                ? "Handmade"
+                                : "Not handmade"
+                              : ""}
                         </span>
                       </div>
                       {singleArtwork.artwork_details?.medium && (
@@ -595,19 +654,19 @@ export const Single = () => {
                           {singleArtwork.artwork_details?.size
                             ? "Size:"
                             : singleArtwork.sculpture_details?.width_cm
-                            ? "Width:"
-                            : singleArtwork.beads_details?.length_cm
-                            ? "Length:"
-                            : ""}
+                              ? "Width:"
+                              : singleArtwork.beads_details?.length_cm
+                                ? "Length:"
+                                : ""}
                         </span>
                         <span className="font-[400] capitalize">
                           {singleArtwork.artwork_details?.size
                             ? singleArtwork.artwork_details.size
                             : singleArtwork.sculpture_details?.width_cm
-                            ? `${singleArtwork.sculpture_details.width_cm}cm`
-                            : singleArtwork.beads_details?.length_cm
-                            ? `${singleArtwork.beads_details.length_cm}cm`
-                            : ""}
+                              ? `${singleArtwork.sculpture_details.width_cm}cm`
+                              : singleArtwork.beads_details?.length_cm
+                                ? `${singleArtwork.beads_details.length_cm}cm`
+                                : ""}
                         </span>
                       </div>
                       {singleArtwork.artwork_details?.ready_to_hang && (

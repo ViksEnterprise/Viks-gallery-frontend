@@ -40,6 +40,7 @@ export const AdminLayout = ({ children, stats, online }) => {
 
         if (exp) {
           sessionStorage.clear();
+          window.location.href = "/login";
         }
       }
     }, 60000);

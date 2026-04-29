@@ -119,8 +119,8 @@ export const ShoppingCart = () => {
   };
 
   const checkout = () => {
-    navigate('/cart/checkout')
-  }
+    navigate("/cart/checkout");
+  };
 
   useEffect(() => {
     getCartItems();
@@ -229,58 +229,62 @@ export const ShoppingCart = () => {
                               <BiTrash />
                               <span className="text-xs">Remove</span>
                             </div>
-                            <div className="flex items-center gap-1">
-                              <button
-                                className={
-                                  count[item.userCartId] == 1
-                                    ? "border-none h-6 w-6 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
-                                    : "border-none h-6 w-6 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
-                                }
-                                type="button"
-                                onClick={() =>
-                                  decreaseNoOfArtNeeded(item.userCartId)
-                                }
-                                disabled={count[item.userCartId] == 1 || loader}
-                              >
-                                <BiMinus />
-                              </button>
-                              <div>{count[item.userCartId]}</div>
-                              {item.product.quantity >= 25 ? (
+                            {item.product.quantity !== 1 ? (
+                              <div className="flex items-center gap-1">
                                 <button
                                   className={
-                                    count[item.userCartId] == 10
+                                    count[item.userCartId] == 1
                                       ? "border-none h-6 w-6 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
                                       : "border-none h-6 w-6 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
                                   }
                                   type="button"
                                   onClick={() =>
-                                    increaseNoOfArtNeeded(item.userCartId)
+                                    decreaseNoOfArtNeeded(item.userCartId)
                                   }
                                   disabled={
-                                    count[item.userCartId] == 10 || loader
+                                    count[item.userCartId] == 1 || loader
                                   }
                                 >
-                                  <BiPlus />
+                                  <BiMinus />
                                 </button>
-                              ) : (
-                                <button
-                                  className={
-                                    count[item.userCartId] == 5
-                                      ? "border-none h-6 w-6 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
-                                      : "border-none h-6 w-6 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
-                                  }
-                                  type="button"
-                                  onClick={() =>
-                                    increaseNoOfArtNeeded(item.userCartId)
-                                  }
-                                  disabled={
-                                    count[item.userCartId] == 5 || loader
-                                  }
-                                >
-                                  <BiPlus />
-                                </button>
-                              )}
-                            </div>
+                                <div>{count[item.userCartId]}</div>
+                                {item.product.quantity >= 25 ? (
+                                  <button
+                                    className={
+                                      count[item.userCartId] == 10
+                                        ? "border-none h-6 w-6 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
+                                        : "border-none h-6 w-6 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
+                                    }
+                                    type="button"
+                                    onClick={() =>
+                                      increaseNoOfArtNeeded(item.userCartId)
+                                    }
+                                    disabled={
+                                      count[item.userCartId] == 10 || loader
+                                    }
+                                  >
+                                    <BiPlus />
+                                  </button>
+                                ) : (
+                                  <button
+                                    className={
+                                      count[item.userCartId] == 5
+                                        ? "border-none h-6 w-6 flex items-center justify-center bg-blue-200 text-[#fff] rounded-[3px] text-sm"
+                                        : "border-none h-6 w-6 flex items-center justify-center bg-blue-800 text-[#fff] rounded-[3px] text-sm"
+                                    }
+                                    type="button"
+                                    onClick={() =>
+                                      increaseNoOfArtNeeded(item.userCartId)
+                                    }
+                                    disabled={
+                                      count[item.userCartId] == 5 || loader
+                                    }
+                                  >
+                                    <BiPlus />
+                                  </button>
+                                )}
+                              </div>
+                            ) : <span className="text-xs font-[500]">Only 1 item left</span>}
                           </div>
                           <div>
                             <span className="text-sm font-[500] capitalize">

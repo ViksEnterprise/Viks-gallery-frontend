@@ -37,9 +37,9 @@ export const DashBoardUsers = () => {
     { key: "actions", label: "Action" },
   ];
 
-  const openForm = () => {
-    setActive("form");
-  };
+  // const openForm = () => {
+  //   setActive("form");
+  // };
 
   const openDetail = (id) => {
     setActive("detail");
@@ -134,13 +134,13 @@ export const DashBoardUsers = () => {
                 Manage system users and permissions
               </span>
             </div>
-            <button
+            {/* <button
               className="h-11 w-35 bg-blue-700 text-white text-base flex items-center gap-2 justify-center p-3 rounded-lg"
               onClick={openForm}
             >
               <BiPlus size={25} />
               Add User
-            </button>
+            </button> */}
           </div>
           <Statistic subHeaders={header} subData={headerData} />
           <Table headers={tableHeader} data={UserResult}>

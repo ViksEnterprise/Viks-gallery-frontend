@@ -87,8 +87,10 @@ export const Gallery = () => {
     }
   };
 
-  const details = (id) => {
-    navigate(`/${id}/art-gallery`);
+  const details = (title, id) => {
+    const formattedTitle = title?.replace(/\s+/g, "-")?.toLowerCase();
+    navigate(`/art-gallery/${formattedTitle}`);
+    localStorage.setItem("artworkId", id);
   };
 
   function debounce(func, timer) {
@@ -260,7 +262,7 @@ export const Gallery = () => {
           renderItem={(sale) => (
             <div
               className="flex items-start justify-start flex-col gap-[5px] w-full h-fit cursor-pointer"
-              onClick={() => details(sale?.id)}
+              onClick={() => details(sale?.title, sale?.id) }
             >
               <div className="w-full h-80">
                 <img className="w-full h-full" src={sale.main_image} />

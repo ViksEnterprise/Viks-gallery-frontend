@@ -68,6 +68,18 @@ export const CollectionCreate = ({
 
   const requiredFieldsForStep = fieldsForStep.filter((field) => field.required);
 
+  const next = () => {
+      if (type === "artwork") {
+        if (formData.quantity > 2) {
+          alert("Quantity cannot be more than 2 for artwork.");
+        } else {
+          setStep(step + 1);
+        }
+      } else {
+        setStep(step + 1);
+      }
+  };
+
   const normalizeInitialData = (data, type) => {
     const detailsKey = NESTED_FIELD_MAP[type];
 
@@ -100,7 +112,6 @@ export const CollectionCreate = ({
       setDeletedGalleryIds((prev) => [...prev, removedImage.id]);
     }
   };
-
 
   const isLastStep = step === FORM_STEPS.length - 1;
 
@@ -264,7 +275,7 @@ export const CollectionCreate = ({
           {!isLastStep ? (
             <button
               disabled={!canProceed}
-              onClick={() => setStep(step + 1)}
+              onClick={next}
               className="px-4 py-2 bg-black text-white rounded-lg disabled:opacity-50"
             >
               Next
