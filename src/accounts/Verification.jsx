@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { FormCard } from "../component/FormModal";
 import ver from "../assets/home/VIKS 28.jpg";
 import { Model } from "../component/Model/Modal";
@@ -178,7 +178,7 @@ export const Verification = () => {
       setLoader(false);
     }
   };
-
+  
   return (
     <>
       <FormCard
@@ -214,9 +214,7 @@ export const Verification = () => {
           icon={modalMsg.icon}
           message={modalMsg.message}
           direction={modalMsg.direction}
-          buttonText={
-            request == "Verify Account" ? "ver" : "Set new password"
-          }
+          buttonText={request == "Verify Account" ? "ver" : "Set new password"}
           button={button}
         />
       )}

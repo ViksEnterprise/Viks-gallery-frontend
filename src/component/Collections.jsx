@@ -48,13 +48,13 @@ export const Seller = () => {
           renderItem={(sale) => (
             <div
               className="flex items-start justify-start flex-col gap-[4px] w-full h-fit cursor-pointer"
-              onClick={() => details(sale.artworkId)}
+              onClick={() => details(sale.id)}
             >
-              <div className="w-full h-80">
-                <img className="w-full h-full" src={sale.full_artwork_image} />
+              <div className="w-full h-80 object-fit">
+                <img className="w-full h-full object-fit" src={sale.main_image} />
               </div>
               <div className="py-2 text-base font-[450] text-black uppercase">
-                <h6>{sale.artwork_title}</h6>
+                <h6>{sale.title}</h6>
               </div>
             </div>
           )}

@@ -2,8 +2,9 @@ import React, { useEffect, useState } from "react";
 import { BUTTON, NAVLINKS } from "../libs/Navbar";
 import { FaTimes } from "react-icons/fa";
 import { checkTokenStatus } from "../utils/tokenDecoil";
-import { BiChevronDown } from "react-icons/bi";
-import Logo from "../assets/VIKS Gallery transparent.webp"
+import { BiChevronDown, BiHome } from "react-icons/bi";
+import Logo from "../assets/VIKS Gallery transparent.webp";
+import { axiosPrivate } from "../service/axios";
 
 export const NavBar = () => {
   const [scroll, setScroll] = useState(false);
@@ -13,6 +14,7 @@ export const NavBar = () => {
     const user = JSON.parse(sessionStorage.getItem("userInfo"));
     return user ? user : [];
   });
+  const staff = sessionStorage.getItem("staff") === "false";
   const [activeToggle, setActiveToggle] = useState(false);
 
   const activateScrollBarView = () => {
@@ -53,7 +55,7 @@ export const NavBar = () => {
 
         links.addEventListener("click", function (e) {
           navLink.forEach((link) =>
-            link.classList.remove("text-[#0A078E] font-[500]")
+            link.classList.remove("text-[#0A078E] font-[500]"),
           );
 
           links.classList.add("font-[500]");
@@ -74,7 +76,15 @@ export const NavBar = () => {
   }, [mobile]);
 
   useEffect(() => {
-    const clearLogoutUser = () => {
+    const checkIfUserIsActive = setInterval(async () => {
+      try {
+        const res = await axiosPrivate.post("admin-get-active-user", {});
+      } catch (err) {
+        throw err;
+      }
+    }, 60000);
+
+    const clearLogoutUser = setInterval(() => {
       const token = sessionStorage.getItem("MVtoken");
 
       if (token) {
@@ -83,11 +93,15 @@ export const NavBar = () => {
         if (exp) {
           sessionStorage.clear();
           setData([]);
+          window.reload();
         }
       }
-    };
+    }, 60000);
 
-    clearLogoutUser();
+    return () => {
+      clearInterval(clearLogoutUser);
+      clearInterval(checkIfUserIsActive);
+    };
   }, []);
   return (
     <>
@@ -105,11 +119,12 @@ export const NavBar = () => {
               : "w-full py-3 md:px-12 px-3 h-20 flex items-center justify-between bg-white"
           }
         >
-          <a
-            className="text-decoration-none pointer-cursor w-16"
-            href="/"
-          >
-            <img className="h-16 w-[inherit]" src={Logo} alt="Viks gallery logo" />
+          <a className="text-decoration-none pointer-cursor w-16" href="/">
+            <img
+              className="h-16 w-[inherit]"
+              src={Logo}
+              alt="Viks gallery logo"
+            />
           </a>
           {!mobile && (
             <nav className="flex items-center justify-between xl:w-[50%] w-[62%]">
@@ -146,13 +161,19 @@ export const NavBar = () => {
                         <div
                           className={
                             scroll
-                              ? "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-3em] top-[2.5em] z-[999] bg-white"
-                              : "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-2em] top-[2.5em] z-[999] bg-white"
+                              ? "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-3em] top-[2.5em] z-[999] bg-white flex flex-col gap-2"
+                              : "h-fit p-2 w-[14em] rounded-[7px] border-solid border-slate-300 border-[1px] absolute end-[-2em] top-[2.5em] z-[999] bg-white flex flex-col gap-2"
                           }
                         >
+                          {!staff && (
+                            <div className="flex items-center gap-2 font-medium">
+                              <BiHome />
+                              <a href="dashboard/collections">Dashboard</a>
+                            </div>
+                          )}
                           <button
                             onClick={() => logOut()}
-                            className="h-12 w-full rounded-[8px] border-solid border-red-500 border-[2px]"
+                            className="h-10 w-full rounded-[8px] border-solid border-red-500 border-[2px]"
                             type="button"
                           >
                             Logout
@@ -215,10 +236,7 @@ export const NavBar = () => {
                     <div className="flex items-center justify-between relative w-full">
                       <div className="flex items-center gap-2 relative">
                         <div className="h-8 w-8 rounded-full overflow-hidden border-solid border-gray-400 border-[1px]">
-                          <img
-                            src={data.pic}
-                            alt=""
-                          />
+                          <img src={data.pic} alt="" />
                         </div>
                         <div>
                           <span>{data.name}</span>
@@ -232,9 +250,15 @@ export const NavBar = () => {
                           <BiChevronDown className="text-[2em]" />
                         </div>
                         {activeToggle ? (
-                          <div className="h-fit p-2 w-full rounded-[7px] border-solid border-slate-300 border-[1px] absolute top-[3em] start-0 end-0 bg-white">
+                          <div className="h-fit p-2 w-full rounded-[7px] border-solid border-slate-300 border-[1px] absolute top-[3em] start-0 end-0 bg-white flex flex-col gap-2">
+                            {!staff && (
+                              <div className="flex items-center gap-2 font-medium">
+                                <BiHome />
+                                <a href="dashboard/collections">Dashboard</a>
+                              </div>
+                            )}
                             <button
-                              className="h-12 w-full rounded-[8px] border-solid border-red-700 border-[1px]"
+                              className="h-10 w-full rounded-[8px] border-solid border-red-700 border-[1px]"
                               type="button"
                               onClick={() => logOut()}
                             >

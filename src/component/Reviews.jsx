@@ -78,8 +78,8 @@ export const Testimonial = () => {
         sliperElement={tesSwipe}
         items={tes}
         renderItem={(tes) => (
-          <div className="flex items-center w-full flex-col gap-3 py-5 rounded-lg shadow-md shadow-slate-400 bg-tes-col overflow-hidden h-full">
-            <div className="flex items-center justify-between lg:gap-2 lg:justify-center w-full px-5 h-full">
+          <div className="flex items-center w-full flex-col gap-3 py-5 rounded-lg shadow-md shadow-slate-400 bg-tes-col overflow-hidden md:h-52 h-60">
+            <div className="flex items-center justify-between lg:gap-2 lg:justify-center w-full px-5 h-fit">
               <div className="w-9 h-9 rounded-full">
                 <img
                   className="bg-black w-9 h-9 rounded-full"

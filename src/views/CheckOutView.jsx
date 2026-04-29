@@ -8,11 +8,10 @@ import { CartNav } from "../component/CartNav";
 import { useNavigate } from "react-router-dom";
 import { useEffect, useRef, useState } from "react";
 import { CardComp } from "../component/CardModal";
-import axios, { axiosPrivate } from "../service/axios";
+import { axiosPrivate } from "../service/axios";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import { Model } from "../component/Model/Modal";
 import { FaPen } from "react-icons/fa";
-import HideContent from "../component/Hidden";
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -33,6 +32,9 @@ export const Checkout = () => {
   const [error, setError] = useState({});
   const [loader, setLoader] = useState(false);
   const [toggleModal, setToggleModal] = useState(false);
+  const [countriesData, setCountriesData] = useState([]);
+  const [statesData, setStatesData] = useState([]);
+  const [citiesData, setCitiesData] = useState([]);
   const [address, setAddress] = useState([]);
   const [modalMsg, setModalMsg] = useState({
     message: "",
@@ -83,7 +85,7 @@ export const Checkout = () => {
     const newType = {
       card_details: selectedKey === "card_details",
       paypal: selectedKey === "paypal",
-      payment_address_id: address?.[0]?.payment_address_ID || "",
+      payment_address_id: address[0]?.payment_address_ID || "",
     };
     setType(newType);
     payment_Type(newType);
@@ -92,15 +94,15 @@ export const Checkout = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name == "country") {
-      const select = countries.find((c) => c.name === value);
-      setSelectedCountry(select?.isoCode);
-      getState(select?.isoCode);
+    if (name === "country") {
+      const select = countries.find((c) => c.value === value);
+      setSelectedCountry(select?.key || "");
+      getState(select?.key);
     }
 
-    if (name == "state") {
+    if (name === "state") {
       const select = states.find((s) => s.name === value);
-      getCity(select?.isoCode);
+      getCity(selectedCountry, select?.name);
     }
 
     setFormData({ ...formData, [name]: value });
@@ -193,27 +195,43 @@ export const Checkout = () => {
       const url = "payments/payment-address";
 
       const payload = Object.fromEntries(
-        Object.entries(formData).filter(([key, value]) => value !== "")
+        Object.entries(formData).filter(([key, value]) => value !== ""),
       );
 
       setLoader(true);
 
       try {
-        const response = axiosPrivate.post(url, payload);
-        if (response) {
-          getAddress();
-          setModalMsg({
-            message: "Address saved successfully",
-            icon: "success",
-          });
-          setToggleModal(true);
+        if (edit) {
+          const response = axiosPrivate.patch(
+            `${url}/${address[0]?.payment_address_ID}`,
+            payload,
+          );
+          if (response) {
+            setModalMsg({
+              message: "Address updated successfully",
+              icon: "success",
+            });
+            setToggleModal(true);
+            getAddress();
+            setEdit(false);
+          }
+        } else {
+          const response = axiosPrivate.post(url, payload);
+          if (response) {
+            getAddress();
+            setEdit(false);
+            setModalMsg({
+              message: "Address saved successfully",
+              icon: "success",
+            });
+            setToggleModal(true);
+          }
         }
       } catch (err) {
         return;
       } finally {
         setLoader(false);
       }
-      return;
     }
 
     if (Object.keys(err).length > 0) {
@@ -274,11 +292,9 @@ export const Checkout = () => {
     try {
       const response = await axiosPrivate.get(url);
       if (response) {
-        setAddress(response.data);
-        // setOrderDisable(false);
-
         if (response.data.length > 0) {
           const addr = response.data[0];
+          setAddress([addr]);
           setGetCartAdd(addr);
 
           setFormData((prev) => ({
@@ -291,16 +307,14 @@ export const Checkout = () => {
             city: addr.city || "",
             zip_code: addr.zip_code || "",
             phone_number:
-              String(addr.phone_number !== null && "+" + addr.phone_number) ||
-              "",
+              String(addr.phone_number !== null && addr.phone_number) || "",
             alternative_phone_number:
               String(
                 addr.alternative_phone_number !== null
-                  ? "+" + addr.alternative_phone_number
-                  : ""
+                  ? addr.alternative_phone_number
+                  : "",
               ) || "",
           }));
-          console.log(formData);
         }
       }
     } catch (err) {
@@ -321,64 +335,23 @@ export const Checkout = () => {
     }
   };
 
-  const getCountry = async () => {
-    const url = `https://country-state-city-search-rest-api.p.rapidapi.com/allcountries`;
-    try {
-      const response = await axios.get(url, {
-        headers: {
-          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
-          "X-RapidAPI-Host":
-            "country-state-city-search-rest-api.p.rapidapi.com",
-        },
-      });
-      if (response) {
-        setCountries(response.data);
-      }
-    } catch (err) {
-      return;
-    }
+  const getCountry = () => {
+    setCountries(
+      countriesData.map((c) => ({
+        key: c.name,
+        value: c.name,
+      })),
+    );
   };
 
-  const getState = async (id) => {
-    const payload = { countrycode: id };
-    const url = `https://country-state-city-search-rest-api.p.rapidapi.com/states-by-countrycode`;
-    try {
-      const response = await axios.get(url, {
-        params: payload,
-        headers: {
-          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
-          "X-RapidAPI-Host":
-            "country-state-city-search-rest-api.p.rapidapi.com",
-        },
-      });
-      if (response) {
-        setStates(response.data);
-      }
-    } catch (err) {
-      return;
-    }
+  const getState = (id) => {
+    const filtered = statesData.filter((s) => s.country_name === id);
+    setStates(filtered);
   };
 
-  const getCity = async (con, id) => {
-    const payload = { countrycode: con || selectedCountry, statecode: id };
-    const url = `https://country-state-city-search-rest-api.p.rapidapi.com/cities-by-countrycode-and-statecode`;
-    try {
-      const response = await axios.get(url, {
-        params: payload,
-        headers: {
-          "X-RapidAPI-Key": import.meta.env.VITE_VKIS_RAPID_API_KEY,
-          "X-RapidAPI-Host":
-            "country-state-city-search-rest-api.p.rapidapi.com",
-        },
-      });
-      if (response) {
-        setCities(response.data);
-
-        console.log(formData.country);
-      }
-    } catch (err) {
-      return;
-    }
+  const getCity = (con, id) => {
+    const filtered = citiesData.filter((ct) => ct.c_c === con && ct.s_n === id);
+    setCities(filtered);
   };
 
   const getPaymentLink = async () => {
@@ -424,10 +397,6 @@ export const Checkout = () => {
       setYear(year);
     };
 
-    if (address.length == 0) {
-      getCountry();
-    }
-
     getCurrentYear();
     getCartItems();
     getCartSummary();
@@ -435,20 +404,60 @@ export const Checkout = () => {
   }, []);
 
   useEffect(() => {
+    if (countriesData.length > 0) {
+      getCountry();
+    }
+  }, [countriesData]);
+
+  useEffect(() => {
+    const loadLocationData = async () => {
+      try {
+        const [countriesRes, statesRes, citiesRes] = await Promise.all([
+          fetch("/data/countries.json"),
+          fetch("/data/states.json"),
+          fetch("/data/con_sta_city.json"),
+        ]);
+
+        const countriesJson = await countriesRes.json();
+        const statesJson = await statesRes.json();
+        const citiesJson = await citiesRes.json();
+
+        setCountriesData(countriesJson);
+        setStatesData(statesJson);
+        setCitiesData(citiesJson);
+      } catch (err) {
+        console.error("Failed to load location data", err);
+      }
+    };
+
+    loadLocationData();
+  }, []);
+
+  useEffect(() => {
     if (hasFetchedLocation || !getCartAdd || countries.length === 0) return;
 
-    const countryCode = countries.find((c) => c.name === getCartAdd.country);
-    if (!countryCode?.isoCode) return;
+    const countryName = getCartAdd.country;
+    const stateName = getCartAdd.state;
 
-    // Fetch states first
-    getState(countryCode.isoCode).then(() => {
-      const stateObj = states.find((s) => s.name === getCartAdd.state);
-      if (stateObj?.isoCode) {
-        getCity(countryCode.isoCode, stateObj.isoCode);
-      }
-      setHasFetchedLocation(true);
-    });
-  }, [getCartAdd, countries, states, hasFetchedLocation]);
+    if (!countryName || !stateName) return;
+
+    const country = countriesData.find((c) => c.name === countryName);
+    if (!country) return;
+
+    setSelectedCountry(country.name);
+
+    const filteredStates = statesData.filter(
+      (s) => s.country_name === country.name,
+    );
+    setStates(filteredStates);
+
+    const filteredCities = citiesData.filter(
+      (ct) => ct.c_c === country.name && ct.s_n === stateName,
+    );
+    setCities(filteredCities);
+
+    setHasFetchedLocation(true);
+  }, [getCartAdd, countries, hasFetchedLocation]);
 
   useEffect(() => {
     if (!loading) {
@@ -510,14 +519,14 @@ export const Checkout = () => {
                         <div className="flex gap-2 flex-col w-full">
                           <div className="w-full rounded-[5px] h-28 overflow-hidden">
                             <img
-                              src={item.product?.full_artwork_image}
+                              src={item.product?.main_image}
                               className="w-full h-[inherit]"
                             />
                           </div>
                           <div className="flex flex-col gap-1 w-full">
                             <div className="flex flex-row justify-between items-center gap-1">
                               <span className="font-[500] text-xs">
-                                {item.product.artwork_title}
+                                {item.product.title}
                               </span>
                             </div>
                           </div>
@@ -533,7 +542,7 @@ export const Checkout = () => {
                   <div className="flex items-center gap-1 flex-wrap">
                     {cart.map((item, i) => (
                       <span className="font-[500] text-xs" key={i}>
-                        {item.product.artwork_title},
+                        {item.product.title},
                       </span>
                     ))}
                   </div>
@@ -564,31 +573,28 @@ export const Checkout = () => {
                 )}
               </div>
               <div className="flex flex-col items-start w-full">
-                {address.length !== 0 && !edit ? (
+                {address.length > 0 && !edit ? (
                   <div className="flex flex-col lg:gap-2 gap-3 items-start w-full">
                     <div className="flex gap-2 flex-col w-full">
                       <div className="flex flex-col gap-1 w-full">
                         <div className="flex flex-row justify-between items-center gap-1">
                           <span className="font-[500] text-xs">
-                            {address?.[0].address}, {address?.[0].city},{" "}
-                            {address?.[0].state} {address?.[0].state && "state"}
-                            , {address?.[0].country}
+                            {address[0]?.address}, {address[0]?.city},{" "}
+                            {address[0]?.state} {address[0]?.state && "state"},{" "}
+                            {address[0]?.country}
                           </span>
                         </div>
                       </div>
                     </div>
-
-                    <HideContent>
-                      <div className="w-full flex items-end justify-end">
-                        <button
-                          type="button"
-                          className="flex items-center w-fit text-sm gap-1 font-semibold"
-                          onClick={editAddress}
-                        >
-                          <FaPen className="size-3" /> Edit
-                        </button>
-                      </div>
-                    </HideContent>
+                    <div className="w-full flex items-end justify-end">
+                      <button
+                        type="button"
+                        className="flex items-center w-fit text-sm gap-1 font-semibold"
+                        onClick={editAddress}
+                      >
+                        <FaPen className="size-3" /> Edit
+                      </button>
+                    </div>
                   </div>
                 ) : (
                   <form
@@ -604,7 +610,7 @@ export const Checkout = () => {
                               placeholder="First name"
                               type="text"
                               name="first_name"
-                              onChange={(e) => handleChange({ e })}
+                              onChange={(e) => handleChange(e)}
                               value={formData.first_name}
                             />
                             <p className="text-xs font-semibold text-red-500 m-0">
@@ -650,8 +656,8 @@ export const Checkout = () => {
                                 Select your country
                               </option>
                               {countries.map((country, index) => (
-                                <option key={index} value={country.name}>
-                                  {country.name}
+                                <option key={index} value={country.value}>
+                                  {country.value}
                                 </option>
                               ))}
                             </select>
@@ -723,7 +729,7 @@ export const Checkout = () => {
                               name="phone_number"
                               value={formData.phone_number}
                               onChange={handlePhoneChange}
-                              defaultCountry={`${selectedCountry}`}
+                              defaultCountry={`GB`}
                             />
                             <p className="text-xs font-semibold text-red-500 m-0">
                               {error.phone_number}
@@ -736,7 +742,7 @@ export const Checkout = () => {
                               name="alternative_phone_number"
                               value={formData.alternative_phone_number}
                               onChange={handleAlternatePhoneChange}
-                              defaultCountry={`${selectedCountry}`}
+                              defaultCountry={`GB`}
                             />
                             <p className="text-xs font-semibold text-red-500 m-0">
                               {error.alternative_phone_number}

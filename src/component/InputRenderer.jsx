@@ -1,0 +1,85 @@
+import { ImageUpload } from "./ImageUpload";
+import { MultiImageUpload } from "./MultiImageUpload";
+import { SelectDropDown } from "./SelectDropDown";
+
+export const InputRenderer = ({ field, value, onChange }) => {
+  const handleValueChange = (val, removedImage = null) => {
+    onChange(field.name, val, removedImage);
+  };
+
+  if (field.type === "textarea") {
+    return (
+      <div className="grid gap-1 items-start">
+        <label className="text-sm font-medium">{field.label}</label>
+        <textarea
+          placeholder={field.label || field.placeholder}
+          value={value || ""}
+          required
+          onChange={(e) => onChange(field.name, e.target.value)}
+          className="border border-gray-400 rounded-lg w-full resize-none h-48 outline-none p-2 placeholder:text-gray-500 text-black"
+        />
+      </div>
+    );
+  }
+
+  if (field.type === "select") {
+    return (
+      <div className="grid gap-1 items-start">
+        <label className="text-sm font-medium">{field.label}</label>
+        <SelectDropDown
+          value={value}
+          onChange={(val) => onChange(field.name, val)}
+          options={field.options || []}
+          placeholder={`Select ${field.label}`}
+        />
+      </div>
+    );
+  }
+
+  if (field.type === "image") {
+    return (
+      <ImageUpload
+        imageUrl={value?.preview}
+        onChange={(data) => onChange(field.name, data)}
+      />
+    );
+  }
+
+  if (field.type === "image-multiple") {
+    return (
+      <MultiImageUpload
+        label={field.label}
+        helperText={field.helperText}
+        value={value || []}
+        onChange={handleValueChange}
+      />
+    );
+  }
+
+  if (field.type === "checkbox") {
+    return (
+      <label className="flex items-center gap-1">
+        <input
+          type="checkbox"
+          checked={value || false}
+          onChange={(e) => onChange(field.name, e.target.checked)}
+        />
+        {field.label}
+      </label>
+    );
+  }
+
+  return (
+    <div className="grid gap-1 items-start">
+      <label className="text-sm font-medium">{field.label}</label>
+      <input
+        type={field.type}
+        placeholder={!field.placeholder ? field.label : field.placeholder}
+        value={value || ""}
+        required
+        onChange={(e) => onChange(field.name, e.target.value)}
+        className="border border-gray-400 rounded-lg w-full resize-none h-11 outline-none p-2 placeholder:text-gray-500 text-black"
+      />
+    </div>
+  );
+};

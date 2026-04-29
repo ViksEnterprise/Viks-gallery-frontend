@@ -1,5 +1,5 @@
 import { useEffect, useState } from "react";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Navigate, Outlet, useNavigate } from "react-router-dom";
 
 export const HasEmailCredentials = () => {
   const navigate = useNavigate();
@@ -16,5 +16,5 @@ export const HasEmailCredentials = () => {
     }
   }, [credentials]);
 
-  return credentials ? <Outlet /> : navigate("/login");
+  return credentials ? <Outlet /> : <Navigate to="/login" replace />;
 };

@@ -1,6 +1,6 @@
-.stroke-text{
+.stroke-text {
   -webkit-text-stroke-width: 1px;
-  -webkit-text-stroke-color: #09067C;
+  -webkit-text-stroke-color: #09067c;
   -webkit-font-smoothing: antialiased;
   animation: slide 19s linear infinite;
 }
@@ -14,11 +14,11 @@
   }
 }
 
-.hero-hol{
+.hero-hol {
   transition: 0.5s ease-in-out;
 }
 
-.img-hold{
+.img-hold {
   background-image: url(../src/assets/home/VIKS_213.jpg);
   background-repeat: no-repeat;
   background-position: center center;
@@ -30,15 +30,16 @@
   animation: slideLeft 2s alternate;
 }
 @keyframes slideLeft {
-  0%{
+  0% {
     transform: translateX(50em);
-  } 100% {
+  }
+  100% {
     transform: translateX(0);
   }
 }
-.img-hold::before{
+.img-hold::before {
   display: none;
-  content: '';
+  content: "";
   position: absolute;
   background-image: url(../src/assets/home/VIKS_213.jpg);
   background-repeat: no-repeat;
@@ -53,15 +54,16 @@
   animation: slideRight 2s alternate;
 }
 @keyframes slideRight {
-  0%{
+  0% {
     transform: translateX(-90em);
-  } 100% {
+  }
+  100% {
     transform: translateX(0);
   }
 }
-.img-hold::after{
+.img-hold::after {
   display: none;
-  content: '';
+  content: "";
   position: absolute;
   background-image: url(../src/assets/home/VIKS_27.jpg);
   background-repeat: no-repeat;
@@ -76,25 +78,26 @@
   animation: slideUp 2s alternate;
 }
 @keyframes slideUp {
-  0%{
+  0% {
     transform: translateY(50em);
-  } 100% {
+  }
+  100% {
     transform: translateX(0);
   }
 }
 @media only screen and (min-width: 1024px) {
   .img-hold::before,
-  .img-hold::after{
+  .img-hold::after {
     display: block;
   }
-  .img-hold{
+  .img-hold {
     width: 280px !important;
     height: 400px !important;
     background-image: url(../src/assets/home/VIKS_2.jpg) !important;
   }
 }
 @media only screen and (min-width: 765px) {
-  .img-hold{
+  .img-hold {
     height: 100%;
   }
 }
@@ -111,4 +114,19 @@
 
 .read-the-docs {
   color: #888;
+}
+
+input::-webkit-inner-spin-button,
+input::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.swiper-pagination-bullet {
+  background: #7a7a7acc !important;
+  opacity: 100% !important;
+}
+
+.swiper-pagination-bullet-active {
+  background: rgb(0, 68, 255) !important;
 }
