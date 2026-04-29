@@ -12,9 +12,6 @@ import { axiosPrivate } from "../service/axios";
 import PhoneInput, { isValidPhoneNumber } from "react-phone-number-input";
 import { Model } from "../component/Model/Modal";
 import { FaPen } from "react-icons/fa";
-import con from "../js/json/countries.json";
-import stateData from "../js/json/states.json";
-import ctyData from "../js/json/con_sta_city.json";
 
 export const Checkout = () => {
   const navigate = useNavigate();
@@ -35,6 +32,9 @@ export const Checkout = () => {
   const [error, setError] = useState({});
   const [loader, setLoader] = useState(false);
   const [toggleModal, setToggleModal] = useState(false);
+  const [countriesData, setCountriesData] = useState([]);
+  const [statesData, setStatesData] = useState([]);
+  const [citiesData, setCitiesData] = useState([]);
   const [address, setAddress] = useState([]);
   const [modalMsg, setModalMsg] = useState({
     message: "",
@@ -94,13 +94,13 @@ export const Checkout = () => {
   const handleChange = (e) => {
     const { name, value } = e.target;
 
-    if (name == "country") {
-      const select = countries.find((c) => c.value == value);
-      setSelectedCountry(select?.key);
+    if (name === "country") {
+      const select = countries.find((c) => c.value === value);
+      setSelectedCountry(select?.key || "");
       getState(select?.key);
     }
 
-    if (name == "state") {
+    if (name === "state") {
       const select = states.find((s) => s.name === value);
       getCity(selectedCountry, select?.name);
     }
@@ -201,7 +201,7 @@ export const Checkout = () => {
       setLoader(true);
 
       try {
-        if(edit){
+        if (edit) {
           const response = axiosPrivate.patch(
             `${url}/${address[0]?.payment_address_ID}`,
             payload,
@@ -307,8 +307,7 @@ export const Checkout = () => {
             city: addr.city || "",
             zip_code: addr.zip_code || "",
             phone_number:
-              String(addr.phone_number !== null &&  addr.phone_number) ||
-              "",
+              String(addr.phone_number !== null && addr.phone_number) || "",
             alternative_phone_number:
               String(
                 addr.alternative_phone_number !== null
@@ -336,16 +335,23 @@ export const Checkout = () => {
     }
   };
 
-  const getCountry = async () => {
-    setCountries(con.map((c) => ({ key: c.name, value: c.name })));
+  const getCountry = () => {
+    setCountries(
+      countriesData.map((c) => ({
+        key: c.name,
+        value: c.name,
+      })),
+    );
   };
 
-  const getState = async (id) => {
-    setStates(stateData.filter((s) => s.country_name === id));
+  const getState = (id) => {
+    const filtered = statesData.filter((s) => s.country_name === id);
+    setStates(filtered);
   };
 
-  const getCity = async (con, id) => {
-    setCities(ctyData.filter((ct) => ct.c_c === con && ct.s_n === id));
+  const getCity = (con, id) => {
+    const filtered = citiesData.filter((ct) => ct.c_c === con && ct.s_n === id);
+    setCities(filtered);
   };
 
   const getPaymentLink = async () => {
@@ -391,14 +397,40 @@ export const Checkout = () => {
       setYear(year);
     };
 
-    if (address.length == 0) {
-      getCountry();
-    }
-
     getCurrentYear();
     getCartItems();
     getCartSummary();
     getAddress();
+  }, []);
+
+  useEffect(() => {
+    if (countriesData.length > 0) {
+      getCountry();
+    }
+  }, [countriesData]);
+
+  useEffect(() => {
+    const loadLocationData = async () => {
+      try {
+        const [countriesRes, statesRes, citiesRes] = await Promise.all([
+          fetch("/data/countries.json"),
+          fetch("/data/states.json"),
+          fetch("/data/con_sta_city.json"),
+        ]);
+
+        const countriesJson = await countriesRes.json();
+        const statesJson = await statesRes.json();
+        const citiesJson = await citiesRes.json();
+
+        setCountriesData(countriesJson);
+        setStatesData(statesJson);
+        setCitiesData(citiesJson);
+      } catch (err) {
+        console.error("Failed to load location data", err);
+      }
+    };
+
+    loadLocationData();
   }, []);
 
   useEffect(() => {
@@ -409,18 +441,18 @@ export const Checkout = () => {
 
     if (!countryName || !stateName) return;
 
-    const country = con.find((c) => c.name === countryName);
+    const country = countriesData.find((c) => c.name === countryName);
     if (!country) return;
 
     setSelectedCountry(country.name);
 
-    const filteredStates = stateData.filter(
-      (s) => s.country_name === country.name
+    const filteredStates = statesData.filter(
+      (s) => s.country_name === country.name,
     );
     setStates(filteredStates);
 
-    const filteredCities = ctyData.filter(
-      (ct) => ct.c_c === country.name && ct.s_n === stateName
+    const filteredCities = citiesData.filter(
+      (ct) => ct.c_c === country.name && ct.s_n === stateName,
     );
     setCities(filteredCities);
 
